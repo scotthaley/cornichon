@@ -11,6 +11,10 @@
   },
   "author": "Scott Haley",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/scotthaley/cornichon"
+  },
   "dependencies": {
     "co": "^4.6.0",
     "cucumber": "^2.0.0-rc.9",
