@@ -1,0 +1,20 @@
+{
+  "name": "cornichon",
+  "version": "1.0.0",
+  "description": "Documentation generator and manual test runner for CucumberJS",
+  "main": "index.js",
+  "bin": {
+    "cornichon": "./index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Scott Haley",
+  "license": "ISC",
+  "dependencies": {
+    "co": "^4.6.0",
+    "cucumber": "^2.0.0-rc.9",
+    "express": "^4.15.2",
+    "open": "0.0.5"
+  }
+}
