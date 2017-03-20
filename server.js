@@ -3,28 +3,34 @@
  */
 
 const express = require('express');
-const Cli = require('cucumber').Cli;
-const co = require('co');
+const cors = require('cors');
+const path = require('path');
+const util = require('util');
+const cycle = require('cycle');
+
+const cucumber = require('./cucumber');
+cucumber.init();
 
 module.exports = () => {
     let app = express();
+    app.use(cors());
+
+    app.use('/static', express.static(path.join(__dirname, './node_modules/superplaceholder/dist/')))
 
     app.get('/', (req, res) => {
-        co(function* () {
-            const cli = new Cli({
-                argv: process.argv,
-                cwd: process.cwd(),
-                stdout: process.stdout
-            });
-            const configuration = yield cli.getConfiguration();
-            res.send(cli.getSupportCodeLibrary(configuration.supportCodePaths));
-        }).catch(e => {
-            console.log(e);
-        });
+      res.send(util.inspect(cucumber.features[0].scenarios[0]));
     });
 
-    app.listen(8080, () => {
-        console.log('http://localhost:8080');
-        require('open')('http://localhost:8080', 'chrome');
+    app.get('/features', (req, res) => {
+      res.send(cycle.decycle(cucumber.features));
+    });
+
+    app.get('/supportcode', (req, res) => {
+      res.send(cycle.decycle(cucumber.supportCode));
+    });
+
+    app.listen(8088, () => {
+        console.log('http://localhost:8088');
+        require('open')('http://localhost:8088', 'chrome');
     });
 }

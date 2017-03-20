@@ -17,8 +17,12 @@
   },
   "dependencies": {
     "co": "^4.6.0",
+    "cors": "^2.8.1",
     "cucumber": "^2.0.0-rc.9",
+    "cucumber-expressions": "^3.0.0",
+    "cycle": "^1.0.3",
     "express": "^4.15.2",
-    "open": "0.0.5"
+    "open": "0.0.5",
+    "promise-map": "^1.2.0"
   }
 }

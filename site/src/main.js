@@ -5,6 +5,12 @@ import App from './App'
 
 Vue.config.productionTip = false
 
+require('node_modules/highlightjs/styles/dracula.css')
+document.addEventListener('DOMContentLoaded', () => {
+  var hljs = require('highlightjs')
+  hljs.initHighlightingOnLoad()
+}, false)
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

@@ -1,17 +1,21 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <hello></hello>
+    <searchbar></searchbar>
+    <searchresults></searchresults>
   </div>
 </template>
 
 <script>
 import Hello from './components/Hello'
+import searchbar from './components/SearchBar'
+import searchresults from './components/SearchResults'
 
 export default {
   name: 'app',
   components: {
-    Hello
+    Hello,
+    searchbar,
+    searchresults
   }
 }
 </script>
@@ -23,6 +27,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  font-size: 32px;
 }
 </style>
