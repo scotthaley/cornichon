@@ -11,6 +11,8 @@ const Cli = cucumber.Cli;
 const fs = require('fs');
 const co = require('co');
 
+var beautify = require('js-beautify').js_beautify;
+
 const cucumberExpression = require('cucumber-expressions');
 
 module.exports = (() => {
@@ -69,7 +71,7 @@ module.exports = (() => {
       for (let i in supportCode.stepDefinitions) {
         let rule = supportCode.stepDefinitions[i];
         rule.expression = new cucumberExpression.CucumberExpression(rule.pattern, [], supportCode.parameterTypeRegistry);
-        rule.code = rule.code.toString();
+        rule.code = beautify(rule.code.toString(), { indent_size: 4 });
         rule.keywords = [];
         rule.features = [];
         rule.scenarios = [];
@@ -110,6 +112,7 @@ module.exports = (() => {
       uri: feature.uri,
       tags: feature.tags,
       line: feature.line,
+      keyword: feature.keyword,
       description: feature.description ? feature.description.trim() : ''
     }
   }
@@ -124,6 +127,7 @@ module.exports = (() => {
       line: scenario.line,
       tags: scenario.tags,
       uri: scenario.uri,
+      keyword: scenario.keyword,
       description: scenario.description ? scenario.description.trim() : '',
       steps
     }

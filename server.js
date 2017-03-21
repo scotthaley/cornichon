@@ -26,7 +26,7 @@ module.exports = () => {
     });
 
     app.get('/supportcode', (req, res) => {
-      res.send(cycle.decycle(cucumber.supportCode));
+      res.send(cucumber.supportCode);
     });
 
     app.listen(8088, () => {

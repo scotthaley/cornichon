@@ -1,7 +1,8 @@
 <template>
   <div id="searchresults" ref="container">
     <div v-for="result in supportCode">
-      <resultcard v-bind:pattern="result.fullName"></resultcard>
+      <resultcard v-bind:pattern="result.pattern" v-bind:code="result.code"
+                  v-bind:scenarios="result.scenarios" v-bind:keyword="result.keywords[0]"></resultcard>
     </div>
   </div>
 </template>
@@ -34,10 +35,7 @@
     },
     methods: {
       updateSupportCode: function (supportCode) {
-//        console.log(supportCode)
-//        for (var i in supportCode.stepDefinitions) {
-//          console.log(supportCode.stepDefinitions[i])
-//        }
+        console.log(supportCode)
         this.supportCode = supportCode
       }
     }
