@@ -15,10 +15,10 @@ module.exports = () => {
     let app = express();
     app.use(cors());
 
-    app.use('/static', express.static(path.join(__dirname, './node_modules/superplaceholder/dist/')))
+    app.use('/static', express.static(path.join(__dirname, './site/dist/static/')));
 
     app.get('/', (req, res) => {
-      res.send(util.inspect(cucumber.features[0].scenarios[0]));
+      res.sendFile(path.join(__dirname, './site/dist/index.html'));
     });
 
     app.get('/features', (req, res) => {

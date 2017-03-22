@@ -29,7 +29,6 @@
         let filter = []
         for (let f in this.$data.supportCode) {
           let sCode = this.$data.supportCode[f]
-//          if (sCode.fullName.indexOf(this.search) !== -1) {
           if (fuzzy.test(this.search, sCode.fullName)) {
             filter.push(sCode)
           }
