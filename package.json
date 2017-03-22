@@ -1,6 +1,6 @@
 {
   "name": "cornichon",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Documentation generator and manual test runner for CucumberJS",
   "main": "index.js",
   "bin": {
