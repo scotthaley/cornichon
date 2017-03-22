@@ -1,6 +1,6 @@
 <template>
   <div id="searchresults" ref="container">
-    <div v-for="result in supportCode">
+    <div v-for="result in filteredSupportCode">
       <resultcard v-bind:pattern="result.pattern" v-bind:code="result.code"
                   v-bind:scenarios="result.scenarios" v-bind:keyword="result.keywords[0]"></resultcard>
     </div>
@@ -11,15 +11,30 @@
   import resultcard from './ResultCard'
 
   const $ = require('jquery')
+  const fuzzy = require('fuzzy')
 
   export default {
     name: 'searchresults',
+    props: ['search'],
     components: {
       resultcard
     },
     data () {
       return {
         supportCode: {}
+      }
+    },
+    computed: {
+      filteredSupportCode: function () {
+        let filter = []
+        for (let f in this.$data.supportCode) {
+          let sCode = this.$data.supportCode[f]
+//          if (sCode.fullName.indexOf(this.search) !== -1) {
+          if (fuzzy.test(this.search, sCode.fullName)) {
+            filter.push(sCode)
+          }
+        }
+        return filter
       }
     },
     mounted () {

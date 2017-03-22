@@ -6,5 +6,5 @@ Feature: Example feature
   Scenario: Simple scenario
     This is the scenario description
     Given I'm running a simple test
-    When I pass a parameter like "banana"
+    When I pass a parameter like "<strong>banana</strong>"
     Then I should see some results

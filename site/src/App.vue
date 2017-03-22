@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <searchbar></searchbar>
-    <searchresults></searchresults>
+    <searchbar v-model="search"></searchbar>
+    <searchresults v-bind:search="search"></searchresults>
   </div>
 </template>
 
@@ -16,6 +16,11 @@ export default {
     Hello,
     searchbar,
     searchresults
+  },
+  data () {
+    return {
+      search: ''
+    }
   }
 }
 </script>

@@ -3,7 +3,7 @@
     <table>
       <tr>
         <td><stepselector></stepselector></td>
-        <td class="input-cell"><input type="text" ref="input"/></td>
+        <td class="input-cell"><input type="text" v-bind:value="value" ref="input" v-on:input="updateValue($event.target.value)"/></td>
       </tr>
     </table>
   </div>
@@ -23,11 +23,17 @@ export default {
     stepType: {
       type: String,
       default: 'Any'
-    }
+    },
+    value: String
   },
   data () {
     return {
       search: ''
+    }
+  },
+  methods: {
+    updateValue: function (value) {
+      this.$emit('input', value)
     }
   },
   mounted () {

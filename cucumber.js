@@ -90,7 +90,7 @@ module.exports = (() => {
               }
             }
             if (includeScenario) {
-              rule.scenarios.push(mappedScenario(scenario));
+              rule.scenarios.push(mappedScenario(scenario, rule));
             }
           }
           if (includeFeature) {
@@ -117,10 +117,10 @@ module.exports = (() => {
     }
   }
 
-  const mappedScenario = (scenario) => {
+  const mappedScenario = (scenario, rule) => {
     let steps = [];
     for (let st in scenario.steps) {
-      steps.push(mappedStep(scenario.steps[st]));
+      steps.push(mappedStep(scenario.steps[st], rule));
     }
     return {
       name: scenario.name,
@@ -133,9 +133,11 @@ module.exports = (() => {
     }
   }
 
-  const mappedStep = (step) => {
+  const mappedStep = (step, rule) => {
+    let stepMatch = rule.expression.match(step.name)
     return {
       name: step.name,
+      currentStep: stepMatch != null,
       uri: step.uri,
       keyword: step.keyword
     }
