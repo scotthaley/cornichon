@@ -3,9 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="252beba3-8471-4eab-89f5-94329749d95c" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cucumber.helper.js" afterPath="$PROJECT_DIR$/cucumber.helper.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cucumber.js" afterPath="$PROJECT_DIR$/cucumber.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/site/src/components/ResultCard.vue" afterPath="$PROJECT_DIR$/site/src/components/ResultCard.vue" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/site/src/components/SearchResults.vue" afterPath="$PROJECT_DIR$/site/src/components/SearchResults.vue" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/simple/features/step_definitions/general.steps.js" afterPath="$PROJECT_DIR$/tests/simple/features/step_definitions/general.steps.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -59,8 +58,8 @@
           <file leaf-file-name="cucumber.js" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/cucumber.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="675">
-                  <caret line="99" column="8" lean-forward="false" selection-start-line="99" selection-start-column="8" selection-end-line="99" selection-end-column="8" />
+                <state relative-caret-position="243">
+                  <caret line="74" column="63" lean-forward="false" selection-start-line="74" selection-start-column="63" selection-end-line="74" selection-end-column="63" />
                   <folding>
                     <element signature="e#0#47#0" expanded="false" />
                   </folding>
@@ -75,8 +74,8 @@
           <file leaf-file-name="general.steps.js" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/tests/simple/features/step_definitions/general.steps.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="216">
-                  <caret line="10" column="0" lean-forward="false" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+                <state relative-caret-position="540">
+                  <caret line="22" column="0" lean-forward="true" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
                   <folding>
                     <element signature="e#0#47#0" expanded="false" />
                   </folding>
@@ -166,8 +165,8 @@
           <file leaf-file-name="cucumber.helper.js" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/cucumber.helper.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="675">
-                  <caret line="30" column="28" lean-forward="false" selection-start-line="30" selection-start-column="28" selection-end-line="30" selection-end-column="28" />
+                <state relative-caret-position="567">
+                  <caret line="35" column="4" lean-forward="false" selection-start-line="35" selection-start-column="4" selection-end-line="35" selection-end-column="4" />
                   <folding>
                     <element signature="e#0#47#0" expanded="false" />
                   </folding>
@@ -215,11 +214,11 @@
         <option value="$PROJECT_DIR$/site/index.html" />
         <option value="$PROJECT_DIR$/server.js" />
         <option value="$PROJECT_DIR$/site/.gitignore" />
-        <option value="$PROJECT_DIR$/tests/simple/features/step_definitions/general.steps.js" />
         <option value="$PROJECT_DIR$/site/src/components/SearchResults.vue" />
-        <option value="$PROJECT_DIR$/cucumber.js" />
         <option value="$PROJECT_DIR$/site/src/components/ResultCard.vue" />
+        <option value="$PROJECT_DIR$/cucumber.js" />
         <option value="$PROJECT_DIR$/cucumber.helper.js" />
+        <option value="$PROJECT_DIR$/tests/simple/features/step_definitions/general.steps.js" />
       </list>
     </option>
   </component>
@@ -481,12 +480,12 @@
       <updated>1489792564776</updated>
       <workItem from="1489792566109" duration="1268000" />
       <workItem from="1489807193358" duration="10287000" />
-      <workItem from="1489935976351" duration="53864000" />
+      <workItem from="1489935976351" duration="55733000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="65419000" />
+    <option name="totallyTimeSpent" value="67288000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="2576" height="1056" extended-state="6" />
@@ -914,16 +913,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cucumber.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="675">
-          <caret line="99" column="8" lean-forward="false" selection-start-line="99" selection-start-column="8" selection-end-line="99" selection-end-column="8" />
-          <folding>
-            <element signature="e#0#47#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/site/src/components/ResultCard.vue">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="162">
@@ -935,10 +924,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/cucumber.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="243">
+          <caret line="74" column="63" lean-forward="false" selection-start-line="74" selection-start-column="63" selection-end-line="74" selection-end-column="63" />
+          <folding>
+            <element signature="e#0#47#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/cucumber.helper.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="675">
-          <caret line="30" column="28" lean-forward="false" selection-start-line="30" selection-start-column="28" selection-end-line="30" selection-end-column="28" />
+        <state relative-caret-position="567">
+          <caret line="35" column="4" lean-forward="false" selection-start-line="35" selection-start-column="4" selection-end-line="35" selection-end-column="4" />
           <folding>
             <element signature="e#0#47#0" expanded="false" />
           </folding>
@@ -947,8 +946,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tests/simple/features/step_definitions/general.steps.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="10" column="0" lean-forward="false" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+        <state relative-caret-position="540">
+          <caret line="22" column="0" lean-forward="true" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
           <folding>
             <element signature="e#0#47#0" expanded="false" />
           </folding>

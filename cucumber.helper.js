@@ -17,8 +17,8 @@ module.exports = (() => {
   };
 
   const writeLine = (uri, line, text) => {
-    let lines = fs.readFileSync(uri, 'utf8').split('\n');
-    lines.splice(line, 0, text);
+    let lines = fs.readFileSync(uri, 'utf8').split(/\r?\n/);
+    lines[line] = lines[line] + text;
     let data = lines.join('\n');
     fs.writeFileSync(uri, data);
   }
@@ -29,10 +29,18 @@ module.exports = (() => {
   };
 
   const getStepID = step => {
-    writeLine(step.uri, step.line - 2, `/* cornichon: ${new Date().getTime()}`);
+    let line = readLine(step.uri, step.line - 1);
+    let matches = line.match(/{cornichon: [0-9]+}/);
+    if (matches) {
+      return matches[0].match(/[0-9]+/)[0];
+    }
+    let ID = new Date().getTime().toString();
+    writeLine(step.uri, step.line - 1, ` /* {cornichon: ${ID}} */`);
+    return ID;
   }
 
   return {
-    getStepKeyword
+    getStepKeyword,
+    getStepID
   };
 })();

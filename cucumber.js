@@ -72,6 +72,7 @@ module.exports = (() => {
       let supportCodeMapped = [];
       for (let i in supportCode.stepDefinitions) {
         let stepDef = supportCode.stepDefinitions[i];
+        stepDef.cornichonID = cucumberHelper.getStepID(stepDef);
         stepDef.expression = new cucumberExpression.CucumberExpression(stepDef.pattern, [], supportCode.parameterTypeRegistry);
         stepDef.code = beautify(stepDef.code.toString(), { indent_size: 4 });
         stepDef.keyword = cucumberHelper.getStepKeyword(stepDef);
