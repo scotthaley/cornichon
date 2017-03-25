@@ -75,6 +75,8 @@ module.exports = (() => {
         stepDef.cornichonID = cucumberHelper.getStepID(stepDef);
         stepDef.expression = new cucumberExpression.CucumberExpression(stepDef.pattern, [], supportCode.parameterTypeRegistry);
         stepDef.code = beautify(stepDef.code.toString(), { indent_size: 4 });
+        stepDef.code = stepDef.code.replace(/\/\* ?{cornichon: [0-9]+} ?\*\//, '');
+        stepDef.code = stepDef.code.replace(/ ?{cornichon: [0-9]+}/, '');
         stepDef.keyword = cucumberHelper.getStepKeyword(stepDef);
         stepDef.features = [];
         stepDef.scenarios = [];
