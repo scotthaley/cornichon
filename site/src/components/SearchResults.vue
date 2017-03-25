@@ -2,7 +2,7 @@
   <div id="searchresults" ref="container">
     <div v-for="result in filteredSupportCode">
       <resultcard v-bind:pattern="result.pattern" v-bind:code="result.code"
-                  v-bind:scenarios="result.scenarios" v-bind:keyword="result.keywords[0]"></resultcard>
+                  v-bind:scenarios="result.scenarios" v-bind:keyword="result.keyword"></resultcard>
     </div>
   </div>
 </template>

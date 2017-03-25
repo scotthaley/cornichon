@@ -8,6 +8,8 @@ const ScenarioFilter = cucumber.ScenarioFilter;
 const FeatureParser = cucumber.FeatureParser;
 const Cli = cucumber.Cli;
 
+const cucumberHelper = require('./cucumber.helper');
+
 const fs = require('fs');
 const co = require('co');
 
@@ -69,12 +71,12 @@ module.exports = (() => {
       let supportCode = cli.getSupportCodeLibrary(configuration.supportCodePaths);
       let supportCodeMapped = [];
       for (let i in supportCode.stepDefinitions) {
-        let rule = supportCode.stepDefinitions[i];
-        rule.expression = new cucumberExpression.CucumberExpression(rule.pattern, [], supportCode.parameterTypeRegistry);
-        rule.code = beautify(rule.code.toString(), { indent_size: 4 });
-        rule.keywords = [];
-        rule.features = [];
-        rule.scenarios = [];
+        let stepDef = supportCode.stepDefinitions[i];
+        stepDef.expression = new cucumberExpression.CucumberExpression(stepDef.pattern, [], supportCode.parameterTypeRegistry);
+        stepDef.code = beautify(stepDef.code.toString(), { indent_size: 4 });
+        stepDef.keyword = cucumberHelper.getStepKeyword(stepDef);
+        stepDef.features = [];
+        stepDef.scenarios = [];
         for (let f in features) {
           let feature = features[f];
           let includeFeature = false
@@ -83,22 +85,21 @@ module.exports = (() => {
             let includeScenario = false;
             for (let st in scenario.steps) {
               let step = scenario.steps[st];
-              if (rule.expression.match(step.name)) {
+              if (stepDef.expression.match(step.name)) {
                 includeFeature = true;
                 includeScenario = true;
-                rule.keywords.push(step.keyword);
               }
             }
             if (includeScenario) {
-              rule.scenarios.push(mappedScenario(scenario, rule));
+              stepDef.scenarios.push(mappedScenario(scenario, stepDef));
             }
           }
           if (includeFeature) {
-            rule.features.push(mappedFeature(feature));
+            stepDef.features.push(mappedFeature(feature));
           }
         }
-        rule.fullName = rule.keywords[0] + rule.pattern;
-        supportCodeMapped.push(rule);
+        stepDef.fullName = stepDef.keyword + stepDef.pattern;
+        supportCodeMapped.push(stepDef);
       }
       return supportCodeMapped;
     }).catch(e => {
@@ -117,10 +118,10 @@ module.exports = (() => {
     }
   }
 
-  const mappedScenario = (scenario, rule) => {
+  const mappedScenario = (scenario, stepDef) => {
     let steps = [];
     for (let st in scenario.steps) {
-      steps.push(mappedStep(scenario.steps[st], rule));
+      steps.push(mappedStep(scenario.steps[st], stepDef));
     }
     return {
       name: scenario.name,
@@ -133,8 +134,8 @@ module.exports = (() => {
     }
   }
 
-  const mappedStep = (step, rule) => {
-    let stepMatch = rule.expression.match(step.name)
+  const mappedStep = (step, stepDef) => {
+    let stepMatch = stepDef.expression.match(step.name)
     return {
       name: step.name,
       currentStep: stepMatch != null,

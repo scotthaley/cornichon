@@ -4,16 +4,19 @@
 
 const {defineSupportCode} = require('cucumber');
 
-defineSupportCode(function({Given, When, Then}) {
-    Given('I\'m running a simple test', function() {
-        return console.log('Running a simple test');
-    });
+defineSupportCode(function ({Given, When, Then}) {
+  Given('I\'m running a simple test', function () {
+    let moreCode = 4;
 
-    When('I pass a parameter like {stringInDoubleQuotes}', function(param) {
-        return console.log(`Passed param: ${param}`);
-    });
+    moreCode += 2;
+    return console.log(`Running a simple test ${moreCode}`);
+  });
 
-    Then('I should see some results', function() {
-        return console.log('Did you see stuff?');
-    });
+  When('I pass a parameter like {stringInDoubleQuotes}', function (param) {
+    return console.log(`Passed param: ${param}`);
+  });
+
+  Then('I should see some results', function () {
+    return console.log('Did you see stuff?');
+  });
 });
