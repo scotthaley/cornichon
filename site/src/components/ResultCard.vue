@@ -20,10 +20,14 @@
       <pre><code class="gherkin header" ref="header" v-text="featureTitle"></code></pre>
       <div class="content">
         <span class="uri" v-text="feature.uri"></span>
-        <h1>Description</h1>
-        <span v-html="feature.description"></span>
-        <h1>Tags</h1>
-        <span v-for="tag in feature.tags" class="tag" v-text="tag.name"></span>
+        <div v-if="feature.description != ''">
+          <h1>Description</h1>
+          <span v-html="feature.description"></span>
+        </div>
+        <div v-if="feature.tags.length > 0">
+          <h1>Tags</h1>
+          <span v-for="tag in feature.tags" class="tag" v-text="tag.name"></span>
+        </div>
         <h1>Scenarios</h1>
         <pre><code class="gherkin" v-html="mappedScenarios"></code></pre>
       </div>
@@ -76,7 +80,7 @@
         return marked(this.step.usage)
       },
       featureTitle: function () {
-        let featureTitle = this.feature ? `${this.feature.keyword} ${this.feature.name}` : ''
+        let featureTitle = this.feature ? `${this.feature.keyword}: ${this.feature.name}` : ''
         return featureTitle
       },
       stepTitle: function () {
@@ -92,16 +96,23 @@
         } else if (this.feature) {
           source = this.feature.scenarios
         }
+        let firstScenario = true
         for (let i in source) {
           let s = source[i]
+          if (!firstScenario) {
+            mappedScenarios += '\n\n'
+          }
           if (this.step) {
-            mappedScenarios += `<div ${this.$options._scopeId} class="uri">${s.uri}</div>`
+            mappedScenarios += `<span ${this.$options._scopeId} class="uri">${s.uri}</span>\n`
           }
           for (let t in s.tags) {
             let tag = s.tags[t]
             mappedScenarios += `${escape(tag.name)} `
           }
-          mappedScenarios += `\n${escape(s.keyword)} ${escape(s.name)}`
+          if (s.tags.length > 0) {
+            mappedScenarios += '\n'
+          }
+          mappedScenarios += `${escape(s.keyword)}: ${escape(s.name)}`
           for (let st in s.steps) {
             let step = s.steps[st]
             if (step.currentStep) {
@@ -110,6 +121,7 @@
               mappedScenarios += `\n&#8195;&#8195;${escape(step.keyword + step.name)}`
             }
           }
+          firstScenario = false
         }
         return mappedScenarios
       }
@@ -184,7 +196,9 @@
     .currentStep {
       display: inline-block;
       width: 100%;
-      background-color: darkslategray;
+      background-color: #414350;
+      padding: 0 0.5em;
+      margin: 0 -0.5em;
     }
 
     .tag {
@@ -209,7 +223,8 @@
     }
 
     code .uri {
-      font-size: 14px;
+      display: inline;
+      font-size: 12px;
       color: lightgray;
       margin-bottom: 10px;
       margin-top: 0;
