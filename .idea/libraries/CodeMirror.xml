@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="CodeMirror" type="javaScript">
+    <properties>
+      <option name="frameworkName" value="node_modules" />
+      <sourceFilesUrls>
+        <item url="file://$PROJECT_DIR$/site/node_modules/codemirror" />
+      </sourceFilesUrls>
+    </properties>
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/site/node_modules/codemirror" />
+    </CLASSES>
+    <SOURCES />
+  </library>
+</component>

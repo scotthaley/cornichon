@@ -1,8 +1,10 @@
 <template>
   <div id="searchresults" ref="container">
-    <div v-for="result in filteredSupportCode">
-      <resultcard v-bind:pattern="result.pattern" v-bind:code="result.code"
-                  v-bind:scenarios="result.scenarios" v-bind:keyword="result.keyword"></resultcard>
+    <div v-if="sidebarData.searchMode == 'Steps'" v-for="result in filteredSupportCode">
+      <resultcard v-bind:step="result"></resultcard>
+    </div>
+    <div v-if="sidebarData.searchMode == 'Features'" v-for="result in features">
+      <resultcard v-bind:feature="result"></resultcard>
     </div>
   </div>
 </template>
@@ -15,13 +17,14 @@
 
   export default {
     name: 'searchresults',
-    props: ['search'],
+    props: ['search', 'sidebarData'],
     components: {
       resultcard
     },
     data () {
       return {
-        supportCode: {}
+        supportCode: [],
+        features: []
       }
     },
     computed: {
@@ -40,7 +43,7 @@
       const _this = this
       $.get('http://localhost:8088/features')
         .done(function (json) {
-          console.log(json)
+          _this.updateFeatures(json)
         })
       $.get('http://localhost:8088/supportcode')
         .done(function (json) {
@@ -49,8 +52,10 @@
     },
     methods: {
       updateSupportCode: function (supportCode) {
-        console.log(supportCode)
         this.supportCode = supportCode
+      },
+      updateFeatures: function (features) {
+        this.features = features
       }
     }
   }

@@ -12,7 +12,7 @@ defineSupportCode(function ({Given, When, Then}) {
     return console.log(`Running a simple test ${moreCode}`);
   });
 
-  When('I pass a parameter like {stringInDoubleQuotes}', function (param) { /* {cornichon: 1490418306512} */
+  When('I pass a parameter like {stringInDoubleQuotes}', function (param) { /* {cornichon: 1490472816253} */
     return console.log(`Passed param: ${param}`);
   });
 

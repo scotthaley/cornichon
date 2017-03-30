@@ -2,34 +2,34 @@
  * Created by Scott Haley on 3/19/2017.
  */
 
-const cucumber = require('cucumber');
-// console.log(cucumber);
-const ScenarioFilter = cucumber.ScenarioFilter;
-const FeatureParser = cucumber.FeatureParser;
-const Cli = cucumber.Cli;
+const cucumber = require('cucumber')
+const ScenarioFilter = cucumber.ScenarioFilter
+const FeatureParser = cucumber.FeatureParser
+const Cli = cucumber.Cli
 
-const cucumberHelper = require('./cucumber.helper');
+const cucumberHelper = require('./cucumber.helper')
+const cornichon = require('./cornichon')
 
-const fs = require('fs');
-const co = require('co');
+const fs = require('fs')
+const co = require('co')
 
-var beautify = require('js-beautify').js_beautify;
+var beautify = require('js-beautify').js_beautify
 
-const cucumberExpression = require('cucumber-expressions');
+const cucumberExpression = require('cucumber-expressions')
 
 module.exports = (() => {
-  let features = null;
-  let supportCode = null;
+  let features = null
+  let supportCode = null
 
-  const init = function() {
-    const _this = this;
-    this.cli = getCli();
+  const init = function () {
+    const _this = this
+    this.cli = getCli()
     getFeatures(this.cli).then(f => {
-      _this.features = f;
+      _this.features = f
       return getSupportCode(_this.cli, _this.features)
     }).then(c => {
-      _this.supportCode = c;
-    });
+      _this.supportCode = c
+    })
   }
 
   const getCli = () => {
@@ -37,81 +37,91 @@ module.exports = (() => {
       argv: process.argv,
       cwd: process.cwd(),
       stdout: process.stdout
-    });
-    return cli;
+    })
+    return cli
   }
 
   const getFeatures = (cli) => {
     return co(function* () {
-      const configuration = yield cli.getConfiguration();
-      const scenarioFilter = new ScenarioFilter(configuration.scenarioFilterOptions);
-      let resolveFeatures = [];
+      const configuration = yield cli.getConfiguration()
+      const scenarioFilter = new ScenarioFilter(configuration.scenarioFilterOptions)
+      let resolveFeatures = []
       for (var i = 0; i < configuration.featurePaths.length; i++) {
-        resolveFeatures.push((function(featurePath) {
+        resolveFeatures.push((function (featurePath) {
           return co(function* () {
             const source = yield new Promise((resolve) => {
               fs.readFile(featurePath, (err, data) => {
-                resolve(data.toString());
-              });
-            });
-            return FeatureParser.parse({scenarioFilter, source, uri: featurePath});
-          });
-        })(configuration.featurePaths[i]));
+                if (err) {
+                  console.log(err.stack)
+                }
+                resolve(data.toString())
+              })
+            })
+            return FeatureParser.parse({scenarioFilter, source, uri: featurePath})
+          })
+        })(configuration.featurePaths[i]))
       }
-      let features = yield Promise.all(resolveFeatures);
-      return features;
+      let features = yield Promise.all(resolveFeatures)
+      let mappedFeatures = []
+      for (let f = 0; f < features.length; f++) {
+        mappedFeatures.push(mappedFeature(features[f], true))
+      }
+      return mappedFeatures
     }).catch(e => {
-      console.log(e);
-    });
+      console.log(e)
+    })
   }
 
   const getSupportCode = (cli, features) => {
     return co(function* () {
-      const configuration = yield cli.getConfiguration();
-      let supportCode = cli.getSupportCodeLibrary(configuration.supportCodePaths);
-      let supportCodeMapped = [];
+      const configuration = yield cli.getConfiguration()
+      let supportCode = cli.getSupportCodeLibrary(configuration.supportCodePaths)
+      let supportCodeMapped = []
       for (let i in supportCode.stepDefinitions) {
-        let stepDef = supportCode.stepDefinitions[i];
-        stepDef.cornichonID = cucumberHelper.getStepID(stepDef);
-        stepDef.expression = new cucumberExpression.CucumberExpression(stepDef.pattern, [], supportCode.parameterTypeRegistry);
-        stepDef.code = beautify(stepDef.code.toString(), { indent_size: 4 });
-        stepDef.code = stepDef.code.replace(/\/\* ?{cornichon: [0-9]+} ?\*\//, '');
-        stepDef.code = stepDef.code.replace(/ ?{cornichon: [0-9]+}/, '');
-        stepDef.keyword = cucumberHelper.getStepKeyword(stepDef);
-        stepDef.features = [];
-        stepDef.scenarios = [];
+        let stepDef = supportCode.stepDefinitions[i]
+        stepDef.expression = new cucumberExpression.CucumberExpression(stepDef.pattern, [], supportCode.parameterTypeRegistry)
+        stepDef.code = beautify(stepDef.code.toString(), {indent_size: 4})
+        // needs to happen after stepDef.code is set, before stripping ID
+        stepDef.cornichonID = cucumberHelper.getStepID(stepDef)
+        // remove ID from function code
+        stepDef.code = stepDef.code.replace(/\/\* ?{cornichon: [0-9]+} ?\*\//, '')
+        stepDef.code = stepDef.code.replace(/ ?{cornichon: [0-9]+}/, '')
+        stepDef.keyword = cucumberHelper.getStepKeyword(stepDef)
+        stepDef.usage = cornichon.getUsage(stepDef.cornichonID) || 'No usage information provided.'
+        stepDef.features = []
+        stepDef.scenarios = []
         for (let f in features) {
-          let feature = features[f];
+          let feature = features[f]
           let includeFeature = false
           for (let s in feature.scenarios) {
-            let scenario = feature.scenarios[s];
-            let includeScenario = false;
+            let scenario = feature.scenarios[s]
+            let includeScenario = false
             for (let st in scenario.steps) {
-              let step = scenario.steps[st];
+              let step = scenario.steps[st]
               if (stepDef.expression.match(step.name)) {
-                includeFeature = true;
-                includeScenario = true;
+                includeFeature = true
+                includeScenario = true
               }
             }
             if (includeScenario) {
-              stepDef.scenarios.push(mappedScenario(scenario, stepDef));
+              stepDef.scenarios.push(mappedScenario(scenario, stepDef))
             }
           }
           if (includeFeature) {
-            stepDef.features.push(mappedFeature(feature));
+            stepDef.features.push(mappedFeature(feature))
           }
         }
-        stepDef.fullName = stepDef.keyword + stepDef.pattern;
-        supportCodeMapped.push(stepDef);
+        stepDef.fullName = stepDef.keyword + stepDef.pattern
+        supportCodeMapped.push(stepDef)
       }
-      return supportCodeMapped;
+      return supportCodeMapped
     }).catch(e => {
-      console.log(e);
-    });
+      console.log(e)
+    })
   }
 
-  const mappedFeature = (feature) => {
-    return {
+  const mappedFeature = (feature, includeScenarios) => {
+    let f = {
       name: feature.name,
       uri: feature.uri,
       tags: feature.tags,
@@ -119,12 +129,20 @@ module.exports = (() => {
       keyword: feature.keyword,
       description: feature.description ? feature.description.trim() : ''
     }
+
+    if (includeScenarios) {
+      f.scenarios = []
+      for (let s = 0; s < feature.scenarios.length; s++) {
+        f.scenarios.push(mappedScenario(feature.scenarios[s]))
+      }
+    }
+    return f
   }
 
   const mappedScenario = (scenario, stepDef) => {
-    let steps = [];
+    let steps = []
     for (let st in scenario.steps) {
-      steps.push(mappedStep(scenario.steps[st], stepDef));
+      steps.push(mappedStep(scenario.steps[st], stepDef))
     }
     return {
       name: scenario.name,
@@ -138,7 +156,7 @@ module.exports = (() => {
   }
 
   const mappedStep = (step, stepDef) => {
-    let stepMatch = stepDef.expression.match(step.name)
+    let stepMatch = stepDef ? stepDef.expression.match(step.name) : null
     return {
       name: step.name,
       currentStep: stepMatch != null,
@@ -152,4 +170,4 @@ module.exports = (() => {
     features,
     supportCode
   }
-})();
+})()

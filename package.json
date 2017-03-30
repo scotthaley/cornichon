@@ -16,6 +16,7 @@
     "url": "https://github.com/scotthaley/cornichon"
   },
   "dependencies": {
+    "body-parser": "^1.17.1",
     "co": "^4.6.0",
     "cors": "^2.8.1",
     "cucumber": "^2.0.0-rc.9",
@@ -25,5 +26,8 @@
     "js-beautify": "^1.6.12",
     "open": "0.0.5",
     "promise-map": "^1.2.0"
+  },
+  "devDependencies": {
+    "standard": "^9.0.2"
   }
 }
