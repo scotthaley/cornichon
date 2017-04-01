@@ -1,5 +1,5 @@
 <template>
-  <div class="resultcard" ref="card">
+  <div class="resultcard" ref="card" v-bind:class="{ modal }">
     <div v-if="step">
       <pre><code class="gherkin header" ref="header" v-html="stepTitle"></code></pre>
       <div class="content">
@@ -63,12 +63,13 @@
   const escape = require('escape-html')
   const hljs = require('highlightjs')
   const marked = require('marked')
+  const eventBus = require('@/eventBus')
 
   import codemirror from './CodeMirror'
 
   export default {
     name: 'resultcard',
-    props: ['step', 'feature', 'scenario'],
+    props: ['step', 'feature', 'scenario', 'modal'],
     components: {
       codemirror
     },
@@ -146,9 +147,9 @@
           for (let st in s.steps) {
             let step = s.steps[st]
             if (step.currentStep) {
-              mappedS += `\n<div ${this.$options._scopeId} class="currentStep"><span ${this.$options._scopeId} class="marker"></span>&#8195;&#8195;${escape(step.keyword + step.name)}</div>`
+              mappedS += `\n<div ${this.$options._scopeId} class="step currentStep" data-id="${step.cornichonID}"><span ${this.$options._scopeId} class="marker"></span>${escape(step.keyword + ' ' + step.name)}</div>`
             } else {
-              mappedS += `\n&#8195;&#8195;${escape(step.keyword + step.name)}`
+              mappedS += `\n<div ${this.$options._scopeId} class="step" data-id="${step.cornichonID}">${escape(step.keyword + ' ' + step.name)}</div>`
             }
           }
           mappedScenarios.push(mappedS)
@@ -167,18 +168,24 @@
       $(this.$refs.editusage).click(function () {
         $(_this.$refs.usage).addClass('open')
       })
+
+      $(this.$refs.card).on('click', '.step:not(.currentStep)', function (e) {
+        eventBus.emit('details', $(e.target).data('id').toString())
+      })
     }
   }
 </script>
 
 <style lang="scss" scoped>
   .resultcard {
-    margin-top: 30px;
+    &:not(.modal) {
+      margin-top: 30px;
+    }
     box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12), 0 3px 5px -1px rgba(0, 0, 0, 0.3);
     font-size: 24px;
     text-align: left;
 
-    &.open {
+    &.open, &.modal {
       padding-bottom: 5px;
 
       .content {
@@ -223,11 +230,15 @@
       }
     }
 
-    .currentStep {
+    .step {
       display: inline-block;
-      width: 100%;
-      padding: 0 0.5em;
+      padding: 0 1.5em;
       margin: 0 -0.5em;
+
+      &:hover:not(.currentStep) {
+        text-decoration: underline;
+        cursor: pointer;
+      }
 
       span.marker {
         position: absolute;
@@ -236,6 +247,7 @@
         height: 10px;
         border-radius: 5px;
         margin-top: 7px;
+        margin-left: -18px;
         background-color: #42b983;
       }
     }

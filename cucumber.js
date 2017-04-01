@@ -21,6 +21,7 @@ module.exports = (() => {
   let features = null
   let supportCode = null
   let scenarios = null
+  let cID = 100
 
   const init = function () {
     const _this = this
@@ -79,7 +80,7 @@ module.exports = (() => {
     for (let f = 0; f < features.length; f++) {
       let feature = features[f]
       for (let s = 0; s < feature.scenarios.length; s++) {
-        let scenario = feature.scenarios[s]
+        let scenario = Object.assign({}, feature.scenarios[s])
         let shouldInclude = true
         for (let b = 0; b < scenarios.length; b++) {
           let foundScenario = scenarios[b]
@@ -100,6 +101,34 @@ module.exports = (() => {
       }
     }
     return scenarios
+  }
+
+  const identifySteps = (stepDef, features, supportCode)=> {
+    for (let f = 0; f < features.length; f++) {
+      let feature = features[f]
+      for (let sc = 0; sc < feature.scenarios.length; sc++) {
+        let scenario = feature.scenarios[sc]
+        for (let s = 0; s < scenario.steps.length; s++) {
+          let step = scenario.steps[s]
+          if (stepDef.expression.match(step.name)) {
+            step.cornichonID = stepDef.cornichonID
+          }
+        }
+      }
+    }
+
+    for (let sc = 0; sc < supportCode.length; sc++) {
+      let sCode = supportCode[sc]
+      for (let sc = 0; sc < sCode.scenarios.length; sc++) {
+        let scenario = sCode.scenarios[sc]
+        for (let s = 0; s < scenario.steps.length; s++) {
+          let step = scenario.steps[s]
+          if (stepDef.expression.match(step.name)) {
+            step.cornichonID = stepDef.cornichonID
+          }
+        }
+      }
+    }
   }
 
   const getSupportCode = (cli, features) => {
@@ -135,20 +164,35 @@ module.exports = (() => {
               }
             }
             if (includeScenario) {
-              stepDef.scenarios.push(mappedScenario(scenario, stepDef))
+              stepDef.scenarios.push(mappedScenario(scenario, stepDef, features))
             }
           }
           if (includeFeature) {
-            stepDef.features.push(mappedFeature(feature))
+            stepDef.features.push(mappedFeature(feature, features))
           }
         }
         stepDef.fullName = `${stepDef.keyword} ${stepDef.pattern}`
         supportCodeMapped.push(stepDef)
       }
+      for (let sd = 0; sd < supportCodeMapped.length; sd++) {
+        identifySteps(supportCodeMapped[sd], features, supportCodeMapped)
+      }
       return supportCodeMapped
     }).catch(e => {
       console.log(e)
     })
+  }
+
+  const getFeatureID = (feature, features) => {
+    if (features) {
+      for (let f = 0; f < features.length; f++) {
+        let testF = features[f]
+        if (feature.name === testF.name && feature.uri === testF.uri && feature.tags === testF.tags && feature.line === testF.line && testF.internalID) {
+          return testF.internalID
+        }
+      }
+    }
+    return `feature-${cID++}`
   }
 
   const mappedFeature = (feature, includeScenarios) => {
@@ -158,7 +202,8 @@ module.exports = (() => {
       tags: feature.tags,
       line: feature.line,
       keyword: feature.keyword,
-      description: feature.description ? feature.description.trim() : ''
+      description: feature.description ? feature.description.trim() : '',
+      internalID: feature.internalID || getFeatureID(feature)
     }
 
     if (includeScenarios) {
@@ -170,7 +215,22 @@ module.exports = (() => {
     return f
   }
 
-  const mappedScenario = (scenario, stepDef) => {
+  const getScenarioID = (scenario, features) => {
+    if (features) {
+      for (let f = 0; f < features.length; f++) {
+        let feature = features[f]
+        for (let s = 0; s < feature.scenarios.length; s++) {
+          let testS = this.scenarios[s]
+          if (scenario.name === testS.name && scenario.uri === testS.uri && scenario.tags === testS.tags && scenario.line === testS.line && testS.internalID) {
+            return testS.internalID
+          }
+        }
+      }
+    }
+    return `scenario-${cID++}`
+  }
+
+  const mappedScenario = (scenario, stepDef, features) => {
     let steps = []
     for (let st in scenario.steps) {
       steps.push(mappedStep(scenario.steps[st], stepDef))
@@ -182,18 +242,21 @@ module.exports = (() => {
       uri: scenario.uri.replace(/^.*\\features\\/, 'features\\'),
       keyword: scenario.keyword,
       description: scenario.description ? scenario.description.trim() : '',
-      steps
+      steps,
+      internalID: scenario.internalID || getScenarioID(scenario, features)
     }
   }
 
   const mappedStep = (step, stepDef) => {
     let stepMatch = stepDef ? stepDef.expression.match(step.name) : null
-    return {
+    let mStep = {
+      pattern: step.name,
       name: step.name,
       currentStep: stepMatch != null,
       uri: step.uri.replace(/^.*\\features\\/, 'features\\'),
-      keyword: step.keyword
+      keyword: step.keyword.trim()
     }
+    return mStep
   }
 
   return {

@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <sidebar v-model="sidebarData"></sidebar>
-    <div class="content">
+    <div class="content" ref="content">
       <searchbar v-show="sidebarData.searchMode === 'Steps'" v-model="search"
                  v-bind:placeholders="placeholders.Steps"></searchbar>
       <searchbar v-show="sidebarData.searchMode === 'Features'" v-model="search"
@@ -12,6 +12,7 @@
                      v-bind:supportCode="supportCode" v-bind:features="features"
                      v-bind:scenarios="scenarios"></searchresults>
     </div>
+    <detailsview v-bind:supportCode="supportCode" v-bind:features="features" v-bind:scenarios="scenarios"></detailsview>
   </div>
 </template>
 
@@ -20,8 +21,10 @@
   import searchbar from './components/SearchBar'
   import searchresults from './components/SearchResults'
   import sidebar from './components/SideBar'
+  import detailsview from './components/DetailsView'
 
   const $ = require('jquery')
+  const eventBus = require('@/eventBus')
 
   export default {
     name: 'app',
@@ -29,7 +32,8 @@
       Hello,
       searchbar,
       searchresults,
-      sidebar
+      sidebar,
+      detailsview
     },
     data () {
       return {
@@ -57,6 +61,13 @@
         .done(function (json) {
           _this.updateScenarios(json)
         })
+
+      eventBus.on('details', function () {
+        $('body').css('overflow', 'hidden')
+      })
+      eventBus.on('details-closed', function () {
+        $('body').css('overflow', 'auto')
+      })
     },
     methods: {
       updateSupportCode: function (supportCode) {
