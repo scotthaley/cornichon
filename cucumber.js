@@ -20,12 +20,14 @@ const cucumberExpression = require('cucumber-expressions')
 module.exports = (() => {
   let features = null
   let supportCode = null
+  let scenarios = null
 
   const init = function () {
     const _this = this
     this.cli = getCli()
     getFeatures(this.cli).then(f => {
       _this.features = f
+      _this.scenarios = getScenarios(_this.features)
       return getSupportCode(_this.cli, _this.features)
     }).then(c => {
       _this.supportCode = c
@@ -72,6 +74,34 @@ module.exports = (() => {
     })
   }
 
+  const getScenarios = (features) => {
+    let scenarios = []
+    for (let f = 0; f < features.length; f++) {
+      let feature = features[f]
+      for (let s = 0; s < feature.scenarios.length; s++) {
+        let scenario = feature.scenarios[s]
+        let shouldInclude = true
+        for (let b = 0; b < scenarios.length; b++) {
+          let foundScenario = scenarios[b]
+          if (foundScenario.name === scenario.name && foundScenario.feature.name === feature.name && foundScenario.feature.uri === feature.uri) {
+            shouldInclude = false
+            foundScenario.otherScenarios.push(scenario)
+            break
+          }
+        }
+        if (!shouldInclude) {
+          continue
+        }
+        let featureDef = Object.assign({}, feature)
+        delete featureDef.scenarios
+        scenario.feature = featureDef
+        scenario.otherScenarios = []
+        scenarios.push(scenario)
+      }
+    }
+    return scenarios
+  }
+
   const getSupportCode = (cli, features) => {
     return co(function* () {
       const configuration = yield cli.getConfiguration()
@@ -88,7 +118,7 @@ module.exports = (() => {
         stepDef.code = stepDef.code.replace(/ ?{cornichon: [0-9]+}/, '')
         stepDef.keyword = cucumberHelper.getStepKeyword(stepDef)
         stepDef.usage = cornichon.getUsage(stepDef.cornichonID) || 'No usage information provided.'
-        stepDef.uri = stepDef.uri.replace(/^.*\\features\\/, 'features\\');
+        stepDef.uri = stepDef.uri.replace(/^.*\\features\\/, 'features\\')
         stepDef.features = []
         stepDef.scenarios = []
         for (let f in features) {
@@ -169,6 +199,7 @@ module.exports = (() => {
   return {
     init,
     features,
-    supportCode
+    supportCode,
+    scenarios
   }
 })()

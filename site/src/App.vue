@@ -6,8 +6,11 @@
                  v-bind:placeholders="placeholders.Steps"></searchbar>
       <searchbar v-show="sidebarData.searchMode === 'Features'" v-model="search"
                  v-bind:placeholders="placeholders.Features"></searchbar>
+      <searchbar v-show="sidebarData.searchMode === 'Scenarios'" v-model="search"
+                 v-bind:placeholders="placeholders.Scenarios"></searchbar>
       <searchresults v-model="placeholderData" v-bind:search="search" v-bind:sidebarData="sidebarData"
-                     v-bind:supportCode="supportCode" v-bind:features="features"></searchresults>
+                     v-bind:supportCode="supportCode" v-bind:features="features"
+                     v-bind:scenarios="scenarios"></searchresults>
     </div>
   </div>
 </template>
@@ -35,11 +38,11 @@
         placeholderData: {},
         supportCode: [],
         features: [],
+        scenarios: [],
         placeholders: {}
       }
     },
-    computed: {
-    },
+    computed: {},
     mounted () {
       const _this = this
       $.get('http://localhost:8088/features')
@@ -49,6 +52,10 @@
       $.get('http://localhost:8088/supportcode')
         .done(function (json) {
           _this.updateSupportCode(json)
+        })
+      $.get('http://localhost:8088/scenarios')
+        .done(function (json) {
+          _this.updateScenarios(json)
         })
     },
     methods: {
@@ -63,7 +70,14 @@
         this.features = features
         this.placeholders['Features'] = []
         for (let f in this.features) {
-          this.placeholders['Features'].push(this.features[f].name)
+          this.placeholders['Features'].push(this.features[f].name + '...')
+        }
+      },
+      updateScenarios: function (scenarios) {
+        this.scenarios = scenarios
+        this.placeholders['Scenarios'] = []
+        for (let s in this.scenarios) {
+          this.placeholders['Scenarios'].push(this.scenarios[s].name + '...')
         }
       }
     }

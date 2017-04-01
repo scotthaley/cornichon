@@ -2,11 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="252beba3-8471-4eab-89f5-94329749d95c" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/codeStyleSettings.xml" afterPath="$PROJECT_DIR$/.idea/codeStyleSettings.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cucumber.js" afterPath="$PROJECT_DIR$/cucumber.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server.js" afterPath="$PROJECT_DIR$/server.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/site/src/App.vue" afterPath="$PROJECT_DIR$/site/src/App.vue" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/site/src/components/ResultCard.vue" afterPath="$PROJECT_DIR$/site/src/components/ResultCard.vue" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/site/src/components/SearchBar.vue" afterPath="$PROJECT_DIR$/site/src/components/SearchBar.vue" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/site/src/components/SearchResults.vue" afterPath="$PROJECT_DIR$/site/src/components/SearchResults.vue" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -47,11 +46,11 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="cucumber.js" pinned="false" current-in-tab="false">
+          <file leaf-file-name="cucumber.js" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/cucumber.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="840">
-                  <caret line="116" column="6" lean-forward="false" selection-start-line="116" selection-start-column="6" selection-end-line="116" selection-end-column="6" />
+                <state relative-caret-position="396">
+                  <caret line="88" column="16" lean-forward="false" selection-start-line="88" selection-start-column="16" selection-end-line="88" selection-end-column="16" />
                   <folding>
                     <element signature="e#0#47#0" expanded="false" />
                   </folding>
@@ -72,13 +71,13 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="App.vue" pinned="false" current-in-tab="true">
+          <file leaf-file-name="App.vue" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/site/src/App.vue">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="84">
-                  <caret line="7" column="49" lean-forward="false" selection-start-line="7" selection-start-column="49" selection-end-line="7" selection-end-column="49" />
+                <state relative-caret-position="210">
+                  <caret line="10" column="101" lean-forward="false" selection-start-line="10" selection-start-column="101" selection-end-line="10" selection-end-column="101" />
                   <folding>
-                    <element signature="e#649#687#0" expanded="true" />
+                    <element signature="e#856#894#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -91,8 +90,8 @@
           <file leaf-file-name="server.js" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/server.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="60">
-                  <caret line="8" column="0" lean-forward="false" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+                <state relative-caret-position="564">
+                  <caret line="32" column="0" lean-forward="false" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
                   <folding>
                     <element signature="e#0#47#0" expanded="false" />
                   </folding>
@@ -110,14 +109,14 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="ResultCard.vue" pinned="false" current-in-tab="false">
+          <file leaf-file-name="ResultCard.vue" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/site/src/components/ResultCard.vue">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="2941">
-                  <caret line="242" column="7" lean-forward="false" selection-start-line="242" selection-start-column="7" selection-end-line="242" selection-end-column="7" />
+                <state relative-caret-position="231">
+                  <caret line="50" column="13" lean-forward="false" selection-start-line="50" selection-start-column="13" selection-end-line="50" selection-end-column="13" />
                   <folding>
-                    <marker date="1491013236082" expanded="true" signature="4181:4188" ph="..." />
-                    <marker date="1491013236082" expanded="true" signature="4188:4195" ph="..." />
+                    <marker date="1491019372038" expanded="true" signature="5311:5318" ph="..." />
+                    <marker date="1491019372038" expanded="true" signature="5318:5325" ph="..." />
                   </folding>
                 </state>
               </provider>
@@ -143,11 +142,11 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="SearchResults.vue" pinned="false" current-in-tab="true">
+          <file leaf-file-name="SearchResults.vue" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/site/src/components/SearchResults.vue">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="693">
-                  <caret line="43" column="4" lean-forward="false" selection-start-line="43" selection-start-column="4" selection-end-line="43" selection-end-column="4" />
+                <state relative-caret-position="42">
+                  <caret line="8" column="88" lean-forward="false" selection-start-line="8" selection-start-column="88" selection-end-line="8" selection-end-column="88" />
                   <folding />
                 </state>
               </provider>
@@ -201,14 +200,14 @@
         <option value="$PROJECT_DIR$/tests/simple/usage.cornichon" />
         <option value="$PROJECT_DIR$/site/src/main.js" />
         <option value="$PROJECT_DIR$/cucumber.helper.js" />
-        <option value="$PROJECT_DIR$/server.js" />
         <option value="$PROJECT_DIR$/site/src/components/SideBar.vue" />
         <option value="$PROJECT_DIR$/tests/simple/features/tests/advanced.feature" />
-        <option value="$PROJECT_DIR$/site/src/components/ResultCard.vue" />
-        <option value="$PROJECT_DIR$/cucumber.js" />
         <option value="$PROJECT_DIR$/site/src/components/SearchBar.vue" />
+        <option value="$PROJECT_DIR$/server.js" />
         <option value="$PROJECT_DIR$/site/src/App.vue" />
         <option value="$PROJECT_DIR$/site/src/components/SearchResults.vue" />
+        <option value="$PROJECT_DIR$/cucumber.js" />
+        <option value="$PROJECT_DIR$/site/src/components/ResultCard.vue" />
       </list>
     </option>
   </component>
@@ -562,12 +561,12 @@
       <workItem from="1489792566109" duration="1268000" />
       <workItem from="1489807193358" duration="10287000" />
       <workItem from="1489935976351" duration="65061000" />
-      <workItem from="1490501353121" duration="36583000" />
+      <workItem from="1490501353121" duration="38520000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="113199000" />
+    <option name="totallyTimeSpent" value="115136000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="2576" height="1056" extended-state="6" />
@@ -600,7 +599,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="13" />
+      <option name="time" value="14" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -654,7 +653,7 @@
         <state relative-caret-position="783">
           <caret line="28" column="0" lean-forward="false" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
           <folding>
-            <element signature="e#649#687#0" expanded="true" />
+            <element signature="e#856#894#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -918,16 +917,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/server.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="8" column="0" lean-forward="false" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#47#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/site/src/components/CodeMirror.vue">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="861">
@@ -947,29 +936,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tests/simple/features/tests/simple.feature">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
-          <caret line="9" column="15" lean-forward="false" selection-start-line="9" selection-start-column="15" selection-end-line="9" selection-end-column="15" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tests/simple/features/tests/advanced.feature">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="252">
           <caret line="12" column="17" lean-forward="false" selection-start-line="12" selection-start-column="17" selection-end-line="12" selection-end-column="17" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cucumber.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="840">
-          <caret line="116" column="6" lean-forward="false" selection-start-line="116" selection-start-column="6" selection-end-line="116" selection-end-column="6" />
-          <folding>
-            <element signature="e#0#47#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -981,17 +952,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/site/src/components/ResultCard.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2941">
-          <caret line="242" column="7" lean-forward="false" selection-start-line="242" selection-start-column="7" selection-end-line="242" selection-end-column="7" />
-          <folding>
-            <marker date="1491013236082" expanded="true" signature="4181:4188" ph="..." />
-            <marker date="1491013236082" expanded="true" signature="4188:4195" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/site/src/components/SearchBar.vue">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="504">
@@ -1000,21 +960,60 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/site/src/App.vue">
+    <entry file="file://$PROJECT_DIR$/server.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="84">
-          <caret line="7" column="49" lean-forward="false" selection-start-line="7" selection-start-column="49" selection-end-line="7" selection-end-column="49" />
+        <state relative-caret-position="564">
+          <caret line="32" column="0" lean-forward="false" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
           <folding>
-            <element signature="e#649#687#0" expanded="true" />
+            <element signature="e#0#47#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/simple/features/tests/simple.feature">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="189">
+          <caret line="9" column="15" lean-forward="false" selection-start-line="9" selection-start-column="15" selection-end-line="9" selection-end-column="15" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/site/src/components/SearchResults.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="693">
-          <caret line="43" column="4" lean-forward="false" selection-start-line="43" selection-start-column="4" selection-end-line="43" selection-end-column="4" />
+        <state relative-caret-position="42">
+          <caret line="8" column="88" lean-forward="false" selection-start-line="8" selection-start-column="88" selection-end-line="8" selection-end-column="88" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/site/src/App.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="10" column="101" lean-forward="false" selection-start-line="10" selection-start-column="101" selection-end-line="10" selection-end-column="101" />
+          <folding>
+            <element signature="e#856#894#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cucumber.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="396">
+          <caret line="88" column="16" lean-forward="false" selection-start-line="88" selection-start-column="16" selection-end-line="88" selection-end-column="16" />
+          <folding>
+            <element signature="e#0#47#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/site/src/components/ResultCard.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="231">
+          <caret line="50" column="13" lean-forward="false" selection-start-line="50" selection-start-column="13" selection-end-line="50" selection-end-column="13" />
+          <folding>
+            <marker date="1491019372038" expanded="true" signature="5311:5318" ph="..." />
+            <marker date="1491019372038" expanded="true" signature="5318:5325" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>

@@ -31,6 +31,10 @@ module.exports = () => {
     res.send(cucumber.supportCode)
   })
 
+  app.get('/scenarios', (req, res) => {
+    res.send(cucumber.scenarios)
+  })
+
   app.post('/updateUsage', (req, res) => {
     cornichon.updateUsage(req.body.cornichonID, req.body.markdown)
     cucumber.init()

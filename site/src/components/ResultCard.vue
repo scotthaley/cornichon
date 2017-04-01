@@ -36,6 +36,25 @@
         </div>
       </div>
     </div>
+
+    <div v-if="scenario">
+      <pre><code class="gherkin header" ref="header" v-text="scenarioTitle"></code></pre>
+      <div class="content">
+        <span class="uri" v-text="scenario.uri"></span>
+        <div v-if="scenario.description != ''">
+          <h1>Description</h1>
+          <span v-html="scenario.description"></span>
+        </div>
+        <div v-if="scenario.tags.length > 0">
+          <h1>Tags</h1>
+          <span v-for="tag in scenario.tags" class="tag" v-text="tag.name"></span>
+        </div>
+        <h1>Full Scenario</h1>
+        <div v-for="scenario in mappedScenarios">
+          <pre><code class="gherkin" v-html="scenario"></code></pre>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -49,7 +68,7 @@
 
   export default {
     name: 'resultcard',
-    props: ['step', 'feature'],
+    props: ['step', 'feature', 'scenario'],
     components: {
       codemirror
     },
@@ -59,6 +78,10 @@
         setTimeout(this.codeHighlight, 50)
       },
       'featureTitle': function () {
+        $(this.$refs.card).removeClass('open')
+        setTimeout(this.codeHighlight, 50)
+      },
+      'scenarioTitle': function () {
         $(this.$refs.card).removeClass('open')
         setTimeout(this.codeHighlight, 50)
       }
@@ -92,6 +115,10 @@
         stepTitle = stepTitle.replace(/({.*})/g, `<span class="hljs-string">$1</span>`)
         return stepTitle
       },
+      scenarioTitle: function () {
+        let scenarioTitle = this.scenario ? `${this.scenario.keyword}: ${this.scenario.name}` : ''
+        return scenarioTitle
+      },
       mappedScenarios: function () {
         let mappedScenarios = []
         let source
@@ -99,6 +126,8 @@
           source = this.step.scenarios
         } else if (this.feature) {
           source = this.feature.scenarios
+        } else if (this.scenario) {
+          source = [this.scenario, ...this.scenario.otherScenarios]
         }
         for (let i in source) {
           let s = source[i]
@@ -219,6 +248,7 @@
       border-radius: 4px;
       color: white;
       cursor: pointer;
+      margin-right: 5px;
 
       &:hover {
         color: #8be9fd;

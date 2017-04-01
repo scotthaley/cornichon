@@ -1,10 +1,13 @@
 <template>
   <div id="searchresults" ref="container">
-    <div v-if="sidebarData.searchMode == 'Steps'" v-for="result in filteredSupportCode">
+    <div v-if="sidebarData.searchMode === 'Steps'" v-for="result in filteredSupportCode">
       <resultcard v-bind:step="result"></resultcard>
     </div>
-    <div v-if="sidebarData.searchMode == 'Features'" v-for="result in filteredFeatures">
+    <div v-if="sidebarData.searchMode === 'Features'" v-for="result in filteredFeatures">
       <resultcard v-bind:feature="result"></resultcard>
+    </div>
+    <div v-if="sidebarData.searchMode === 'Scenarios'" v-for="result in filteredScenarios">
+      <resultcard v-bind:scenario="result"></resultcard>
     </div>
   </div>
 </template>
@@ -16,7 +19,7 @@
 
   export default {
     name: 'searchresults',
-    props: ['value', 'search', 'sidebarData', 'supportCode', 'features'],
+    props: ['value', 'search', 'sidebarData', 'supportCode', 'features', 'scenarios'],
     components: {
       resultcard
     },
@@ -37,6 +40,16 @@
           let feature = this.features[f]
           if (fuzzy.test(this.search, feature.name)) {
             filter.push(feature)
+          }
+        }
+        return filter
+      },
+      filteredScenarios: function () {
+        let filter = []
+        for (let s in this.scenarios) {
+          let scenario = this.scenarios[s]
+          if (fuzzy.test(this.search, scenario.name)) {
+            filter.push(scenario)
           }
         }
         return filter
