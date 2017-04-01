@@ -2,8 +2,12 @@
   <div id="app">
     <sidebar v-model="sidebarData"></sidebar>
     <div class="content">
-      <searchbar v-model="search"></searchbar>
-      <searchresults v-bind:search="search" v-bind:sidebarData="sidebarData"></searchresults>
+      <searchbar v-show="sidebarData.searchMode === 'Steps'" v-model="search"
+                 v-bind:placeholders="placeholders.Steps"></searchbar>
+      <searchbar v-show="sidebarData.searchMode === 'Features'" v-model="search"
+                 v-bind:placeholders="placeholders.Features"></searchbar>
+      <searchresults v-model="placeholderData" v-bind:search="search" v-bind:sidebarData="sidebarData"
+                     v-bind:supportCode="supportCode" v-bind:features="features"></searchresults>
     </div>
   </div>
 </template>
@@ -13,6 +17,8 @@
   import searchbar from './components/SearchBar'
   import searchresults from './components/SearchResults'
   import sidebar from './components/SideBar'
+
+  const $ = require('jquery')
 
   export default {
     name: 'app',
@@ -25,7 +31,40 @@
     data () {
       return {
         search: '',
-        sidebarData: {}
+        sidebarData: {},
+        placeholderData: {},
+        supportCode: [],
+        features: [],
+        placeholders: {}
+      }
+    },
+    computed: {
+    },
+    mounted () {
+      const _this = this
+      $.get('http://localhost:8088/features')
+        .done(function (json) {
+          _this.updateFeatures(json)
+        })
+      $.get('http://localhost:8088/supportcode')
+        .done(function (json) {
+          _this.updateSupportCode(json)
+        })
+    },
+    methods: {
+      updateSupportCode: function (supportCode) {
+        this.supportCode = supportCode
+        this.placeholders['Steps'] = []
+        for (let s in this.supportCode) {
+          this.placeholders['Steps'].push(this.supportCode[s].fullName + '...')
+        }
+      },
+      updateFeatures: function (features) {
+        this.features = features
+        this.placeholders['Features'] = []
+        for (let f in this.features) {
+          this.placeholders['Features'].push(this.features[f].name)
+        }
       }
     }
   }

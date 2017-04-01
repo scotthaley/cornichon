@@ -88,6 +88,7 @@ module.exports = (() => {
         stepDef.code = stepDef.code.replace(/ ?{cornichon: [0-9]+}/, '')
         stepDef.keyword = cucumberHelper.getStepKeyword(stepDef)
         stepDef.usage = cornichon.getUsage(stepDef.cornichonID) || 'No usage information provided.'
+        stepDef.uri = stepDef.uri.replace(/^.*\\features\\/, 'features\\');
         stepDef.features = []
         stepDef.scenarios = []
         for (let f in features) {
@@ -111,7 +112,7 @@ module.exports = (() => {
             stepDef.features.push(mappedFeature(feature))
           }
         }
-        stepDef.fullName = stepDef.keyword + stepDef.pattern
+        stepDef.fullName = `${stepDef.keyword} ${stepDef.pattern}`
         supportCodeMapped.push(stepDef)
       }
       return supportCodeMapped
@@ -123,7 +124,7 @@ module.exports = (() => {
   const mappedFeature = (feature, includeScenarios) => {
     let f = {
       name: feature.name,
-      uri: feature.uri,
+      uri: feature.uri.replace(/^.*\\features\\/, 'features\\'),
       tags: feature.tags,
       line: feature.line,
       keyword: feature.keyword,
@@ -148,7 +149,7 @@ module.exports = (() => {
       name: scenario.name,
       line: scenario.line,
       tags: scenario.tags,
-      uri: scenario.uri,
+      uri: scenario.uri.replace(/^.*\\features\\/, 'features\\'),
       keyword: scenario.keyword,
       description: scenario.description ? scenario.description.trim() : '',
       steps
@@ -160,7 +161,7 @@ module.exports = (() => {
     return {
       name: step.name,
       currentStep: stepMatch != null,
-      uri: step.uri,
+      uri: step.uri.replace(/^.*\\features\\/, 'features\\'),
       keyword: step.keyword
     }
   }

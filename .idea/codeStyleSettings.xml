@@ -7,7 +7,7 @@
           <value>
             <option name="INDENT_SIZE" value="2" />
             <option name="CONTINUATION_INDENT_SIZE" value="8" />
-            <option name="TAB_SIZE" value="4" />
+            <option name="TAB_SIZE" value="2" />
             <option name="USE_TAB_CHARACTER" value="false" />
             <option name="SMART_TABS" value="false" />
             <option name="LABEL_INDENT_SIZE" value="0" />
@@ -22,6 +22,12 @@
           <option name="FORCE_QUOTE_STYlE" value="true" />
           <option name="SPACES_WITHIN_IMPORTS" value="true" />
         </JSCodeStyleSettings>
+        <codeStyleSettings language="HTML">
+          <indentOptions>
+            <option name="INDENT_SIZE" value="2" />
+            <option name="TAB_SIZE" value="2" />
+          </indentOptions>
+        </codeStyleSettings>
         <codeStyleSettings language="JavaScript">
           <option name="KEEP_BLANK_LINES_IN_CODE" value="1" />
           <option name="SPACE_BEFORE_METHOD_PARENTHESES" value="true" />
@@ -37,6 +43,5 @@
       </value>
     </option>
     <option name="USE_PER_PROJECT_SETTINGS" value="true" />
-    <option name="PREFERRED_PROJECT_CODE_STYLE" value="Default (1)" />
   </component>
 </project>

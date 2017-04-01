@@ -4,7 +4,7 @@
       <pre><code class="gherkin header" ref="header" v-html="stepTitle"></code></pre>
       <div class="content">
         <div class="usage" ref="usage">
-          <h1>Usage<i ref="editusage" class="edit-usage fa fa-pencil fa-1x"></i></h1>
+          <h1 class="first">Usage<i ref="editusage" class="edit-usage fa fa-pencil fa-1x"></i></h1>
           <div ref="marked" class="marked" v-html="usageHTML"></div>
           <codemirror class="codemirror_usage" v-bind:value="step.usage" v-on:updated="updateUsage"
                       v-on:cancel="cancelUsage"></codemirror>
@@ -12,7 +12,9 @@
         <h1>Code</h1>
         <pre><code class="javascript" v-html="step.code"></code></pre>
         <h1>Scenarios</h1>
-        <pre><code class="gherkin" v-html="mappedScenarios"></code></pre>
+        <div v-for="scenario in mappedScenarios">
+          <pre><code class="gherkin" v-html="scenario"></code></pre>
+        </div>
       </div>
     </div>
 
@@ -29,7 +31,9 @@
           <span v-for="tag in feature.tags" class="tag" v-text="tag.name"></span>
         </div>
         <h1>Scenarios</h1>
-        <pre><code class="gherkin" v-html="mappedScenarios"></code></pre>
+        <div v-for="scenario in mappedScenarios">
+          <pre><code class="gherkin" v-html="scenario"></code></pre>
+        </div>
       </div>
     </div>
   </div>
@@ -89,39 +93,36 @@
         return stepTitle
       },
       mappedScenarios: function () {
-        let mappedScenarios = ''
+        let mappedScenarios = []
         let source
         if (this.step) {
           source = this.step.scenarios
         } else if (this.feature) {
           source = this.feature.scenarios
         }
-        let firstScenario = true
         for (let i in source) {
           let s = source[i]
-          if (!firstScenario) {
-            mappedScenarios += '\n\n'
-          }
+          let mappedS = ''
           if (this.step) {
-            mappedScenarios += `<span ${this.$options._scopeId} class="uri">${s.uri}</span>\n`
+            mappedS += `<span ${this.$options._scopeId} class="uri">${s.uri}</span>\n`
           }
           for (let t in s.tags) {
             let tag = s.tags[t]
-            mappedScenarios += `${escape(tag.name)} `
+            mappedS += `${escape(tag.name)} `
           }
           if (s.tags.length > 0) {
-            mappedScenarios += '\n'
+            mappedS += '\n'
           }
-          mappedScenarios += `${escape(s.keyword)}: ${escape(s.name)}`
+          mappedS += `${escape(s.keyword)}: ${escape(s.name)}`
           for (let st in s.steps) {
             let step = s.steps[st]
             if (step.currentStep) {
-              mappedScenarios += `\n<div ${this.$options._scopeId} class="currentStep">&#8195;&#8195;${escape(step.keyword + step.name)}</div>`
+              mappedS += `\n<div ${this.$options._scopeId} class="currentStep"><span ${this.$options._scopeId} class="marker"></span>&#8195;&#8195;${escape(step.keyword + step.name)}</div>`
             } else {
-              mappedScenarios += `\n&#8195;&#8195;${escape(step.keyword + step.name)}`
+              mappedS += `\n&#8195;&#8195;${escape(step.keyword + step.name)}`
             }
           }
-          firstScenario = false
+          mappedScenarios.push(mappedS)
         }
         return mappedScenarios
       }
@@ -196,9 +197,18 @@
     .currentStep {
       display: inline-block;
       width: 100%;
-      background-color: #414350;
       padding: 0 0.5em;
       margin: 0 -0.5em;
+
+      span.marker {
+        position: absolute;
+        display: block;
+        width: 10px;
+        height: 10px;
+        border-radius: 5px;
+        margin-top: 7px;
+        background-color: #42b983;
+      }
     }
 
     .tag {
@@ -237,9 +247,13 @@
       box-sizing: border-box;
       width: 100%;
       font-size: 24px;
-      margin: 10px 0;
+      margin: 15px 0 10px;
       border-bottom: 3px solid #E6E6E6;
       line-height: 1.5;
+
+      &.first {
+        margin-top: 10px;
+      }
     }
 
     pre {

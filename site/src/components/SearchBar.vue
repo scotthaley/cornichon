@@ -1,5 +1,5 @@
 <template>
-  <div id="searchbar">
+  <div id="searchbar" ref="container">
     <input type="text" v-bind:value="value" ref="input" v-on:input="updateValue($event.target.value)"/>
   </div>
 </template>
@@ -19,32 +19,39 @@
         type: String,
         default: 'Any'
       },
-      value: String
+      value: String,
+      placeholders: Array
     },
     data () {
       return {
         search: ''
       }
     },
+    watch: {
+      placeholders: function () {
+        this.initSuperplaceholder()
+      }
+    },
     methods: {
       updateValue: function (value) {
         this.$emit('input', value)
+      },
+      initSuperplaceholder: function () {
+        if (this.placeholders) {
+          superplaceholder({
+            el: this.$refs.input,
+            sentences: this.placeholders,
+            options: {
+              startOnFocus: false,
+              shuffle: true,
+              loop: true
+            }
+          })
+        }
       }
     },
     mounted () {
-      superplaceholder({
-        el: this.$refs.input,
-        sentences: [
-          'Given I am logged in...',
-          'When I proceed to billing...',
-          'Then I should see a confirmation page...'
-        ],
-        options: {
-          startOnFocus: false,
-          shuffle: true,
-          loop: true
-        }
-      })
+      this.initSuperplaceholder()
     }
   }
 </script>
