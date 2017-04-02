@@ -25,7 +25,8 @@
     "express": "^4.15.2",
     "js-beautify": "^1.6.12",
     "open": "0.0.5",
-    "promise-map": "^1.2.0"
+    "promise-map": "^1.2.0",
+    "strip-indent": "^2.0.0"
   },
   "devDependencies": {
     "standard": "^9.0.2"

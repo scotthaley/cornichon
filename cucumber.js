@@ -13,7 +13,8 @@ const cornichon = require('./cornichon')
 const fs = require('fs')
 const co = require('co')
 
-var beautify = require('js-beautify').js_beautify
+const beautify = require('js-beautify').js_beautify
+const stripIndent = require('strip-indent')
 
 const cucumberExpression = require('cucumber-expressions')
 
@@ -202,7 +203,7 @@ module.exports = (() => {
       tags: feature.tags,
       line: feature.line,
       keyword: feature.keyword,
-      description: feature.description ? feature.description.trim() : '',
+      description: feature.description ? stripIndent(feature.description) : '',
       internalID: feature.internalID || getFeatureID(feature)
     }
 

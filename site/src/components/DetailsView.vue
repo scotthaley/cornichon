@@ -1,7 +1,8 @@
 <template>
   <div id="detailsview" ref="main">
     <div class="content" ref="content">
-      <resultcard v-bind:modal="true" v-bind:step="step"></resultcard>
+      <resultcard v-bind:modal="true" v-bind:step="step" v-bind:scenario="scenario"
+                  v-bind:feature="feature"></resultcard>
     </div>
     <div class="overlay" ref="overlay"></div>
   </div>
@@ -21,7 +22,9 @@
     },
     data () {
       return {
-        step: null
+        step: null,
+        scenario: null,
+        feature: null
       }
     },
     mounted () {
@@ -36,10 +39,14 @@
     },
     methods: {
       showDetails: function (id) {
+        const _this = this
+        setTimeout(function () {
+          _this.$refs.content.scrollTop = 0
+        }, 50)
         if (id.indexOf('feature-') !== -1) {
-
+          this.showFeature(id)
         } else if (id.indexOf('scenario-') !== -1) {
-
+          this.showScenario(id)
         } else {
           this.showStep(id)
         }
@@ -49,7 +56,34 @@
           let step = this.supportCode[s]
           if (step.cornichonID === id) {
             this.step = step
+            this.scenario = null
+            this.feature = null
             this.showModal()
+            return
+          }
+        }
+      },
+      showFeature: function (id) {
+        for (let f in this.features) {
+          let feature = this.features[f]
+          if (feature.internalID === id) {
+            this.feature = feature
+            this.step = null
+            this.scenario = null
+            this.showModal()
+            return
+          }
+        }
+      },
+      showScenario: function (id) {
+        for (let s in this.scenarios) {
+          let scenario = this.scenarios[s]
+          if (scenario.internalID === id) {
+            this.scenario = scenario
+            this.step = null
+            this.feature = null
+            this.showModal()
+            return
           }
         }
       },
@@ -68,7 +102,10 @@
   #detailsview {
     display: none;
     position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
 
     .overlay {
       top: 0;

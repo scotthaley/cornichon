@@ -1,6 +1,7 @@
 @feature-tag
 Feature: Example feature
   This is an example feature. Some details about the feature go here.
+  Multiline descriptions look like this.
 
   @simple-tag
   Scenario: Simple scenario
