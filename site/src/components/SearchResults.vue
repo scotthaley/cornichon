@@ -16,12 +16,24 @@
   import resultcard from './ResultCard'
 
   const fuzzy = require('fuzzy')
+  const eventBus = require('@/eventBus')
 
   export default {
     name: 'searchresults',
     props: ['value', 'search', 'sidebarData', 'supportCode', 'features', 'scenarios'],
     components: {
       resultcard
+    },
+    data () {
+      return {
+        refinementData: {}
+      }
+    },
+    mounted () {
+      const _this = this
+      eventBus.on('refinement.data', function (data) {
+        _this.refinementData = data
+      })
     },
     computed: {
       filteredSupportCode: function () {
@@ -38,9 +50,15 @@
         let filter = []
         for (let f in this.features) {
           let feature = this.features[f]
-          if (fuzzy.test(this.search, feature.name)) {
-            filter.push(feature)
+          if (!fuzzy.test(this.search, feature.name)) {
+            continue
           }
+          if (this.refinementData.tags && this.refinementData.tags.length > 0) {
+            if (!this.tagMatchesSource(feature)) {
+              continue
+            }
+          }
+          filter.push(feature)
         }
         return filter
       },
@@ -48,11 +66,35 @@
         let filter = []
         for (let s in this.scenarios) {
           let scenario = this.scenarios[s]
-          if (fuzzy.test(this.search, scenario.name)) {
-            filter.push(scenario)
+          if (!fuzzy.test(this.search, scenario.name)) {
+            continue
           }
+          if (this.refinementData.tags && this.refinementData.tags.length > 0) {
+            if (!this.tagMatchesSource(scenario)) {
+              continue
+            }
+          }
+          filter.push(scenario)
         }
         return filter
+      }
+    },
+    methods: {
+      tagMatchesSource: function (source) {
+        let foundTag = false
+        for (let t in this.refinementData.tags) {
+          let tag = this.refinementData.tags[t]
+          for (let st in source.tags) {
+            if (tag === source.tags[st].name) {
+              foundTag = true
+              break
+            }
+          }
+          if (foundTag) {
+            break
+          }
+        }
+        return foundTag
       }
     }
   }

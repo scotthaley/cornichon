@@ -200,6 +200,10 @@
         let $el = $(e.target).closest('[data-id]')
         eventBus.emit('details', $el.data('id').toString())
       })
+
+      $(this.$refs.card).on('click', '.tag', function (e) {
+        eventBus.emit('refinement.tag', $(e.target).closest('.tag').text())
+      })
     }
   }
 </script>
