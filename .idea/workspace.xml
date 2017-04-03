@@ -2,11 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="252beba3-8471-4eab-89f5-94329749d95c" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cucumber.helper.js" afterPath="$PROJECT_DIR$/cucumber.helper.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cucumber.js" afterPath="$PROJECT_DIR$/cucumber.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/site/src/components/ResultCard.vue" afterPath="$PROJECT_DIR$/site/src/components/ResultCard.vue" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/simple/features/tests/advanced.feature" afterPath="$PROJECT_DIR$/tests/simple/features/tests/advanced.feature" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/site/dist/static/css/app.dc6cf1fb1ae47bef803ebb4ccf6a140b.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/site/dist/static/css/app.dc6cf1fb1ae47bef803ebb4ccf6a140b.css.map" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/site/dist/static/js/app.d51f63c1ec68c5388227.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/site/dist/static/js/app.d51f63c1ec68c5388227.js.map" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/site/dist/static/js/manifest.b251b2c9cbdd92923f47.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/site/dist/static/js/manifest.b251b2c9cbdd92923f47.js.map" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/site/dist/static/js/vendor.783549d241401784dc15.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/site/dist/static/js/vendor.783549d241401784dc15.js.map" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/site/dist/index.html" afterPath="$PROJECT_DIR$/site/dist/index.html" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -43,6 +47,13 @@
                   <caret line="128" column="37" lean-forward="false" selection-start-line="128" selection-start-column="37" selection-end-line="128" selection-end-column="37" />
                   <folding>
                     <element signature="e#0#47#0" expanded="false" />
+                    <marker date="1491180205342" expanded="true" signature="530:9926" ph="{...}" />
+                    <marker date="1491180205342" expanded="true" signature="7029:8080" ph="{...}" />
+                    <marker date="1491180205342" expanded="true" signature="7424:8063" ph="{...}" />
+                    <marker date="1491180205342" expanded="true" signature="7536:8057" ph="{...}" />
+                    <marker date="1491180205342" expanded="true" signature="7787:8049" ph="{...}" />
+                    <marker date="1491180205342" expanded="true" signature="7827:8039" ph="{...}" />
+                    <marker date="1491180205342" expanded="true" signature="8567:8746" ph="{...}" />
                   </folding>
                 </state>
               </provider>
@@ -140,7 +151,7 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="ResultCard.vue" pinned="false" current-in-tab="true">
+          <file leaf-file-name="ResultCard.vue" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/site/src/components/ResultCard.vue">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="567">
@@ -148,6 +159,16 @@
                   <folding>
                     <marker date="1491180672998" expanded="true" signature="7046:8463" ph="..." />
                   </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="package.json" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/package.json">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="315">
+                  <caret line="15" column="3" lean-forward="false" selection-start-line="15" selection-start-column="3" selection-end-line="15" selection-end-column="3" />
+                  <folding />
                 </state>
               </provider>
             </entry>
@@ -179,6 +200,9 @@
                   <caret line="74" column="32" lean-forward="false" selection-start-line="74" selection-start-column="32" selection-end-line="74" selection-end-column="32" />
                   <folding>
                     <element signature="e#0#47#0" expanded="false" />
+                    <marker date="1491170299695" expanded="true" signature="99:2537" ph="{...}" />
+                    <marker date="1491170299695" expanded="true" signature="1855:2151" ph="{...}" />
+                    <marker date="1491170299695" expanded="true" signature="2458:2535" ph="{&quot;getStepKeyword&quot;: getStepKeyword...}" />
                   </folding>
                 </state>
               </provider>
@@ -512,18 +536,17 @@
       <workItem from="1489792566109" duration="1268000" />
       <workItem from="1489807193358" duration="10287000" />
       <workItem from="1489935976351" duration="65061000" />
-      <workItem from="1490501353121" duration="66635000" />
+      <workItem from="1490501353121" duration="67332000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="143251000" />
+    <option name="totallyTimeSpent" value="143948000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="2576" height="1056" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.11210938" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.11210938" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980973" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
@@ -745,14 +768,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="350">
-          <caret line="15" column="3" lean-forward="false" selection-start-line="15" selection-start-column="3" selection-end-line="15" selection-end-column="3" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/site/package.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -930,6 +945,9 @@
           <caret line="74" column="32" lean-forward="false" selection-start-line="74" selection-start-column="32" selection-end-line="74" selection-end-column="32" />
           <folding>
             <element signature="e#0#47#0" expanded="false" />
+            <marker date="1491170299695" expanded="true" signature="99:2537" ph="{...}" />
+            <marker date="1491170299695" expanded="true" signature="1855:2151" ph="{...}" />
+            <marker date="1491170299695" expanded="true" signature="2458:2535" ph="{&quot;getStepKeyword&quot;: getStepKeyword...}" />
           </folding>
         </state>
       </provider>
@@ -940,6 +958,13 @@
           <caret line="128" column="37" lean-forward="false" selection-start-line="128" selection-start-column="37" selection-end-line="128" selection-end-column="37" />
           <folding>
             <element signature="e#0#47#0" expanded="false" />
+            <marker date="1491180205342" expanded="true" signature="530:9926" ph="{...}" />
+            <marker date="1491180205342" expanded="true" signature="7029:8080" ph="{...}" />
+            <marker date="1491180205342" expanded="true" signature="7424:8063" ph="{...}" />
+            <marker date="1491180205342" expanded="true" signature="7536:8057" ph="{...}" />
+            <marker date="1491180205342" expanded="true" signature="7787:8049" ph="{...}" />
+            <marker date="1491180205342" expanded="true" signature="7827:8039" ph="{...}" />
+            <marker date="1491180205342" expanded="true" signature="8567:8746" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -959,6 +984,14 @@
           <folding>
             <marker date="1491180672998" expanded="true" signature="7046:8463" ph="..." />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="15" column="3" lean-forward="false" selection-start-line="15" selection-start-column="3" selection-end-line="15" selection-end-column="3" />
+          <folding />
         </state>
       </provider>
     </entry>
