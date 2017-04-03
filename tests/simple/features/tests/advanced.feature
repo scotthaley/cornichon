@@ -5,9 +5,11 @@ Feature: More advanced feature
 
   Scenario Outline: Test a few things
     When I pass a parameter like <fruit>
+    And I do an <type> step
+    And I pass a parameter like <type>
     Then I should see some results
 
     Examples:
-      | fruit    |
-      | "apple"  |
-      | "orange" |
+      | fruit    | type       |
+      | "apple"  | "undefined" |
+      | "orange" | "defined"   |

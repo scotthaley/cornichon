@@ -173,10 +173,26 @@
           mappedS += `<span ${this.$options._scopeId} class="scenario" data-id="${s.internalID}">${escape(s.keyword)}: ${escape(s.name)}</span>`
           for (let st in s.steps) {
             let step = s.steps[st]
+            let undefinedText = step.cornichonID ? '' : `<span ${this.$options._scopeId} class="und-step">No step definition found</span>`
+            let undefinedClass = step.cornichonID ? '' : 'und-step'
             if (step.currentStep) {
-              mappedS += `\n<span ${this.$options._scopeId} class="step currentStep" data-id="${step.cornichonID}"><span ${this.$options._scopeId} class="marker"></span>${escape(step.keyword + ' ' + step.name)}</span>`
+              mappedS += `\n<span ${this.$options._scopeId} class="step currentStep ${undefinedClass}" data-id="${step.cornichonID}"><span ${this.$options._scopeId} class="marker"></span>${escape(step.keyword + ' ' + step.name)}${undefinedText}</span>`
             } else {
-              mappedS += `\n<span ${this.$options._scopeId} class="step" data-id="${step.cornichonID}">${escape(step.keyword + ' ' + step.name)}</span>`
+              mappedS += `\n<span ${this.$options._scopeId} class="step ${undefinedClass}" data-id="${step.cornichonID}">${escape(step.keyword + ' ' + step.name)}${undefinedText}</span>`
+            }
+          }
+          if (s.table) {
+            mappedS += `\n\n<table ${this.$options._scopeId}><tr>`
+            for (let a in s.table) {
+              mappedS += `<th ${this.$options._scopeId}>${a}</th>`
+            }
+            mappedS += '</tr>'
+            for (let a = 0; a < s.table[Object.keys(s.table)[0]].length; a++) {
+              mappedS += `<tr ${this.$options._scopeId}>`
+              for (let b in s.table) {
+                mappedS += `<td ${this.$options._scopeId}>${s.table[b][a]}</td>`
+              }
+              mappedS += '</tr>'
             }
           }
           mappedScenarios.push(mappedS)
@@ -276,7 +292,13 @@
       padding: 0 1.5em;
       margin: 0 -0.5em;
 
-      &:hover:not(.currentStep) {
+      .und-step {
+        font-size: 0.8em;
+        padding-left: 1em;
+        color: #6b7186;
+      }
+
+      &:hover:not(.currentStep):not(.und-step) {
         text-decoration: underline;
         cursor: pointer;
       }
@@ -331,7 +353,7 @@
     code .uri {
       display: inline;
       font-size: 12px;
-      color: lightgray;
+      color: #6b7186;
       margin-bottom: 10px;
       margin-top: 0;
     }
@@ -358,6 +380,30 @@
 
     code {
       line-height: 1.4;
+    }
+
+    table {
+      margin-left: 1em;
+      border: 1px solid #8be9fd;
+
+      th, td {
+        padding: 2px 7px;
+        min-width: 100px;
+        +th, +td {
+          border-left: 1px solid #8be9fd;
+        }
+      }
+
+      th {
+        border-bottom: 1px solid #8be9fd;
+        text-align: center;
+      }
+
+      tr:nth-child(odd) {
+        td {
+          background-color: #373e4c;
+        }
+      }
     }
   }
 </style>

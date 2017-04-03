@@ -27,18 +27,74 @@ module.exports = (() => {
     return line.substring(0, line.indexOf('(')).trim()
   }
 
+  const getTable = scenario => {
+    let table = {}
+    let cLine = scenario.line - 2
+    let lineText = ''
+    let columnNames = []
+    let headerLine = 0
+    while (lineText.indexOf('Examples:') === -1) {
+      columnNames = lineText.split('|').reduce((result, item) => {
+        let header = item.trim()
+        if (header !== '') {
+          result.push(header)
+        }
+        return result
+      }, [])
+      headerLine = cLine
+      lineText = readLine(scenario.uri_full, cLine)
+      cLine--
+    }
+
+    for (let c in columnNames) {
+      table[columnNames[c]] = []
+    }
+
+    cLine = headerLine + 2
+    lineText = readLine(scenario.uri_full, cLine++)
+    while (lineText && lineText.match(/|.*|/)) {
+      let rowData = lineText.split('|').reduce((result, item) => {
+        let dataItem = item.trim()
+        if (dataItem !== '') {
+          result.push(dataItem)
+        }
+        return result
+      }, [])
+      for (let c in columnNames) {
+        table[columnNames[c]].push(rowData[c])
+      }
+      lineText = readLine(scenario.uri_full, cLine++)
+    }
+    return table
+  }
+
+  const fixScenarioOutline = (scenario, table) => {
+    for (let s in scenario.steps) {
+      let step = scenario.steps[s]
+      let line = readLine(scenario.uri_full, step.line - 1)
+      for (let column in table) {
+        if (line.indexOf(`<${column}>`) !== -1) {
+          let newName = line.replace(step.keyword, '').trim()
+          step.name = newName
+        }
+      }
+    }
+  }
+
   const getStepID = step => {
     let matches = step.code.match(/{cornichon: [0-9]+}/)
     if (matches) {
       return matches[0].match(/[0-9]+/)[0]
     }
     let ID = new Date().getTime().toString()
-    writeLine(step.uri, step.line - 1, ` /* {cornichon: ${ID}} */`)
+    writeLine(step.uri_full, step.line - 1, ` /* {cornichon: ${ID}} */`)
     return ID
   }
 
   return {
     getStepKeyword,
-    getStepID
+    getStepID,
+    getTable,
+    fixScenarioOutline
   }
 })()

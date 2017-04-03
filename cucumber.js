@@ -22,6 +22,8 @@ module.exports = (() => {
   let features = null
   let supportCode = null
   let scenarios = null
+  let scenarioMap = []
+  let featureMap = []
   let cID = 100
 
   const init = function () {
@@ -68,7 +70,7 @@ module.exports = (() => {
       let features = yield Promise.all(resolveFeatures)
       let mappedFeatures = []
       for (let f = 0; f < features.length; f++) {
-        mappedFeatures.push(mappedFeature(features[f], true))
+        mappedFeatures.push(mappedFeature(features[f], features, true))
       }
       return mappedFeatures
     }).catch(e => {
@@ -111,8 +113,9 @@ module.exports = (() => {
         let scenario = feature.scenarios[sc]
         for (let s = 0; s < scenario.steps.length; s++) {
           let step = scenario.steps[s]
-          if (stepDef.expression.match(step.name)) {
+          if (stepDef.expression.match(step.pattern)) {
             step.cornichonID = stepDef.cornichonID
+            step.pattern = stepDef.pattern
           }
         }
       }
@@ -124,7 +127,7 @@ module.exports = (() => {
         let scenario = sCode.scenarios[sc]
         for (let s = 0; s < scenario.steps.length; s++) {
           let step = scenario.steps[s]
-          if (stepDef.expression.match(step.name)) {
+          if (stepDef.expression.match(step.pattern)) {
             step.cornichonID = stepDef.cornichonID
           }
         }
@@ -149,6 +152,7 @@ module.exports = (() => {
         stepDef.keyword = cucumberHelper.getStepKeyword(stepDef)
         stepDef.usage = cornichon.getUsage(stepDef.cornichonID) || 'No usage information provided.'
         stepDef.uri = stepDef.uri.replace(/^.*\\features\\/, 'features\\')
+        stepDef.uri_full = stepDef.uri
         stepDef.features = []
         stepDef.scenarios = []
         for (let f in features) {
@@ -184,22 +188,24 @@ module.exports = (() => {
     })
   }
 
-  const getFeatureID = (feature, features) => {
-    if (features) {
-      for (let f = 0; f < features.length; f++) {
-        let testF = features[f]
-        if (feature.name === testF.name && feature.uri === testF.uri && feature.tags === testF.tags && feature.line === testF.line && testF.internalID) {
-          return testF.internalID
-        }
+  const getFeatureID = (feature) => {
+    for (let f = 0; f < featureMap.length; f++) {
+      let testF = featureMap[f]
+      if (feature.name === testF.name && feature.uri === testF.uri && eqSet(feature.tags, testF.tags) && feature.line === testF.line && testF.internalID) {
+        return testF.internalID
       }
     }
-    return `feature-${cID++}`
+    let fmap = Object.assign({}, feature)
+    fmap.internalID = `feature-${cID++}`
+    featureMap.push(fmap)
+    return fmap.internalID
   }
 
-  const mappedFeature = (feature, includeScenarios) => {
+  const mappedFeature = (feature, features, includeScenarios) => {
     let f = {
       name: feature.name,
       uri: feature.uri.replace(/^.*\\features\\/, 'features\\'),
+      uri_full: feature.uri,
       tags: feature.tags,
       line: feature.line,
       keyword: feature.keyword,
@@ -209,29 +215,47 @@ module.exports = (() => {
 
     if (includeScenarios) {
       f.scenarios = []
+      let foundScenarios = []
       for (let s = 0; s < feature.scenarios.length; s++) {
-        f.scenarios.push(mappedScenario(feature.scenarios[s]))
+        let mScenario = mappedScenario(feature.scenarios[s], null, features)
+        if (foundScenarios.indexOf(mScenario.internalID) === -1) {
+          foundScenarios.push(mScenario.internalID)
+          f.scenarios.push(mScenario)
+        } else {
+          for (let fs in f.scenarios) {
+            let foundScenario = f.scenarios[fs]
+            if (foundScenario.internalID === mScenario.internalID) {
+              mapScenarioOutline(foundScenario)
+              break
+            }
+          }
+        }
       }
     }
     return f
   }
 
-  const getScenarioID = (scenario, features) => {
-    if (features) {
-      for (let f = 0; f < features.length; f++) {
-        let feature = features[f]
-        for (let s = 0; s < feature.scenarios.length; s++) {
-          let testS = this.scenarios[s]
-          if (scenario.name === testS.name && scenario.uri === testS.uri && scenario.tags === testS.tags && scenario.line === testS.line && testS.internalID) {
-            return testS.internalID
-          }
-        }
+  const getScenarioID = (scenario) => {
+    for (let s = 0; s < scenarioMap.length; s++) {
+      let testS = scenarioMap[s]
+      if (scenario.name === testS.name && scenario.uri === testS.uri && eqSet(scenario.tags, testS.tags) && testS.internalID) {
+        return testS.internalID
       }
     }
-    return `scenario-${cID++}`
+    let smap = Object.assign({}, scenario)
+    smap.internalID = `scenario-${cID++}`
+    scenarioMap.push(smap)
+    return smap.internalID
   }
 
-  const mappedScenario = (scenario, stepDef, features) => {
+  const mapScenarioOutline = (scenario) => {
+    scenario.keyword = 'Scenario Outline'
+    let table = cucumberHelper.getTable(scenario)
+    cucumberHelper.fixScenarioOutline(scenario, table)
+    scenario.table = table
+  }
+
+  const mappedScenario = (scenario, stepDef) => {
     let steps = []
     for (let st in scenario.steps) {
       steps.push(mappedStep(scenario.steps[st], stepDef))
@@ -241,10 +265,11 @@ module.exports = (() => {
       line: scenario.line,
       tags: scenario.tags,
       uri: scenario.uri.replace(/^.*\\features\\/, 'features\\'),
+      uri_full: scenario.uri,
       keyword: scenario.keyword,
       description: scenario.description ? scenario.description.trim() : '',
       steps,
-      internalID: scenario.internalID || getScenarioID(scenario, features)
+      internalID: scenario.internalID || getScenarioID(scenario)
     }
   }
 
@@ -254,16 +279,25 @@ module.exports = (() => {
       pattern: step.name,
       name: step.name,
       currentStep: stepMatch != null,
+      line: step.line,
       uri: step.uri.replace(/^.*\\features\\/, 'features\\'),
+      uri_full: step.uri,
       keyword: step.keyword.trim()
     }
     return mStep
+  }
+
+  const eqSet = (as, bs) => {
+    if (as.size !== bs.size) return false
+    for (var a of as) if (!bs.has(a)) return false
+    return true
   }
 
   return {
     init,
     features,
     supportCode,
-    scenarios
+    scenarios,
+    eqSet
   }
 })()

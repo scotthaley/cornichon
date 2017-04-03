@@ -2,9 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="252beba3-8471-4eab-89f5-94329749d95c" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/site/src/App.vue" afterPath="$PROJECT_DIR$/site/src/App.vue" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cucumber.helper.js" afterPath="$PROJECT_DIR$/cucumber.helper.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cucumber.js" afterPath="$PROJECT_DIR$/cucumber.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/site/src/components/ResultCard.vue" afterPath="$PROJECT_DIR$/site/src/components/ResultCard.vue" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/site/src/components/SearchResults.vue" afterPath="$PROJECT_DIR$/site/src/components/SearchResults.vue" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/simple/features/tests/advanced.feature" afterPath="$PROJECT_DIR$/tests/simple/features/tests/advanced.feature" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -24,16 +26,6 @@
     <splitter split-orientation="horizontal" split-proportion="0.48790145">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="simple.feature" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/tests/simple/features/tests/simple.feature">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="63">
-                  <caret line="3" column="39" lean-forward="false" selection-start-line="3" selection-start-column="39" selection-end-line="3" selection-end-column="39" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
           <file leaf-file-name="main.js" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/site/src/main.js">
               <provider selected="true" editor-type-id="text-editor">
@@ -47,8 +39,8 @@
           <file leaf-file-name="cucumber.js" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/cucumber.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-630">
-                  <caret line="194" column="4" lean-forward="false" selection-start-line="194" selection-start-column="4" selection-end-line="194" selection-end-column="4" />
+                <state relative-caret-position="756">
+                  <caret line="128" column="37" lean-forward="false" selection-start-line="128" selection-start-column="37" selection-end-line="128" selection-end-column="37" />
                   <folding>
                     <element signature="e#0#47#0" expanded="false" />
                   </folding>
@@ -66,7 +58,7 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="Refinements.vue" pinned="false" current-in-tab="true">
+          <file leaf-file-name="Refinements.vue" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/site/src/components/Refinements.vue">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="420">
@@ -112,14 +104,12 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="cucumber.helper.js" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/cucumber.helper.js">
+          <file leaf-file-name="advanced.feature" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/tests/simple/features/tests/advanced.feature">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="672">
-                  <caret line="34" column="13" lean-forward="false" selection-start-line="34" selection-start-column="13" selection-end-line="34" selection-end-column="13" />
-                  <folding>
-                    <element signature="e#0#47#0" expanded="false" />
-                  </folding>
+                <state relative-caret-position="147">
+                  <caret line="7" column="26" lean-forward="false" selection-start-line="7" selection-start-column="26" selection-end-line="7" selection-end-column="26" />
+                  <folding />
                 </state>
               </provider>
             </entry>
@@ -150,13 +140,13 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="ResultCard.vue" pinned="false" current-in-tab="false">
+          <file leaf-file-name="ResultCard.vue" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/site/src/components/ResultCard.vue">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-609">
-                  <caret line="94" column="42" lean-forward="true" selection-start-line="94" selection-start-column="42" selection-end-line="94" selection-end-column="42" />
+                <state relative-caret-position="567">
+                  <caret line="356" column="0" lean-forward="false" selection-start-line="356" selection-start-column="0" selection-end-line="356" selection-end-column="0" />
                   <folding>
-                    <marker date="1491155855259" expanded="true" signature="6787:7614" ph="..." />
+                    <marker date="1491180672998" expanded="true" signature="7046:8463" ph="..." />
                   </folding>
                 </state>
               </provider>
@@ -172,12 +162,24 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="SearchResults.vue" pinned="false" current-in-tab="true">
+          <file leaf-file-name="SearchResults.vue" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/site/src/components/SearchResults.vue">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="288">
-                  <caret line="54" column="10" lean-forward="false" selection-start-line="54" selection-start-column="10" selection-end-line="54" selection-end-column="10" />
+                <state relative-caret-position="309">
+                  <caret line="55" column="62" lean-forward="false" selection-start-line="55" selection-start-column="62" selection-end-line="55" selection-end-column="62" />
                   <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="cucumber.helper.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/cucumber.helper.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="375">
+                  <caret line="74" column="32" lean-forward="false" selection-start-line="74" selection-start-column="32" selection-end-line="74" selection-end-column="32" />
+                  <folding>
+                    <element signature="e#0#47#0" expanded="false" />
+                  </folding>
                 </state>
               </provider>
             </entry>
@@ -228,19 +230,19 @@
         <option value="$PROJECT_DIR$/cornichon.js" />
         <option value="$PROJECT_DIR$/tests/simple/usage.cornichon" />
         <option value="$PROJECT_DIR$/site/src/main.js" />
-        <option value="$PROJECT_DIR$/cucumber.helper.js" />
         <option value="$PROJECT_DIR$/site/src/components/SideBar.vue" />
-        <option value="$PROJECT_DIR$/tests/simple/features/tests/advanced.feature" />
         <option value="$PROJECT_DIR$/site/src/components/SearchBar.vue" />
         <option value="$PROJECT_DIR$/server.js" />
         <option value="$PROJECT_DIR$/site/src/eventBus.js" />
         <option value="$PROJECT_DIR$/tests/simple/features/tests/simple.feature" />
-        <option value="$PROJECT_DIR$/cucumber.js" />
         <option value="$PROJECT_DIR$/site/src/components/DetailsView.vue" />
         <option value="$PROJECT_DIR$/site/src/App.vue" />
         <option value="$PROJECT_DIR$/site/src/components/Refinements.vue" />
-        <option value="$PROJECT_DIR$/site/src/components/ResultCard.vue" />
         <option value="$PROJECT_DIR$/site/src/components/SearchResults.vue" />
+        <option value="$PROJECT_DIR$/cucumber.helper.js" />
+        <option value="$PROJECT_DIR$/cucumber.js" />
+        <option value="$PROJECT_DIR$/tests/simple/features/tests/advanced.feature" />
+        <option value="$PROJECT_DIR$/site/src/components/ResultCard.vue" />
       </list>
     </option>
   </component>
@@ -375,7 +377,7 @@
     <property name="JavaScriptWeakerCompletionTypeGuess" value="true" />
     <property name="HbShouldOpenHtmlAsHb" value="" />
     <property name="editor.config.accepted" value="true" />
-    <property name="SearchEverywhereHistoryKey" value="search&#9;FILE&#9;file://D:/Workspace/Cornichon/site/src/components/SearchBar.vue&#10;main&#9;FILE&#9;file://D:/Workspace/Cornichon/site/src/main.js&#10;main.j&#9;FILE&#9;file://D:/Workspace/Cornichon/site/src/main.js&#10;color pick&#9;ACTION&#9;ShowColorPicker&#10;color pi&#9;ACTION&#9;ShowColorPicker&#10;reformat co&#9;ACTION&#9;ReformatCode" />
+    <property name="SearchEverywhereHistoryKey" value="adv&#9;FILE&#9;file://D:/Workspace/Cornichon/tests/simple/features/tests/advanced.feature&#10;advanc&#9;FILE&#9;file://D:/Workspace/Cornichon/tests/simple/features/tests/advanced.feature&#10;search&#9;FILE&#9;file://D:/Workspace/Cornichon/site/src/components/SearchBar.vue&#10;main&#9;FILE&#9;file://D:/Workspace/Cornichon/site/src/main.js&#10;main.j&#9;FILE&#9;file://D:/Workspace/Cornichon/site/src/main.js&#10;color pick&#9;ACTION&#9;ShowColorPicker&#10;color pi&#9;ACTION&#9;ShowColorPicker&#10;reformat co&#9;ACTION&#9;ReformatCode" />
     <property name="add_unversioned_files" value="$PROJECT_DIR$/site/node_modules/vue-superplaceholder/superplaceholder.js&#10;D:/Workspace/Cornichon/site/node_modules/highlightjs/highlight.pack.js&#10;D:/Workspace/Cornichon/site/node_modules/codemirror/mode/markdown/markdown.js" />
     <property name="node.js.path.for.package.eslint" value="project" />
     <property name="node.js.selected.package.eslint" value="D:\Workspace\Cornichon\site\node_modules\eslint" />
@@ -510,12 +512,12 @@
       <workItem from="1489792566109" duration="1268000" />
       <workItem from="1489807193358" duration="10287000" />
       <workItem from="1489935976351" duration="65061000" />
-      <workItem from="1490501353121" duration="56944000" />
+      <workItem from="1490501353121" duration="66635000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="133560000" />
+    <option name="totallyTimeSpent" value="143251000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="2576" height="1056" extended-state="6" />
@@ -530,7 +532,7 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980973" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39957717" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="true" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.45983088" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -548,7 +550,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="14" />
+      <option name="time" value="23" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -798,14 +800,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/site/src/main.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="22" column="29" lean-forward="false" selection-start-line="22" selection-start-column="29" selection-end-line="22" selection-end-column="29" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/index.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="63">
@@ -872,42 +866,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cucumber.helper.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="672">
-          <caret line="34" column="13" lean-forward="false" selection-start-line="34" selection-start-column="13" selection-end-line="34" selection-end-column="13" />
-          <folding>
-            <element signature="e#0#47#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tests/simple/features/tests/advanced.feature">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="12" column="17" lean-forward="false" selection-start-line="12" selection-start-column="17" selection-end-line="12" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tests/simple/features/tests/simple.feature">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="63">
-          <caret line="3" column="39" lean-forward="false" selection-start-line="3" selection-start-column="39" selection-end-line="3" selection-end-column="39" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cucumber.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-630">
-          <caret line="194" column="4" lean-forward="false" selection-start-line="194" selection-start-column="4" selection-end-line="194" selection-end-column="4" />
-          <folding>
-            <element signature="e#0#47#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/site/src/components/DetailsView.vue">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="189">
@@ -942,21 +900,65 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/site/src/components/ResultCard.vue">
+    <entry file="file://$PROJECT_DIR$/site/src/components/SearchResults.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-609">
-          <caret line="94" column="42" lean-forward="true" selection-start-line="94" selection-start-column="42" selection-end-line="94" selection-end-column="42" />
+        <state relative-caret-position="309">
+          <caret line="55" column="62" lean-forward="false" selection-start-line="55" selection-start-column="62" selection-end-line="55" selection-end-column="62" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/simple/features/tests/simple.feature">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="63">
+          <caret line="3" column="39" lean-forward="false" selection-start-line="3" selection-start-column="39" selection-end-line="3" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/site/src/main.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="22" column="29" lean-forward="false" selection-start-line="22" selection-start-column="29" selection-end-line="22" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cucumber.helper.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="74" column="32" lean-forward="false" selection-start-line="74" selection-start-column="32" selection-end-line="74" selection-end-column="32" />
           <folding>
-            <marker date="1491155855259" expanded="true" signature="6787:7614" ph="..." />
+            <element signature="e#0#47#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/site/src/components/SearchResults.vue">
+    <entry file="file://$PROJECT_DIR$/cucumber.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="288">
-          <caret line="54" column="10" lean-forward="false" selection-start-line="54" selection-start-column="10" selection-end-line="54" selection-end-column="10" />
+        <state relative-caret-position="756">
+          <caret line="128" column="37" lean-forward="false" selection-start-line="128" selection-start-column="37" selection-end-line="128" selection-end-column="37" />
+          <folding>
+            <element signature="e#0#47#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/simple/features/tests/advanced.feature">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="147">
+          <caret line="7" column="26" lean-forward="false" selection-start-line="7" selection-start-column="26" selection-end-line="7" selection-end-column="26" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/site/src/components/ResultCard.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="567">
+          <caret line="356" column="0" lean-forward="false" selection-start-line="356" selection-start-column="0" selection-end-line="356" selection-end-column="0" />
+          <folding>
+            <marker date="1491180672998" expanded="true" signature="7046:8463" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>
