@@ -146,6 +146,12 @@ module.exports = (() => {
         let realPath = configuration.supportCodePaths[i]
         let tempPath = path.join(__dirname, 'temp/', realPath.replace(/^.*\\features\\/, 'features\\'))
         fse.copySync(realPath, tempPath)
+        let data = fs.readFileSync(tempPath, 'utf8')
+        let fixedData = data.replace(/require\(['"]\.+\/.*\)/g, function (match) {
+          let fixedPath = path.join(realPath.substring(0, realPath.lastIndexOf('\\')), match.replace(/require\(['"]/, '').replace(/['"]\)/, ''))
+          return `require('${fixedPath.replace(/\\/g, '/')}')`
+        })
+        fs.writeFileSync(tempPath, fixedData)
         supportCodePaths.push(tempPath)
       }
       let supportCode = cli.getSupportCodeLibrary(supportCodePaths)
@@ -299,7 +305,7 @@ module.exports = (() => {
 
   const eqSet = (as, bs) => {
     if (as.size !== bs.size) return false
-    for (var a of as) if (!bs.has(a)) return false
+    for (var a of as) if (!bs.includes(a)) return false
     return true
   }
 

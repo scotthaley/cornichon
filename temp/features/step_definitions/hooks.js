@@ -2,14 +2,15 @@
  * Created by Scott Haley on 3/17/2017.
  */
 
-const {defineSupportCode} = require('cucumber');
+const {defineSupportCode} = require('cucumber')
+const includedText = require('D:/Workspace/Cornichon/tests/simple/includeThis')
 
-defineSupportCode(function({Before, After}) {
-    Before(function() {
-        console.log('This is my before');
-    });
+defineSupportCode(function ({Before, After}) {
+  Before(function () {
+    console.log(`This is my before (${includedText}`)
+  })
 
-    After(function() {
-        console.log('This is my after');
-    });
-});
+  After(function () {
+    console.log('This is my after')
+  })
+})
