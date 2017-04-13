@@ -11,7 +11,9 @@ const cucumberHelper = require('./cucumber.helper')
 const cornichon = require('./cornichon')
 
 const fs = require('fs')
+const fse = require('fs-extra')
 const co = require('co')
+const path = require('path')
 
 const beautify = require('js-beautify').js_beautify
 const stripIndent = require('strip-indent')
@@ -138,7 +140,15 @@ module.exports = (() => {
   const getSupportCode = (cli, features) => {
     return co(function* () {
       const configuration = yield cli.getConfiguration()
-      let supportCode = cli.getSupportCodeLibrary(configuration.supportCodePaths)
+      let supportCodePaths = []
+      fse.emptyDirSync(path.join(__dirname, 'temp/'))
+      for (let i in configuration.supportCodePaths) {
+        let realPath = configuration.supportCodePaths[i]
+        let tempPath = path.join(__dirname, 'temp/', realPath.replace(/^.*\\features\\/, 'features\\'))
+        fse.copySync(realPath, tempPath)
+        supportCodePaths.push(tempPath)
+      }
+      let supportCode = cli.getSupportCodeLibrary(supportCodePaths)
       let supportCodeMapped = []
       for (let i in supportCode.stepDefinitions) {
         let stepDef = supportCode.stepDefinitions[i]

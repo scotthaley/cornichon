@@ -3,6 +3,7 @@
     <div v-if="step">
       <pre><code class="gherkin header" ref="header" v-html="stepTitle"></code></pre>
       <div class="content">
+        <span class="uri" v-text="step.uri"></span>
         <div class="usage" ref="usage">
           <h1 class="first">Usage<i ref="editusage" class="edit-usage fa fa-pencil fa-1x"></i></h1>
           <div ref="marked" class="marked" v-html="usageHTML"></div>
