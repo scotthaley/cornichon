@@ -147,9 +147,10 @@ module.exports = (() => {
         let tempPath = path.join(__dirname, 'temp/', realPath.replace(/^.*\\features\\/, 'features\\'))
         fse.copySync(realPath, tempPath)
         let data = fs.readFileSync(tempPath, 'utf8')
-        let fixedData = data.replace(/'\.+\/.*'|"\.+\/.*"/g, function (match) {
-          let fixedPath = path.join(realPath.substring(0, realPath.lastIndexOf('\\')), match.replace(/['"]/g, ''))
-          return `'${fixedPath.replace(/\\/g, '/')}'`
+        let fixedData = data.replace(/'\.+\/.*'|"\.+\/.*"|`\.+\/.*`/g, function (match) {
+          let quotes = match.charAt(0)
+          let fixedPath = path.join(realPath.substring(0, realPath.lastIndexOf('\\')), match.replace(/['"`]/g, ''))
+          return `${quotes}${fixedPath.replace(/\\/g, '/')}${quotes}`
         })
         fs.writeFileSync(tempPath, fixedData)
         supportCodePaths.push(tempPath)

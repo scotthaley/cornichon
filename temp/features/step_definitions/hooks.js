@@ -3,9 +3,9 @@
  */
 
 const {defineSupportCode} = require('cucumber')
-const path = require('path')
-const basePath = 'D:/Workspace/Cornichon/tests/simple/'
-const includedText = require(path.join(basePath, 'includeThis'))
+const fileStart = 'include'
+const basePath = `D:/Workspace/Cornichon/tests/simple/${fileStart}`
+const includedText = require(basePath + 'This')
 
 defineSupportCode(function ({Before, After}) {
   Before(function () {
