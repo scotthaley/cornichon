@@ -1,6 +1,5 @@
 <template>
   <div id="refinements" ref="main">
-    <h3>Test</h3>
     <div v-for="tag in tagDropdown" @click="tags.push(tag)">
       {{tag}}
     </div>
