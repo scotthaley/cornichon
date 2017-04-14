@@ -16,6 +16,11 @@ defineSupportCode(function ({Given, When, Then}) {
     return console.log(`Passed param: ${param}`);
   });
 
+  When('I pass multiple parameters like {stringInDoubleQuotes} and {stringInDoubleQuotes}', function (param1, param2) { /* {cornichon: 1492181081384} */
+    return console.log(`Passed params: ${param1}, ${param2}`);
+  });
+
+
   Then('I should see some results', function () { /* {cornichon: 1490418241119} */
     return console.log('Did you see stuff?');
   });

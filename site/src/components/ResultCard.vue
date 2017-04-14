@@ -11,7 +11,7 @@
                       v-on:cancel="cancelUsage"></codemirror>
         </div>
         <h1>Code</h1>
-        <pre><code class="javascript" v-html="step.code"></code></pre>
+        <codemirror class="codemirror" v-bind:value="step.code" :options="{ readOnly: true, mode: 'javascript', firstLineNumber: step.line }"></codemirror>
         <h1>Features</h1>
         <div v-for="feature in mappedFeatures">
           <pre><code class="gherkin" v-html="feature"></code></pre>
@@ -122,7 +122,7 @@
       },
       stepTitle: function () {
         let stepTitle = this.step ? `${this.step.keyword} ${this.step.pattern}` : ''
-        stepTitle = stepTitle.replace(/({.*})/g, `<span class="hljs-string">$1</span>`)
+        stepTitle = stepTitle.replace(/({[^}]*})/g, `<span class="hljs-string">$1</span>`)
         return stepTitle
       },
       scenarioTitle: function () {
@@ -385,24 +385,26 @@
 
     table {
       margin-left: 1em;
-      border: 1px solid #8be9fd;
+      border-collapse: collapse;
+      border-spacing: 0;
 
       th, td {
+        border: 1px solid #00193a;
         padding: 2px 7px;
         min-width: 100px;
-        +th, +td {
-          border-left: 1px solid #8be9fd;
-        }
       }
 
       th {
-        border-bottom: 1px solid #8be9fd;
         text-align: center;
+      }
+
+      tr {
+        background-color: white;
       }
 
       tr:nth-child(odd) {
         td {
-          background-color: #373e4c;
+          background-color: #d8e8fb;
         }
       }
     }
