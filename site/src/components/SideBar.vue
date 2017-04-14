@@ -2,10 +2,10 @@
   <div id="sidebar">
     <h1>Cornichon</h1>
     <ul class="radio" data-radio="searchMode">
-      <li class="selected">Steps</li>
-      <li>Scenarios</li>
-      <li>Features</li>
-      <li>Settings</li>
+      <li class="selected"><i class="fa fa-puzzle-piece"></i>Steps</li>
+      <li><i class="fa fa-cube"></i>Scenarios</li>
+      <li><i class="fa fa-cubes"></i>Features</li>
+      <li><i class="fa fa-cog"></i>Settings</li>
     </ul>
   </div>
 </template>
@@ -60,7 +60,6 @@
       font-weight: normal;
       font-size: 30px;
       margin-top: 0;
-      border-bottom: 2px solid white;
     }
 
     ul {
@@ -72,13 +71,18 @@
       color: white;
       text-align: left;
       font-size: 18px;
-      border-bottom: 1px solid #e6e6e6;
-      border-top: 1px solid #e6e6e6;
       padding: 5px;
       cursor: pointer;
 
       +li {
         border-top: none;
+      }
+
+      i {
+        padding-left: 3px;
+        padding-right: 5px;
+        width: 25px;
+        text-align: center;
       }
 
       &.selected {
