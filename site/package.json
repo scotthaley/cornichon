@@ -22,7 +22,8 @@
     "sass-loader": "^6.0.3",
     "script-loader": "^0.7.0",
     "superplaceholder": "^0.1.1",
-    "vue": "^2.2.2"
+    "vue": "^2.2.2",
+    "vuex": "^2.3.0"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.2",
