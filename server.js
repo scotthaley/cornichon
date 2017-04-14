@@ -36,9 +36,18 @@ module.exports = () => {
     res.send(cucumber.scenarios)
   })
 
+  app.post('/run', (req, res) => {
+    cornichon.run()
+  })
+
   app.post('/updateUsage', (req, res) => {
     cornichon.updateUsage(req.body.cornichonID, req.body.markdown)
     cucumber.init()
+    res.send(true)
+  })
+
+  app.post('/openFile', (req, res) => {
+    require('opn')(req.body.path)
     res.send(true)
   })
 
