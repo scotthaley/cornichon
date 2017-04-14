@@ -30,6 +30,7 @@ module.exports = (() => {
   let cli = null
 
   const init = function () {
+    console.log('init is happening')
     const _this = this
     this.cli = getCli()
     getFeatures(this.cli).then(f => {
