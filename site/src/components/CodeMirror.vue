@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div ref="container"></div>
-    <div class="buttons">
+    <div ref="container" v-bind:class="{ static: options && options.readOnly}"></div>
+    <div v-if="!options || (options && !options.readOnly)" class="buttons">
       <button ref="cancel">Cancel</button>
       <button ref="save">Save</button>
     </div>
@@ -17,7 +17,7 @@
     mounted () {
       const _this = this
       let _options = this.options || {}
-      _options.mode = 'gfm'
+      _options.mode = _options.mode || 'gfm'
       _options.lineNumbers = _options.lineNumbers || true
       _options.theme = _options.theme || 'material'
       _options.value = this.value
@@ -37,6 +37,13 @@
 </script>
 
 <style lang="scss">
+
+  .static {
+    .CodeMirror {
+      height: initial;
+    }
+  }
+
   .CodeMirror {
     &.cm-s-dracula {
       span.cm-variable-2 {
@@ -58,7 +65,8 @@
     text-align: right;
 
     button {
-      background-color: #282a36;
+      cursor: pointer;
+      background-color: #263238;
       color: white;
       padding: 10px;
       width: 150px;

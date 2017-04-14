@@ -49,7 +49,7 @@
     top: 0;
     left: 0;
     bottom: 0;
-    background-color: #282a36;
+    background-color: #263238;
     width: 150px;
     font-family: monospace;
 

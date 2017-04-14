@@ -11,7 +11,7 @@
                       v-on:cancel="cancelUsage"></codemirror>
         </div>
         <h1>Code</h1>
-        <pre><code class="javascript" v-html="step.code"></code></pre>
+        <codemirror class="codemirror" v-bind:value="step.code" :options="{ readOnly: true, mode: 'javascript', firstLineNumber: step.line }"></codemirror>
         <h1>Features</h1>
         <div v-for="feature in mappedFeatures">
           <pre><code class="gherkin" v-html="feature"></code></pre>
