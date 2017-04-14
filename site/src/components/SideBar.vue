@@ -5,6 +5,7 @@
       <li class="selected">Steps</li>
       <li>Scenarios</li>
       <li>Features</li>
+      <li>Settings</li>
     </ul>
   </div>
 </template>

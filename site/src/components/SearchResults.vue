@@ -9,11 +9,15 @@
     <div v-if="sidebarData.searchMode === 'Scenarios'" v-for="result in filteredScenarios">
       <resultcard v-bind:scenario="result"></resultcard>
     </div>
+    <div v-if="sidebarData.searchMode === 'Settings'">
+      <settings></settings>
+    </div>
   </div>
 </template>
 
 <script>
   import resultcard from './ResultCard'
+  import settings from './Settings'
 
   const fuzzy = require('fuzzy')
   const eventBus = require('@/eventBus')
@@ -22,7 +26,8 @@
     name: 'searchresults',
     props: ['value', 'search', 'sidebarData', 'supportCode', 'features', 'scenarios'],
     components: {
-      resultcard
+      resultcard,
+      settings
     },
     data () {
       return {
@@ -99,9 +104,3 @@
     }
   }
 </script>
-
-<style scoped>
-#searchresults {
-
-}
-</style>
