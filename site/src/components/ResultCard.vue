@@ -391,8 +391,6 @@
       display: inline;
       font-size: 12px;
       color: #6b7186;
-      margin-bottom: 10px;
-      margin-top: 0;
     }
 
     h1 {
