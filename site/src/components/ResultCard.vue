@@ -122,7 +122,7 @@
       },
       stepTitle: function () {
         let stepTitle = this.step ? `${this.step.keyword} ${this.step.pattern}` : ''
-        stepTitle = stepTitle.replace(/({.*})/g, `<span class="hljs-string">$1</span>`)
+        stepTitle = stepTitle.replace(/({[^}]*})/g, `<span class="hljs-string">$1</span>`)
         return stepTitle
       },
       scenarioTitle: function () {
