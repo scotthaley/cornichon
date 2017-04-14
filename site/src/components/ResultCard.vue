@@ -385,24 +385,26 @@
 
     table {
       margin-left: 1em;
-      border: 1px solid #8be9fd;
+      border-collapse: collapse;
+      border-spacing: 0;
 
       th, td {
+        border: 1px solid #00193a;
         padding: 2px 7px;
         min-width: 100px;
-        +th, +td {
-          border-left: 1px solid #8be9fd;
-        }
       }
 
       th {
-        border-bottom: 1px solid #8be9fd;
         text-align: center;
+      }
+
+      tr {
+        background-color: white;
       }
 
       tr:nth-child(odd) {
         td {
-          background-color: #373e4c;
+          background-color: #d8e8fb;
         }
       }
     }
