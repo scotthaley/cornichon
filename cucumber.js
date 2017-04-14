@@ -28,6 +28,7 @@ module.exports = (() => {
   let featureMap = []
   let tags = []
   let cID = 100
+  let cli = null
 
   const init = function () {
     const _this = this
@@ -178,8 +179,8 @@ module.exports = (() => {
       for (let i in supportCode.stepDefinitions) {
         let stepDef = supportCode.stepDefinitions[i]
         stepDef.expression = new cucumberExpression.CucumberExpression(stepDef.pattern, [], supportCode.parameterTypeRegistry)
-        stepDef.uri = stepDef.uri.replace(/^.*\\features\\/, 'features\\')
         stepDef.uri_full = stepDef.uri
+        stepDef.uri = stepDef.uri.replace(/^.*\\features\\/, 'features\\')
         stepDef.code = beautify(stepDef.code.toString(), {indent_size: 4})
         // needs to happen after stepDef.code is set, before stripping ID
         stepDef.cornichonID = cucumberHelper.getStepID(stepDef)
@@ -240,7 +241,7 @@ module.exports = (() => {
     let f = {
       name: feature.name,
       uri: feature.uri.replace(/^.*\\features\\/, 'features\\'),
-      uri_full: feature.uri,
+      uri_full: feature.uri_full || feature.uri,
       tags: feature.tags,
       line: feature.line,
       keyword: feature.keyword,
@@ -300,7 +301,7 @@ module.exports = (() => {
       line: scenario.line,
       tags: scenario.tags,
       uri: scenario.uri.replace(/^.*\\features\\/, 'features\\'),
-      uri_full: scenario.uri,
+      uri_full: scenario.uri_full || scenario.uri,
       keyword: scenario.keyword,
       description: scenario.description ? scenario.description.trim() : '',
       steps,
@@ -310,13 +311,14 @@ module.exports = (() => {
 
   const mappedStep = (step, stepDef) => {
     let stepMatch = stepDef ? stepDef.expression.match(step.name) : null
+
     let mStep = {
       pattern: step.name,
       name: step.name,
       currentStep: stepMatch != null,
       line: step.line,
       uri: step.uri.replace(/^.*\\features\\/, 'features\\'),
-      uri_full: step.uri,
+      uri_full: step.uri_full || step.uri,
       keyword: step.keyword.trim()
     }
     return mStep
@@ -334,6 +336,7 @@ module.exports = (() => {
     features,
     supportCode,
     scenarios,
-    eqSet
+    eqSet,
+    cli
   }
 })()
