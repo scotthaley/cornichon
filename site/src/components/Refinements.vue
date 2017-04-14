@@ -1,5 +1,9 @@
 <template>
   <div id="refinements" ref="main">
+    <h3>Test</h3>
+    <div v-for="tag in tagDropdown" @click="tags.push(tag)">
+      {{tag}}
+    </div>
     <div ref="tags">
       <span v-for="tag in tags" class="tag" v-text="tag"></span>
     </div>
@@ -23,6 +27,9 @@
       }
     },
     computed: {
+      tagDropdown () {
+        return this.$store.state.tags
+      },
       refinementData: function () {
         return {
           tags: this.tags
@@ -34,7 +41,6 @@
       eventBus.on('refinement.tag', function (tag) {
         _this.tags.push(tag)
       })
-
       $(this.$refs.tags).on('click', '.tag', function (e) {
         let text = $(e.target).text()
         let i = _this.tags.indexOf(text)
@@ -42,6 +48,9 @@
           _this.tags.splice(i, 1)
         }
       })
+    },
+    beforeMount () {
+      this.$store.dispatch('TAGS', this)
     }
   }
 </script>
