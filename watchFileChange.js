@@ -8,6 +8,7 @@ const watchFileChange = (function(){
 
     watcher
       .on('change', path => cucumber.init())
+      .on('error', function(error) {console.error('Error happened', error);})
 
 })()
 
