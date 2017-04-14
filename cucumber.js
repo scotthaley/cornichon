@@ -62,8 +62,6 @@ module.exports = (() => {
 
     function addTags (tagArr) {
       tagArr.forEach(function(tag){
-        console.log(tag)
-        console.log(tags)
         if (tags.indexOf(tag.name) < 0){
           tags.push(tag.name)
         }
