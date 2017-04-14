@@ -3,6 +3,8 @@
 import Vue from 'vue'
 import App from './App'
 
+import store from './store'
+
 Vue.config.productionTip = false
 
 require('script-loader!node_modules/codemirror/lib/codemirror.js')
@@ -30,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
+  store,
   template: '<App/>',
   components: { App }
 })

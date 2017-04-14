@@ -28,6 +28,10 @@ module.exports = () => {
     res.send(cucumber.features)
   })
 
+  app.get('/tags', (req,res) => {
+    res.send(cucumber.tags)
+  })
+
   app.get('/supportcode', (req, res) => {
     res.send(cucumber.supportCode)
   })
@@ -36,8 +40,8 @@ module.exports = () => {
     res.send(cucumber.scenarios)
   })
 
-  app.post('/run', (req, res) => {
-    cornichon.run()
+  app.post('/runScenario', (req, res) => {
+    cucumber.runScenario(req.body.internalID)
   })
 
   app.post('/updateUsage', (req, res) => {

@@ -43,7 +43,10 @@
     </div>
 
     <div v-if="scenario">
-      <pre><code class="gherkin header" ref="header" v-text="scenarioTitle"></code></pre>
+      <div class="wrapper">
+        <pre><code class="gherkin header" ref="header">{{scenarioTitle}}</code></pre>
+        <i @click="runScenario(scenario.internalID)" class="fa fa-play-circle play"></i>
+      </div>
       <div class="content">
         <span class="uri" v-text="scenario.uri" v-on:click="openFile(scenario.uri_full)"></span>
         <div v-if="scenario.description != ''">
@@ -114,6 +117,9 @@
       openFile: function (path) {
         path = path.replace(/\\/g, '/')
         $.post('http://localhost:8088/openFile', {path}, null, 'json')
+      },
+      runScenario: function (internalID) {
+        $.post('http://localhost:8088/runScenario', {internalID}, null, 'json')
       }
     },
     computed: {
@@ -254,6 +260,23 @@
       display: none;
       margin: 20px;
       font-size: 18px;
+    }
+
+    .wrapper {
+      position: relative;
+
+      i.play {
+        color: #999;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 20px;
+        cursor: pointer;
+
+        &:hover {
+          color: #263238;
+        }
+      }
     }
 
     .header {

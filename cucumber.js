@@ -8,6 +8,9 @@ const FeatureParser = cucumber.FeatureParser
 const Cli = cucumber.Cli
 
 const cucumberHelper = require('./cucumber.helper')
+const ScenarioRunner = require('./node_modules/cucumber/lib/runtime/scenario_runner.js').default
+const EventBroadcaster = require('./node_modules/cucumber/lib/runtime/event_broadcaster.js').default
+
 const cornichon = require('./cornichon')
 
 const fs = require('fs')
@@ -25,7 +28,9 @@ module.exports = (() => {
   let supportCode = null
   let scenarios = null
   let scenarioMap = []
+  let fullScenarioMap = {}
   let featureMap = []
+  let tags = []
   let cID = 100
   let cli = null
 
@@ -33,8 +38,10 @@ module.exports = (() => {
     console.log('init is happening')
     const _this = this
     this.cli = getCli()
+
     getFeatures(this.cli).then(f => {
       _this.features = f
+      _this.tags = getTags(_this.features)
       _this.scenarios = getScenarios(_this.features)
       return getSupportCode(_this.cli, _this.features)
     }).then(c => {
@@ -49,6 +56,36 @@ module.exports = (() => {
       stdout: process.stdout
     })
     return cli
+  }
+
+  const getTags = (features) => {
+    let tags = []
+
+    function addTags (tagArr) {
+      tagArr.forEach(function(tag){
+        console.log(tag)
+        console.log(tags)
+        if (tags.indexOf(tag.name) < 0){
+          tags.push(tag.name)
+        }
+      })
+    }
+
+    function tagSearch (features) {
+      features.forEach(function(obj){
+        for (var key in obj) {
+          if (key === 'tags' && obj[key].length) addTags(obj[key])
+          else if (typeof obj[key] === 'object' && obj[key].length) {
+            tagSearch(obj[key])
+          }
+          else if (typeof obj[key] === 'object') {
+            if (obj[key]['tags'] && obj[key]['tags'].length) { addTags(obj[key]['tags'])}
+          }
+        }
+      })
+    }
+    tagSearch(features)
+    return tags
   }
 
   const getFeatures = (cli) => {
@@ -261,6 +298,9 @@ module.exports = (() => {
 
   const mappedScenario = (scenario, stepDef) => {
     let steps = []
+    let internalID = scenario.internalID || getScenarioID(scenario)
+    fullScenarioMap[internalID] = fullScenarioMap[internalID] || Object.assign({}, scenario)
+
     for (let st in scenario.steps) {
       steps.push(mappedStep(scenario.steps[st], stepDef))
     }
@@ -273,7 +313,7 @@ module.exports = (() => {
       keyword: scenario.keyword,
       description: scenario.description ? scenario.description.trim() : '',
       steps,
-      internalID: scenario.internalID || getScenarioID(scenario)
+      internalID
     }
   }
 
@@ -298,12 +338,41 @@ module.exports = (() => {
     return true
   }
 
+  async function runScenario(internalID) {
+    const cli = this.cli;
+    const configuration = await cli.getConfiguration()
+    const supportCodeLibrary = cli.getSupportCodeLibrary(configuration.supportCodePaths)
+    const {formatters} = await cli.getFormatters({
+      formatOptions: configuration.formatOptions,
+      formats: configuration.formats,
+      supportCodeLibrary
+    })
+
+    const eventBroadcaster = new EventBroadcaster({
+      listenerDefaultTimeout: supportCodeLibrary.defaultTimeout,
+      listeners: formatters.concat(supportCodeLibrary.listeners)
+    })
+
+    let scenario = fullScenarioMap[internalID] 
+    
+    const scenarioRunner = new ScenarioRunner({
+      eventBroadcaster,
+      options: {},
+      scenario,
+      supportCodeLibrary 
+    });
+
+    scenarioRunner.run();
+  }
+
   return {
     init,
+    tags,
     features,
     supportCode,
     scenarios,
     eqSet,
+    runScenario,
     cli
   }
 })()
