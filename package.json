@@ -27,7 +27,8 @@
     "js-beautify": "^1.6.12",
     "open": "0.0.5",
     "promise-map": "^1.2.0",
-    "strip-indent": "^2.0.0"
+    "strip-indent": "^2.0.0",
+    "chokidar": "^1.6.1"
   },
   "devDependencies": {
     "standard": "^9.0.2"

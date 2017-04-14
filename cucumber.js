@@ -35,7 +35,6 @@ module.exports = (() => {
   let cli = null
 
   const init = function () {
-    console.log('init is happening')
     const _this = this
     this.cli = getCli()
 
@@ -353,13 +352,13 @@ module.exports = (() => {
       listeners: formatters.concat(supportCodeLibrary.listeners)
     })
 
-    let scenario = fullScenarioMap[internalID] 
-    
+    let scenario = fullScenarioMap[internalID]
+
     const scenarioRunner = new ScenarioRunner({
       eventBroadcaster,
       options: {},
       scenario,
-      supportCodeLibrary 
+      supportCodeLibrary
     });
 
     scenarioRunner.run();
