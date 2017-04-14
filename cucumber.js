@@ -26,13 +26,16 @@ module.exports = (() => {
   let scenarios = null
   let scenarioMap = []
   let featureMap = []
+  let tags = []
   let cID = 100
 
   const init = function () {
     const _this = this
     this.cli = getCli()
+
     getFeatures(this.cli).then(f => {
       _this.features = f
+      _this.tags = getTags(_this.features)
       _this.scenarios = getScenarios(_this.features)
       return getSupportCode(_this.cli, _this.features)
     }).then(c => {
@@ -47,6 +50,36 @@ module.exports = (() => {
       stdout: process.stdout
     })
     return cli
+  }
+
+  const getTags = (features) => {
+    let tags = []
+
+    function addTags (tagArr) {
+      tagArr.forEach(function(tag){
+        console.log(tag)
+        console.log(tags)
+        if (tags.indexOf(tag.name) < 0){
+          tags.push(tag.name)
+        }
+      })
+    }
+
+    function tagSearch (features) {
+      features.forEach(function(obj){
+        for (var key in obj) {
+          if (key === 'tags' && obj[key].length) addTags(obj[key])
+          else if (typeof obj[key] === 'object' && obj[key].length) {
+            tagSearch(obj[key])
+          }
+          else if (typeof obj[key] === 'object') {
+            if (obj[key]['tags'] && obj[key]['tags'].length) { addTags(obj[key]['tags'])}
+          }
+        }
+      })
+    }
+    tagSearch(features)
+    return tags
   }
 
   const getFeatures = (cli) => {
@@ -297,6 +330,7 @@ module.exports = (() => {
 
   return {
     init,
+    tags,
     features,
     supportCode,
     scenarios,

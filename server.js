@@ -27,6 +27,10 @@ module.exports = () => {
     res.send(cucumber.features)
   })
 
+  app.get('/tags', (req,res) => {
+    res.send(cucumber.tags)
+  })
+
   app.get('/supportcode', (req, res) => {
     res.send(cucumber.supportCode)
   })
