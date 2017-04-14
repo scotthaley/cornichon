@@ -27,6 +27,7 @@ module.exports = (() => {
   let scenarioMap = []
   let featureMap = []
   let cID = 100
+  let cli = null
 
   const init = function () {
     const _this = this
@@ -300,6 +301,7 @@ module.exports = (() => {
     features,
     supportCode,
     scenarios,
-    eqSet
+    eqSet,
+    cli
   }
 })()

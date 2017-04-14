@@ -11,6 +11,7 @@ const cucumber = require('./cucumber')
 cucumber.init()
 
 const cornichon = require('./cornichon')
+const watchFileChange = require('./watchFileChange')
 
 module.exports = () => {
   let app = express()
