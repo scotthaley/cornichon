@@ -8,6 +8,9 @@ const FeatureParser = cucumber.FeatureParser
 const Cli = cucumber.Cli
 
 const cucumberHelper = require('./cucumber.helper')
+const ScenarioRunner = require('./node_modules/cucumber/lib/runtime/scenario_runner.js').default
+const EventBroadcaster = require('./node_modules/cucumber/lib/runtime/event_broadcaster.js').default
+
 const cornichon = require('./cornichon')
 
 const fs = require('fs')
@@ -25,12 +28,14 @@ module.exports = (() => {
   let supportCode = null
   let scenarios = null
   let scenarioMap = []
+  let fullScenarioMap = {}
   let featureMap = []
   let tags = []
   let cID = 100
   let cli = null
 
   const init = function () {
+    console.log('init is happening')
     const _this = this
     this.cli = getCli()
 
@@ -291,6 +296,9 @@ module.exports = (() => {
 
   const mappedScenario = (scenario, stepDef) => {
     let steps = []
+    let internalID = scenario.internalID || getScenarioID(scenario)
+    fullScenarioMap[internalID] = fullScenarioMap[internalID] || Object.assign({}, scenario)
+
     for (let st in scenario.steps) {
       steps.push(mappedStep(scenario.steps[st], stepDef))
     }
@@ -303,7 +311,7 @@ module.exports = (() => {
       keyword: scenario.keyword,
       description: scenario.description ? scenario.description.trim() : '',
       steps,
-      internalID: scenario.internalID || getScenarioID(scenario)
+      internalID
     }
   }
 
@@ -328,6 +336,33 @@ module.exports = (() => {
     return true
   }
 
+  async function runScenario(internalID) {
+    const cli = this.cli;
+    const configuration = await cli.getConfiguration()
+    const supportCodeLibrary = cli.getSupportCodeLibrary(configuration.supportCodePaths)
+    const {formatters} = await cli.getFormatters({
+      formatOptions: configuration.formatOptions,
+      formats: configuration.formats,
+      supportCodeLibrary
+    })
+
+    const eventBroadcaster = new EventBroadcaster({
+      listenerDefaultTimeout: supportCodeLibrary.defaultTimeout,
+      listeners: formatters.concat(supportCodeLibrary.listeners)
+    })
+
+    let scenario = fullScenarioMap[internalID] 
+    
+    const scenarioRunner = new ScenarioRunner({
+      eventBroadcaster,
+      options: {},
+      scenario,
+      supportCodeLibrary 
+    });
+
+    scenarioRunner.run();
+  }
+
   return {
     init,
     tags,
@@ -335,6 +370,7 @@ module.exports = (() => {
     supportCode,
     scenarios,
     eqSet,
+    runScenario,
     cli
   }
 })()

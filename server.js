@@ -40,8 +40,8 @@ module.exports = () => {
     res.send(cucumber.scenarios)
   })
 
-  app.post('/run', (req, res) => {
-    cornichon.run()
+  app.post('/runScenario', (req, res) => {
+    cucumber.runScenario(req.body.internalID)
   })
 
   app.post('/updateUsage', (req, res) => {
