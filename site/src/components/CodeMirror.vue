@@ -19,7 +19,7 @@
       let _options = this.options || {}
       _options.mode = 'gfm'
       _options.lineNumbers = _options.lineNumbers || true
-      _options.theme = _options.theme || 'dracula'
+      _options.theme = _options.theme || 'material'
       _options.value = this.value
       _options.autoRefresh = true
 
