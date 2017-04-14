@@ -3,8 +3,8 @@
     <div v-if="step">
       <pre><code class="gherkin header" ref="header" v-html="stepTitle"></code></pre>
       <div class="content">
-        <span class="uri" v-text="step.uri"></span>
-        <div class="usage" ref="usage">
+        <span class="uri" v-text="step.uri" v-on:click="openFile(step.uri_full)"></span>
+        <div class="usage" ref="usage"> 
           <h1 class="first">Usage<i ref="editusage" class="edit-usage fa fa-pencil fa-1x"></i></h1>
           <div ref="marked" class="marked" v-html="usageHTML"></div>
           <codemirror class="codemirror_usage" v-bind:value="step.usage" v-on:updated="updateUsage"
@@ -26,7 +26,7 @@
     <div v-if="feature">
       <pre><code class="gherkin header" ref="header" v-text="featureTitle"></code></pre>
       <div class="content">
-        <span class="uri" v-text="feature.uri"></span>
+        <span class="uri" v-text="feature.uri" v-on:click="openFile(feature.uri_full)"></span>
         <div v-if="feature.description != ''">
           <h1>Description</h1>
           <div v-html="feature.description.replace(/(?:\r\n|\r|\n)/g, '<br />')"></div>
@@ -45,7 +45,7 @@
     <div v-if="scenario">
       <pre><code class="gherkin header" ref="header" v-text="scenarioTitle"></code></pre>
       <div class="content">
-        <span class="uri" v-text="scenario.uri"></span>
+        <span class="uri" v-text="scenario.uri" v-on:click="openFile(scenario.uri_full)"></span>
         <div v-if="scenario.description != ''">
           <h1>Description</h1>
           <div v-html="scenario.description.replace(/(?:\r\n|\r|\n)/g, '<br />')"></div>
@@ -110,6 +110,10 @@
       },
       cancelUsage: function () {
         $(this.$refs.usage).removeClass('open')
+      },
+      openFile: function (path) {
+        path = path.replace(/\\/g, '/')
+        $.post('http://localhost:8088/openFile', {path}, null, 'json')
       }
     },
     computed: {
@@ -162,7 +166,7 @@
           let s = source[i]
           let mappedS = ''
           if (this.step) {
-            mappedS += `<span ${this.$options._scopeId} class="uri">${s.uri}</span>\n`
+            mappedS += `<span ${this.$options._scopeId} class="uri" data-uri=${s.uri_full}>${s.uri}</span>\n`
           }
           for (let t in s.tags) {
             let tag = s.tags[t]
@@ -216,6 +220,10 @@
       $(this.$refs.card).on('click', '.step:not(.currentStep), .scenario, .feature', function (e) {
         let $el = $(e.target).closest('[data-id]')
         eventBus.emit('details', $el.data('id').toString())
+      })
+
+      $(this.$refs.card).on('click', '.uri', function (e) {
+        _this.openFile($(this).attr('data-uri'))
       })
 
       $(this.$refs.card).on('click', '.tag', function (e) {
@@ -349,6 +357,11 @@
       color: darkslategrey;
       font-size: 14px;
       margin-top: -10px;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
     }
 
     code .uri {
