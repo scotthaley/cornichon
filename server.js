@@ -11,6 +11,7 @@ const cucumber = require('./cucumber')
 cucumber.init()
 
 const cornichon = require('./cornichon')
+const watchFileChange = require('./watchFileChange')
 
 module.exports = () => {
   let app = express()
@@ -25,6 +26,10 @@ module.exports = () => {
 
   app.get('/features', (req, res) => {
     res.send(cucumber.features)
+  })
+
+  app.get('/tags', (req,res) => {
+    res.send(cucumber.tags)
   })
 
   app.get('/supportcode', (req, res) => {
