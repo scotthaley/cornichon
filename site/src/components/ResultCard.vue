@@ -431,16 +431,6 @@
       th {
         text-align: center;
       }
-
-      tr {
-        background-color: white;
-      }
-
-      tr:nth-child(odd) {
-        td {
-          background-color: #d8e8fb;
-        }
-      }
     }
   }
 </style>

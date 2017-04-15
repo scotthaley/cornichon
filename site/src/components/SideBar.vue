@@ -1,6 +1,6 @@
 <template>
   <div id="sidebar">
-    <h1>Cornichon</h1>
+    <h1 class="long-shadow">Cornichon</h1>
     <ul class="radio" data-radio="searchMode">
       <li class="selected"><i class="fa fa-puzzle-piece"></i>Steps</li>
       <li><i class="fa fa-cube"></i>Scenarios</li>
@@ -45,7 +45,11 @@
 </script>
 
 <style lang="scss" scoped>
+
+  @import '../mixins/long-shadow';
+
   #sidebar {
+    overflow: hidden;
     position: fixed;
     top: 0;
     left: 0;
@@ -60,6 +64,8 @@
       font-weight: normal;
       font-size: 30px;
       margin-top: 0;
+      user-select: none;
+      cursor: default;
     }
 
     ul {
@@ -72,6 +78,7 @@
       text-align: left;
       font-size: 18px;
       padding: 5px;
+      user-select: none;
       cursor: pointer;
 
       +li {
@@ -88,8 +95,12 @@
       &.selected {
         background-color: #e6e6e6;
         color: #282a36;
-        cursor: inherit;
+        cursor: default;
       }
+    }
+
+    .long-shadow {
+      @include long-shadow(#161d21, 70, right, 3, 0);
     }
   }
 </style>
