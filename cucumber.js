@@ -62,22 +62,21 @@ module.exports = (() => {
     let tags = []
 
     function addTags (tagArr) {
-      tagArr.forEach(function(tag){
-        if (tags.indexOf(tag.name) < 0){
+      tagArr.forEach(function (tag) {
+        if (tags.indexOf(tag.name) < 0) {
           tags.push(tag.name)
         }
       })
     }
 
     function tagSearch (features) {
-      features.forEach(function(obj){
+      features.forEach(function (obj) {
         for (var key in obj) {
           if (key === 'tags' && obj[key].length) addTags(obj[key])
           else if (typeof obj[key] === 'object' && obj[key].length) {
             tagSearch(obj[key])
-          }
-          else if (typeof obj[key] === 'object') {
-            if (obj[key]['tags'] && obj[key]['tags'].length) { addTags(obj[key]['tags'])}
+          } else if (typeof obj[key] === 'object') {
+            if (obj[key]['tags'] && obj[key]['tags'].length) { addTags(obj[key]['tags']) }
           }
         }
       })
@@ -145,7 +144,7 @@ module.exports = (() => {
     return scenarios
   }
 
-  const identifySteps = (stepDef, features, supportCode)=> {
+  const identifySteps = (stepDef, features, supportCode) => {
     for (let f = 0; f < features.length; f++) {
       let feature = features[f]
       for (let sc = 0; sc < feature.scenarios.length; sc++) {
@@ -336,8 +335,8 @@ module.exports = (() => {
     return true
   }
 
-  async function runScenario(internalID) {
-    const cli = this.cli;
+  async function runScenario (internalID) {
+    const cli = this.cli
     const configuration = await cli.getConfiguration()
     const supportCodeLibrary = cli.getSupportCodeLibrary(configuration.supportCodePaths)
     const {formatters} = await cli.getFormatters({
@@ -358,9 +357,9 @@ module.exports = (() => {
       options: {},
       scenario,
       supportCodeLibrary
-    });
+    })
 
-    scenarioRunner.run();
+    scenarioRunner.run()
   }
 
   return {
