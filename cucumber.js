@@ -6,17 +6,18 @@ const cucumber = require('cucumber')
 const ScenarioFilter = cucumber.ScenarioFilter
 const FeatureParser = cucumber.FeatureParser
 const Cli = cucumber.Cli
+const path = require('path')
+
+const cucumberDir = path.parse(require.resolve('cucumber')).dir
 
 const cucumberHelper = require('./cucumber.helper')
-const ScenarioRunner = require('./node_modules/cucumber/lib/runtime/scenario_runner.js').default
-const EventBroadcaster = require('./node_modules/cucumber/lib/runtime/event_broadcaster.js').default
+const ScenarioRunner = require(`${cucumberDir}/runtime/scenario_runner.js`).default
+const EventBroadcaster = require(`${cucumberDir}/runtime/event_broadcaster.js`).default
 
 const cornichon = require('./cornichon')
 
 const fs = require('fs')
-const fse = require('fs-extra')
 const co = require('co')
-const path = require('path')
 
 const beautify = require('js-beautify').js_beautify
 const stripIndent = require('strip-indent')
