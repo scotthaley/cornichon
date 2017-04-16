@@ -1,12 +1,14 @@
 <template>
   <div id="sidebar">
-    <h1 class="long-shadow">Cornichon</h1>
-    <ul class="radio" data-radio="searchMode">
-      <li class="selected"><i class="fa fa-puzzle-piece"></i>Steps</li>
-      <li><i class="fa fa-cube"></i>Scenarios</li>
-      <li><i class="fa fa-cubes"></i>Features</li>
-      <li><i class="fa fa-cog"></i>Settings</li>
-    </ul>
+    <div class="sidebar-wrapper">
+      <h1 class="long-shadow">Cornichon</h1>
+      <ul class="radio" data-radio="searchMode">
+        <li class="selected"><i class="fa fa-puzzle-piece"></i>Steps</li>
+        <li><i class="fa fa-cube"></i>Scenarios</li>
+        <li><i class="fa fa-cubes"></i>Features</li>
+        <li><i class="fa fa-cog"></i>Settings</li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -50,13 +52,17 @@
 
   #sidebar {
     overflow: hidden;
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
+    flex: 0 0 150px;
     background-color: #263238;
     width: 150px;
 
+    .sidebar-wrapper {
+      position: fixed;
+      top:0;
+      left:0;
+      width:150px;
+      overflow: hidden;
+    }
     h1 {
       color: white;
       font-family: 'Pacifico', cursive;

@@ -10,11 +10,11 @@
                  v-bind:placeholders="placeholders.scenarios"></searchbar>
       <div class="utility-bar">
         <refinements></refinements>
-        <scenario-queue></scenario-queue>
       </div>
       <searchresults v-bind:search="search" v-bind:sidebarData="sidebarData"></searchresults>
     </div>
-    <detailsview></detailsview>
+    <scenario-queue></scenario-queue>
+    <detailsview v-bind:supportCode="supportCode" v-bind:features="features" v-bind:scenarios="scenarios"></detailsview>
   </div>
 </template>
 
@@ -114,7 +114,11 @@
   }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+  body {
+    margin: 0;
+    min-height: 100vh;
+  }
 
   #app {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
@@ -123,16 +127,21 @@
     text-align: center;
     color: #2c3e50;
     font-size: 32px;
-
+    display: flex;
+    height: 100%;
+    min-height: 100vh;
     .content {
-      padding-left: 170px;
-      padding-right: 15px;
+      flex: 1 1 auto;
+      padding: 0 .5em 3em;
     }
 
     .utility-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
+    }
+    code.header {
+      white-space: normal;
     }
   }
 </style>
