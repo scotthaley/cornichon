@@ -39,6 +39,9 @@ module.exports = (() => {
     const _this = this
     this.cli = getCli()
     cucumber.clearSupportCodeFns()
+    fullScenarioMap = {}
+    featureMap = []
+    scenarioMap = []
 
     getFeatures(this.cli).then(f => {
       _this.features = f
