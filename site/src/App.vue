@@ -3,17 +3,18 @@
     <sidebar v-model="sidebarData"></sidebar>
     <div class="content" ref="content">
       <searchbar v-show="sidebarData.searchMode === 'Steps'" v-model="search"
-                 v-bind:placeholders="placeholders.Steps"></searchbar>
+                 v-bind:placeholders="placeholders.supportcode"></searchbar>
       <searchbar v-show="sidebarData.searchMode === 'Features'" v-model="search"
-                 v-bind:placeholders="placeholders.Features"></searchbar>
+                 v-bind:placeholders="placeholders.features"></searchbar>
       <searchbar v-show="sidebarData.searchMode === 'Scenarios'" v-model="search"
-                 v-bind:placeholders="placeholders.Scenarios"></searchbar>
-      <refinements></refinements>
-      <searchresults v-model="placeholderData" v-bind:search="search" v-bind:sidebarData="sidebarData"
-                     v-bind:supportCode="supportCode" v-bind:features="features"
-                     v-bind:scenarios="scenarios"></searchresults>
+                 v-bind:placeholders="placeholders.scenarios"></searchbar>
+      <div class="utility-bar">
+        <refinements></refinements>
+        <scenario-queue></scenario-queue>
+      </div>
+      <searchresults v-bind:search="search" v-bind:sidebarData="sidebarData"></searchresults>
     </div>
-    <detailsview v-bind:supportCode="supportCode" v-bind:features="features" v-bind:scenarios="scenarios"></detailsview>
+    <detailsview></detailsview>
   </div>
 </template>
 
@@ -24,6 +25,7 @@
   import sidebar from './components/SideBar'
   import detailsview from './components/DetailsView'
   import refinements from './components/Refinements'
+  import scenarioQueue from './components/ScenarioQueue.vue'
 
   const $ = require('jquery')
   const eventBus = require('@/eventBus')
@@ -36,44 +38,59 @@
       searchresults,
       sidebar,
       detailsview,
-      refinements
+      refinements,
+      scenarioQueue
     },
     data () {
       return {
         search: '',
-        sidebarData: {},
-        placeholderData: {},
-        supportCode: [],
-        features: [],
-        scenarios: [],
-        placeholders: {}
+        sidebarData: {}
       }
     },
-    computed: {},
+    computed: {
+      placeholders: function () {
+        return this.$store.state.placeholders
+      }
+    },
+    beforeMount () {
+      this.$store.dispatch('FETCH', 'tags')
+      this.$store.dispatch('FETCH', 'supportcode')
+      this.$store.dispatch('FETCH', 'features')
+      this.$store.dispatch('FETCH', 'scenarios')
+      this.$store.dispatch('FETCH', 'settings')
+    },
     mounted () {
-      const _this = this
-      $.get('http://localhost:8088/features')
-        .done(function (json) {
-          _this.updateFeatures(json)
-        })
-      $.get('http://localhost:8088/supportcode')
-        .done(function (json) {
-          _this.updateSupportCode(json)
-        })
-      $.get('http://localhost:8088/scenarios')
-        .done(function (json) {
-          _this.updateScenarios(json)
-        })
-
       eventBus.on('details', function () {
         $('body').css('overflow', 'hidden')
       })
       eventBus.on('details-closed', function () {
         $('body').css('overflow', 'auto')
       })
+
+      let socket = io.connect('http://localhost:8088')
+      let _this = this
+
+      socket.on('features', (json) => {
+        _this.updateFeatures(json)
+      })
+
+      socket.on('supportcode', (json) => {
+        _this.updateSupportCode(json)
+      })
+
+      socket.on('scenarios', (json) => {
+        _this.updateScenarios(json)
+      })
+
+      socket.on('connect', () => {
+        socket.emit('features')
+        socket.emit('supportcode')
+        socket.emit('scenarios')
+      })
     },
     methods: {
       updateSupportCode: function (supportCode) {
+        console.log(supportCode)
         this.supportCode = supportCode
         this.placeholders['Steps'] = []
         for (let s in this.supportCode) {
@@ -99,6 +116,7 @@
 </script>
 
 <style lang="scss" scoped>
+
   #app {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -108,7 +126,14 @@
     font-size: 32px;
 
     .content {
-      padding-left: 160px;
+      padding-left: 170px;
+      padding-right: 15px;
+    }
+
+    .utility-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
   }
 </style>

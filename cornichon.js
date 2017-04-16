@@ -15,6 +15,23 @@ module.exports = (() => {
     return JSON.parse(fs.readFileSync(usagePath, 'utf8'))
   }
 
+  const saveSettings = settings => {
+    let settingsPath = path.join(process.cwd(), 'settings.cornichon')
+    fs.writeFileSync(settingsPath, JSON.stringify(settings, null, '\t'))
+  }
+
+  const getSettings = () => {
+    let settingsPath = path.join(process.cwd(), 'settings.cornichon')
+    if (fs.existsSync(settingsPath)) {
+      return JSON.parse(fs.readFileSync(settingsPath, 'utf8'))
+    }
+    return {
+      custom: {
+        'Setup Command': ''
+      }
+    }
+  }
+
   const saveUsage = usage => {
     let usagePath = path.join(process.cwd(), 'usage.cornichon')
     fs.writeFileSync(usagePath, JSON.stringify(usage, null, '\t'))
@@ -33,6 +50,8 @@ module.exports = (() => {
 
   return {
     updateUsage,
-    getUsage
+    getUsage,
+    saveSettings,
+    getSettings
   }
 })()

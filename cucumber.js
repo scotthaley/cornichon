@@ -6,17 +6,18 @@ const cucumber = require('cucumber')
 const ScenarioFilter = cucumber.ScenarioFilter
 const FeatureParser = cucumber.FeatureParser
 const Cli = cucumber.Cli
+const path = require('path')
+
+const cucumberDir = path.parse(require.resolve('cucumber')).dir
 
 const cucumberHelper = require('./cucumber.helper')
-const ScenarioRunner = require('./node_modules/cucumber/lib/runtime/scenario_runner.js').default
-const EventBroadcaster = require('./node_modules/cucumber/lib/runtime/event_broadcaster.js').default
+const ScenarioRunner = require(`${cucumberDir}/runtime/scenario_runner.js`).default
+const EventBroadcaster = require(`${cucumberDir}/runtime/event_broadcaster.js`).default
 
 const cornichon = require('./cornichon')
 
 const fs = require('fs')
-const fse = require('fs-extra')
 const co = require('co')
-const path = require('path')
 
 const beautify = require('js-beautify').js_beautify
 const stripIndent = require('strip-indent')
@@ -24,28 +25,33 @@ const stripIndent = require('strip-indent')
 const cucumberExpression = require('cucumber-expressions')
 
 module.exports = (() => {
-  let features = null
   let supportCode = null
   let scenarios = null
   let scenarioMap = []
   let fullScenarioMap = {}
+  let features = null
   let featureMap = []
   let tags = []
   let cID = 100
   let cli = null
 
-  const init = function () {
+  const init = async function () {
     const _this = this
     this.cli = getCli()
+    cucumber.clearSupportCodeFns()
 
-    getFeatures(this.cli).then(f => {
-      _this.features = f
-      _this.tags = getTags(_this.features)
-      _this.scenarios = getScenarios(_this.features)
-      return getSupportCode(_this.cli, _this.features)
-    }).then(c => {
-      _this.supportCode = c
-    })
+    supportCode = []
+    scenarios = []
+    scenarioMap = []
+    fullScenarioMap = {}
+    features = []
+    featureMap = []
+    tags = []
+
+    this.features = await getFeatures(this.cli)
+    this.tags = getTags(_this.features)
+    this.scenarios = getScenarios(_this.features)
+    this.supportCode = await getSupportCode(this.cli, this.features)
   }
 
   const getCli = () => {
@@ -61,22 +67,21 @@ module.exports = (() => {
     let tags = []
 
     function addTags (tagArr) {
-      tagArr.forEach(function(tag){
-        if (tags.indexOf(tag.name) < 0){
+      tagArr.forEach(function (tag) {
+        if (tags.indexOf(tag.name) < 0) {
           tags.push(tag.name)
         }
       })
     }
 
     function tagSearch (features) {
-      features.forEach(function(obj){
+      features.forEach(function (obj) {
         for (var key in obj) {
           if (key === 'tags' && obj[key].length) addTags(obj[key])
           else if (typeof obj[key] === 'object' && obj[key].length) {
             tagSearch(obj[key])
-          }
-          else if (typeof obj[key] === 'object') {
-            if (obj[key]['tags'] && obj[key]['tags'].length) { addTags(obj[key]['tags'])}
+          } else if (typeof obj[key] === 'object') {
+            if (obj[key]['tags'] && obj[key]['tags'].length) { addTags(obj[key]['tags']) }
           }
         }
       })
@@ -144,7 +149,7 @@ module.exports = (() => {
     return scenarios
   }
 
-  const identifySteps = (stepDef, features, supportCode)=> {
+  const identifySteps = (stepDef, features, supportCode) => {
     for (let f = 0; f < features.length; f++) {
       let feature = features[f]
       for (let sc = 0; sc < feature.scenarios.length; sc++) {
@@ -176,6 +181,9 @@ module.exports = (() => {
   const getSupportCode = (cli, features) => {
     return co(function* () {
       const configuration = yield cli.getConfiguration()
+      for (let i in configuration.supportCodePaths) {
+        delete require.cache[configuration.supportCodePaths[i]]
+      }
       let supportCode = cli.getSupportCodeLibrary(configuration.supportCodePaths)
       let supportCodeMapped = []
       for (let i in supportCode.stepDefinitions) {
@@ -335,8 +343,8 @@ module.exports = (() => {
     return true
   }
 
-  async function runScenario(internalID) {
-    const cli = this.cli;
+  async function runScenario (internalID) {
+    const cli = this.cli
     const configuration = await cli.getConfiguration()
     const supportCodeLibrary = cli.getSupportCodeLibrary(configuration.supportCodePaths)
     const {formatters} = await cli.getFormatters({
@@ -357,9 +365,9 @@ module.exports = (() => {
       options: {},
       scenario,
       supportCodeLibrary
-    });
+    })
 
-    scenarioRunner.run();
+    await scenarioRunner.run()
   }
 
   return {

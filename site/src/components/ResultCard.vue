@@ -45,7 +45,8 @@
     <div v-if="scenario">
       <div class="wrapper">
         <pre><code class="gherkin header" ref="header">{{scenarioTitle}}</code></pre>
-        <i @click="runScenario(scenario.internalID)" class="fa fa-play-circle play"></i>
+        <!--<i @click="runScenario(scenario.internalID)" class="fa fa-plus add"></i>-->
+        <i @click="queueScenario(scenario.internalID)" class="fa fa-plus add"></i>
       </div>
       <div class="content">
         <span class="uri" v-text="scenario.uri" v-on:click="openFile(scenario.uri_full)"></span>
@@ -120,6 +121,9 @@
       },
       runScenario: function (internalID) {
         $.post('http://localhost:8088/runScenario', {internalID}, null, 'json')
+      },
+      queueScenario: function (internalID) {
+        this.$store.dispatch('QUEUE_SCENARIO', internalID)
       }
     },
     computed: {
@@ -265,7 +269,7 @@
     .wrapper {
       position: relative;
 
-      i.play {
+      i.add {
         color: #999;
         position: absolute;
         top: 50%;
@@ -391,8 +395,6 @@
       display: inline;
       font-size: 12px;
       color: #6b7186;
-      margin-bottom: 10px;
-      margin-top: 0;
     }
 
     h1 {
@@ -432,16 +434,6 @@
 
       th {
         text-align: center;
-      }
-
-      tr {
-        background-color: white;
-      }
-
-      tr:nth-child(odd) {
-        td {
-          background-color: #d8e8fb;
-        }
       }
     }
   }

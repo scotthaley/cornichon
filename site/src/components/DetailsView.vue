@@ -16,7 +16,6 @@
 
   export default {
     name: 'detailsview',
-    props: ['supportCode', 'features', 'scenarios'],
     components: {
       resultcard
     },
@@ -25,6 +24,17 @@
         step: null,
         scenario: null,
         feature: null
+      }
+    },
+    computed: {
+      supportCode: function () {
+        return this.$store.state.supportcode
+      },
+      features: function () {
+        return this.$store.state.features
+      },
+      scenarios: function () {
+        return this.$store.state.scenarios
       }
     },
     mounted () {
@@ -106,6 +116,7 @@
     left: 0;
     right: 0;
     bottom: 0;
+    z-index: 999;
 
     .overlay {
       top: 0;

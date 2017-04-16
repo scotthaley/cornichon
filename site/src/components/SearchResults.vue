@@ -24,7 +24,7 @@
 
   export default {
     name: 'searchresults',
-    props: ['value', 'search', 'sidebarData', 'supportCode', 'features', 'scenarios'],
+    props: ['value', 'search', 'sidebarData'],
     components: {
       resultcard,
       settings
@@ -41,6 +41,15 @@
       })
     },
     computed: {
+      features: function () {
+        return this.$store.state.features
+      },
+      supportCode: function () {
+        return this.$store.state.supportcode
+      },
+      scenarios: function () {
+        return this.$store.state.scenarios
+      },
       filteredSupportCode: function () {
         let filter = []
         for (let f in this.supportCode) {
