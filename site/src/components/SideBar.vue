@@ -56,7 +56,6 @@
     bottom: 0;
     background-color: #263238;
     width: 150px;
-    font-family: monospace;
 
     h1 {
       color: white;

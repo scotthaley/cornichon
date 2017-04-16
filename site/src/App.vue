@@ -90,7 +90,6 @@
     },
     methods: {
       updateSupportCode: function (supportCode) {
-        console.log(supportCode)
         this.supportCode = supportCode
         this.placeholders['Steps'] = []
         for (let s in this.supportCode) {
