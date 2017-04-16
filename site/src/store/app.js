@@ -1,19 +1,21 @@
-const $ = require('jquery')
+// const $ = require('jquery')
 
 var app = (function () {
   var url = 'http://localhost:8088/'
+  let socket = io.connect(url)
 
   function fetch (what) {
-    var promise = $.ajax({
-      type: 'GET',
-      url: url + what,
-      dataType: 'json'
+    return new Promise((resolve) => {
+      socket.once(what, (json) => {
+        resolve(json)
+      })
+      socket.emit(what)
     })
-    return promise
   }
 
   var api = {
-    fetch: fetch
+    fetch,
+    socket
   }
 
   return api

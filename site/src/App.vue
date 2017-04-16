@@ -3,17 +3,18 @@
     <sidebar v-model="sidebarData"></sidebar>
     <div class="content" ref="content">
       <searchbar v-show="sidebarData.searchMode === 'Steps'" v-model="search"
-                 v-bind:placeholders="placeholders.Steps"></searchbar>
+                 v-bind:placeholders="placeholders.supportcode"></searchbar>
       <searchbar v-show="sidebarData.searchMode === 'Features'" v-model="search"
-                 v-bind:placeholders="placeholders.Features"></searchbar>
+                 v-bind:placeholders="placeholders.features"></searchbar>
       <searchbar v-show="sidebarData.searchMode === 'Scenarios'" v-model="search"
-                 v-bind:placeholders="placeholders.Scenarios"></searchbar>
-      <refinements></refinements>
-      <searchresults v-model="placeholderData" v-bind:search="search" v-bind:sidebarData="sidebarData"
-                     v-bind:supportCode="supportCode" v-bind:features="features"
-                     v-bind:scenarios="scenarios"></searchresults>
+                 v-bind:placeholders="placeholders.scenarios"></searchbar>
+      <div class="utility-bar">
+        <refinements></refinements>
+        <scenario-queue></scenario-queue>
+      </div>
+      <searchresults v-bind:search="search" v-bind:sidebarData="sidebarData"></searchresults>
     </div>
-    <detailsview v-bind:supportCode="supportCode" v-bind:features="features" v-bind:scenarios="scenarios"></detailsview>
+    <detailsview></detailsview>
   </div>
 </template>
 
@@ -24,6 +25,7 @@
   import sidebar from './components/SideBar'
   import detailsview from './components/DetailsView'
   import refinements from './components/Refinements'
+  import scenarioQueue from './components/ScenarioQueue.vue'
 
   const $ = require('jquery')
   const eventBus = require('@/eventBus')
@@ -36,23 +38,27 @@
       searchresults,
       sidebar,
       detailsview,
-      refinements
+      refinements,
+      scenarioQueue
     },
     data () {
       return {
         search: '',
-        sidebarData: {},
-        placeholderData: {},
-        supportCode: [],
-        features: [],
-        scenarios: [],
-        placeholders: {}
+        sidebarData: {}
       }
     },
-    computed: {},
+    computed: {
+      placeholders: function () {
+        return this.$store.state.placeholders
+      }
+    },
+    beforeMount () {
+      this.$store.dispatch('FETCH', 'tags')
+      this.$store.dispatch('FETCH', 'supportcode')
+      this.$store.dispatch('FETCH', 'features')
+      this.$store.dispatch('FETCH', 'scenarios')
+    },
     mounted () {
-      const _this = this
-
       eventBus.on('details', function () {
         $('body').css('overflow', 'hidden')
       })
@@ -61,6 +67,7 @@
       })
 
       let socket = io.connect('http://localhost:8088')
+      let _this = this
 
       socket.on('features', (json) => {
         _this.updateFeatures(json)
@@ -118,6 +125,13 @@
 
     .content {
       padding-left: 160px;
+    }
+
+    .utility-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: .2em .5em 0;
     }
   }
 </style>

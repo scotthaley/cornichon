@@ -1,7 +1,7 @@
 <template>
   <div>
     <div ref="container" v-bind:class="{ static: options && options.readOnly}"></div>
-    <div v-if="!options || (options && !options.readOnly)" class="buttons">
+    <div v-if="showButtons" class="buttons">
       <button ref="cancel">Cancel</button>
       <button ref="save">Save</button>
     </div>
@@ -14,6 +14,11 @@
   export default {
     name: 'codemirror',
     props: ['options', 'value'],
+    computed: {
+      showButtons: function () {
+        return !this.options || (this.options && !this.options.readOnly && !this.options.hideButtons)
+      }
+    },
     mounted () {
       const _this = this
       let _options = this.options || {}
@@ -45,6 +50,9 @@
   }
 
   .CodeMirror {
+    text-align: left;
+    font-size: 18px;
+
     &.cm-s-dracula {
       span.cm-variable-2 {
         color: #8be9fd;
