@@ -1,8 +1,9 @@
 <template>
   <div id="refinements" ref="main">
-    <div v-for="tag in tagDropdown" @click="tags.push(tag)">
-      {{tag}}
-    </div>
+    <select v-model="selected" @change="tags.push(selected)">
+      <option disabled value="">Please select a tag</option>
+      <option v-for="tag in tagDropdown">{{tag}}</option>
+    </select>
     <div ref="tags">
       <span v-for="tag in tags" class="tag" v-text="tag"></span>
     </div>
@@ -17,7 +18,8 @@
     name: 'refinements',
     data () {
       return {
-        tags: []
+        tags: [],
+        selected: ''
       }
     },
     watch: {
