@@ -66,11 +66,57 @@
       eventBus.on('details-closed', function () {
         $('body').css('overflow', 'auto')
       })
+
+      let socket = io.connect('http://localhost:8088')
+      let _this = this
+
+      socket.on('features', (json) => {
+        _this.updateFeatures(json)
+      })
+
+      socket.on('supportcode', (json) => {
+        _this.updateSupportCode(json)
+      })
+
+      socket.on('scenarios', (json) => {
+        _this.updateScenarios(json)
+      })
+
+      socket.on('connect', () => {
+        socket.emit('features')
+        socket.emit('supportcode')
+        socket.emit('scenarios')
+      })
+    },
+    methods: {
+      updateSupportCode: function (supportCode) {
+        console.log(supportCode)
+        this.supportCode = supportCode
+        this.placeholders['Steps'] = []
+        for (let s in this.supportCode) {
+          this.placeholders['Steps'].push(this.supportCode[s].fullName + '...')
+        }
+      },
+      updateFeatures: function (features) {
+        this.features = features
+        this.placeholders['Features'] = []
+        for (let f in this.features) {
+          this.placeholders['Features'].push(this.features[f].name + '...')
+        }
+      },
+      updateScenarios: function (scenarios) {
+        this.scenarios = scenarios
+        this.placeholders['Scenarios'] = []
+        for (let s in this.scenarios) {
+          this.placeholders['Scenarios'].push(this.scenarios[s].name + '...')
+        }
+      }
     }
   }
 </script>
 
 <style lang="scss" scoped>
+
   #app {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -80,14 +126,14 @@
     font-size: 32px;
 
     .content {
-      padding-left: 160px;
+      padding-left: 170px;
+      padding-right: 15px;
     }
 
     .utility-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: .2em .5em 0;
     }
   }
 </style>
