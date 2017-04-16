@@ -11,28 +11,24 @@ const store = new Vuex.Store({
     scenarios: []
   },
   mutations: {
-    SET_TAGS (state, res) {
-      state.tags = res
+    SET (state, {name, res}) {
+      state[name] = res
     },
     ADD_SCENARIO (state, scenario) {
       state.scenarios.push(scenario)
     }
   },
   actions: {
-    TAGS () {
-      app.fetch('tags')
+    FETCH (context, {data, name}) {
+      app.fetch(data)
         .done(function (res) {
-          store.commit('SET_TAGS', res)
+          store.commit('SET', {name, res})
         })
     },
     QUEUE_SCENARIO ({ commit }, scenario) {
       commit('ADD_SCENARIO', scenario)
     }
   }
-})
-
-app.fetch('tags').done(function (res) {
-  store.state.tags = res
 })
 
 export default store

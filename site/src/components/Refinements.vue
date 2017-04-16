@@ -49,7 +49,7 @@
       })
     },
     beforeMount () {
-      this.$store.dispatch('TAGS', this)
+      this.$store.dispatch('FETCH', {data: 'tags', name: 'tags'})
     }
   }
 </script>
