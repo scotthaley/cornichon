@@ -38,6 +38,7 @@ module.exports = (() => {
   const init = function () {
     const _this = this
     this.cli = getCli()
+    cucumber.clearSupportCodeFns()
 
     getFeatures(this.cli).then(f => {
       _this.features = f
@@ -176,6 +177,9 @@ module.exports = (() => {
   const getSupportCode = (cli, features) => {
     return co(function* () {
       const configuration = yield cli.getConfiguration()
+      for (let i in configuration.supportCodePaths) {
+        delete require.cache[configuration.supportCodePaths[i]]
+      }
       let supportCode = cli.getSupportCodeLibrary(configuration.supportCodePaths)
       let supportCodeMapped = []
       for (let i in supportCode.stepDefinitions) {
@@ -359,7 +363,7 @@ module.exports = (() => {
       supportCodeLibrary
     })
 
-    scenarioRunner.run()
+    await scenarioRunner.run()
   }
 
   return {
