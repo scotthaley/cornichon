@@ -11,12 +11,20 @@ const cucumber = require('./cucumber')
 cucumber.init()
 
 const cornichon = require('./cornichon')
-const watchFileChange = require('./watchFileChange')
 
 module.exports = () => {
   let app = express()
   app.use(cors())
   app.use(bodyParser.urlencoded({ extended: false }))
+
+  let server = require('http').createServer(app);
+  let io = require('socket.io')(server);
+
+  const watchFileChange = require('./watchFileChange')(() => {
+    io.emit('features', cucumber.features)
+    io.emit('supportcode', cucumber.supportCode)
+    io.emit('scenarios', cucumber.scenarios)
+  })
 
   app.use('/static', express.static(path.join(__dirname, './site/dist/static/')))
 
@@ -55,7 +63,22 @@ module.exports = () => {
     res.send(true)
   })
 
-  app.listen(8088, () => {
+  io.on('connect', (socket) => {
+    socket.on('features', () => {
+      socket.emit('features', cucumber.features)
+    })
+
+    socket.on('supportcode', () => {
+      console.log(cucumber.supportCode)
+      socket.emit('supportcode', cucumber.supportCode)
+    })
+
+    socket.on('scenarios', () => {
+      socket.emit('scenarios', cucumber.scenarios)
+    })
+  })
+
+  server.listen(8088, () => {
     console.log('http://localhost:8088')
     if (process.env.DEBUG !== 'true') {
       require('open')('http://localhost:8088', 'chrome')
