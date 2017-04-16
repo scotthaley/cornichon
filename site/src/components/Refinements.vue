@@ -54,7 +54,7 @@
     margin-bottom: -15px;
     font-size: 18px;
     text-align: left;
-    overflow: scroll;
+    overflow: auto;
     white-space: nowrap;
     line-height: 40px;
 
