@@ -8,20 +8,36 @@ const store = new Vuex.Store({
   state: {
     settings: ['1', '2', '3'],
     tags: [],
-    scenarios: []
+    scenario_queue: [],
+    scenarios: [],
+    features: [],
+    supportcode: [],
+    placeholders: {
+      supportcode: [],
+      features: [],
+      scenarios: []
+    }
   },
   mutations: {
     SET (state, {name, res}) {
       state[name] = res
+      if (name in state.placeholders) {
+        for (let i in res) {
+          let obj = res[i]
+          state.placeholders[name].push(`${obj.fullName || obj.name}...`)
+        }
+      }
     },
     ADD_SCENARIO (state, scenario) {
-      state.scenarios.push(scenario)
+      state.scenario_queue.push(scenario)
     }
   },
   actions: {
-    FETCH (context, {data, name}) {
+    FETCH (context, request) {
+      let data = request.data || request
+      let name = request.name || request
       app.fetch(data)
-        .done(function (res) {
+        .then(function (res) {
           store.commit('SET', {name, res})
         })
     },

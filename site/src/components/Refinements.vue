@@ -49,9 +49,6 @@
           _this.tags.splice(i, 1)
         }
       })
-    },
-    beforeMount () {
-      this.$store.dispatch('FETCH', {data: 'tags', name: 'tags'})
     }
   }
 </script>

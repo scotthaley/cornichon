@@ -64,6 +64,10 @@ module.exports = () => {
   })
 
   io.on('connect', (socket) => {
+    socket.on('tags', () => {
+      socket.emit('tags', cucumber.tags)
+    })
+
     socket.on('features', () => {
       socket.emit('features', cucumber.features)
     })
@@ -75,6 +79,10 @@ module.exports = () => {
 
     socket.on('scenarios', () => {
       socket.emit('scenarios', cucumber.scenarios)
+    })
+
+    socket.on('saveSettings', (settings) => {
+      cornichon.saveSettings(settings)
     })
   })
 
