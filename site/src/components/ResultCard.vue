@@ -45,7 +45,7 @@
     <div v-if="scenario">
       <div class="wrapper">
         <pre><code class="gherkin header" ref="header">{{scenarioTitle}}</code></pre>
-        <i @click="runScenario(scenario.internalID)" class="fa fa-play-circle play"></i>
+        <i @click="runScenario(scenario.internalID)" class="fa fa-plus add"></i>
       </div>
       <div class="content">
         <span class="uri" v-text="scenario.uri" v-on:click="openFile(scenario.uri_full)"></span>
@@ -265,7 +265,7 @@
     .wrapper {
       position: relative;
 
-      i.play {
+      i.add {
         color: #999;
         position: absolute;
         top: 50%;
