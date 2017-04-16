@@ -3,17 +3,15 @@
     <sidebar v-model="sidebarData"></sidebar>
     <div class="content" ref="content">
       <searchbar v-show="sidebarData.searchMode === 'Steps'" v-model="search"
-                 v-bind:placeholders="placeholders.Steps"></searchbar>
+                 v-bind:placeholders="placeholders.supportcode"></searchbar>
       <searchbar v-show="sidebarData.searchMode === 'Features'" v-model="search"
-                 v-bind:placeholders="placeholders.Features"></searchbar>
+                 v-bind:placeholders="placeholders.features"></searchbar>
       <searchbar v-show="sidebarData.searchMode === 'Scenarios'" v-model="search"
-                 v-bind:placeholders="placeholders.Scenarios"></searchbar>
+                 v-bind:placeholders="placeholders.scenarios"></searchbar>
       <div class="utility-bar">
         <refinements></refinements>
       </div>
-      <searchresults v-model="placeholderData" v-bind:search="search" v-bind:sidebarData="sidebarData"
-                     v-bind:supportCode="supportCode" v-bind:features="features"
-                     v-bind:scenarios="scenarios"></searchresults>
+      <searchresults v-bind:search="search" v-bind:sidebarData="sidebarData"></searchresults>
     </div>
     <scenario-queue></scenario-queue>
     <detailsview v-bind:supportCode="supportCode" v-bind:features="features" v-bind:scenarios="scenarios"></detailsview>
@@ -46,18 +44,22 @@
     data () {
       return {
         search: '',
-        sidebarData: {},
-        placeholderData: {},
-        supportCode: [],
-        features: [],
-        scenarios: [],
-        placeholders: {}
+        sidebarData: {}
       }
     },
-    computed: {},
+    computed: {
+      placeholders: function () {
+        return this.$store.state.placeholders
+      }
+    },
+    beforeMount () {
+      this.$store.dispatch('FETCH', 'tags')
+      this.$store.dispatch('FETCH', 'supportcode')
+      this.$store.dispatch('FETCH', 'features')
+      this.$store.dispatch('FETCH', 'scenarios')
+      this.$store.dispatch('FETCH', 'settings')
+    },
     mounted () {
-      const _this = this
-
       eventBus.on('details', function () {
         $('body').css('overflow', 'hidden')
       })
@@ -66,13 +68,13 @@
       })
 
       let socket = io.connect('http://localhost:8088')
+      let _this = this
 
       socket.on('features', (json) => {
         _this.updateFeatures(json)
       })
 
       socket.on('supportcode', (json) => {
-        console.log(json)
         _this.updateSupportCode(json)
       })
 
@@ -117,6 +119,7 @@
     margin: 0;
     min-height: 100vh;
   }
+
   #app {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -136,7 +139,6 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: .2em .5em 0;
     }
     code.header {
       white-space: normal;

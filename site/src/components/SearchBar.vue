@@ -63,7 +63,6 @@
 <style scoped>
   #searchbar {
     display: block;
-    margin: 0 15px;
     border-bottom: 3px solid #E6E6E6;
   }
 

@@ -64,6 +64,10 @@ module.exports = () => {
   })
 
   io.on('connect', (socket) => {
+    socket.on('tags', () => {
+      socket.emit('tags', cucumber.tags)
+    })
+
     socket.on('features', () => {
       socket.emit('features', cucumber.features)
     })
@@ -75,10 +79,25 @@ module.exports = () => {
     socket.on('scenarios', () => {
       socket.emit('scenarios', cucumber.scenarios)
     })
+
+    socket.on('settings', () => {
+      socket.emit('settings', cornichon.getSettings())
+    })
+
+    socket.on('saveSettings', (settings) => {
+      cornichon.saveSettings(settings)
+      socket.emit('saveSettings', true)
+    })
   })
 
   server.listen(8088, () => {
     console.log('http://localhost:8088')
+    require('child_process').exec(cornichon.getSettings().custom['Setup Command'], (e, stdout, stderr) => {
+      console.log('Setup Command:', stdout)
+      if (stderr) {
+        console.log('Setup Command Error:', stderr)
+      }
+    })
     if (process.env.DEBUG !== 'true') {
       require('open')('http://localhost:8088', 'chrome')
     }
