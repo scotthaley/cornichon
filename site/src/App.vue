@@ -114,24 +114,28 @@
   }
 </script>
 
-<style lang="scss" scoped>
-  #app {
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
-    font-size: 32px;
+<style lang="scss">
+  body {
 
-    .content {
-      padding-left: 160px;
-    }
+    margin-right: 25px;
 
-    .utility-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: .2em .5em 0;
+    #app {
+      font-family: 'Avenir', Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-align: center;
+      color: #2c3e50;
+      font-size: 32px;
+
+      .content {
+        padding-left: 170px;
+      }
+
+      .utility-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
     }
   }
 </style>
