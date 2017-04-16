@@ -57,6 +57,7 @@
       this.$store.dispatch('FETCH', 'supportcode')
       this.$store.dispatch('FETCH', 'features')
       this.$store.dispatch('FETCH', 'scenarios')
+      this.$store.dispatch('FETCH', 'settings')
     },
     mounted () {
       eventBus.on('details', function () {
