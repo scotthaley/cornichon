@@ -1,17 +1,12 @@
 <template>
   <div id="refinements" ref="main">
-    <select v-model="selected" @change="tags.push(selected)">
-      <option disabled value="">Please select a tag</option>
-      <option v-for="tag in tagDropdown">{{tag}}</option>
-    </select>
     <div ref="tags">
-      <span v-for="tag in tags" class="tag" v-text="tag"></span>
+      <span v-for="tag in tagOptions" class="tag" @click="toggleTag(tag.name)" v-bind:class="{ active: tags.includes(tag.name) }" v-text="tag.name"></span>
     </div>
   </div>
 </template>
 
 <script>
-  const $ = require('jquery')
   const eventBus = require('@/eventBus')
 
   export default {
@@ -22,33 +17,30 @@
         selected: ''
       }
     },
+    methods: {
+      toggleTag: function (tag) {
+        let i = this.tags.indexOf(tag)
+        if (i < 0) {
+          this.tags.push(tag)
+        } else {
+          this.tags.splice(i, 1)
+        }
+      }
+    },
     watch: {
       refinementData: function (value) {
         eventBus.emit('refinement.data', value)
       }
     },
     computed: {
-      tagDropdown () {
-        return this.$store.state.tags
+      tagOptions: function () {
+        return this.$store.state.tags.map((t) => ({name: t, active: false}))
       },
       refinementData: function () {
         return {
           tags: this.tags
         }
       }
-    },
-    mounted () {
-      const _this = this
-      eventBus.on('refinement.tag', function (tag) {
-        _this.tags.push(tag)
-      })
-      $(this.$refs.tags).on('click', '.tag', function (e) {
-        let text = $(e.target).text()
-        let i = _this.tags.indexOf(text)
-        if (i >= 0) {
-          _this.tags.splice(i, 1)
-        }
-      })
     },
     beforeMount () {
       this.$store.dispatch('FETCH', {data: 'tags', name: 'tags'})
@@ -59,19 +51,31 @@
 <style lang="scss" scoped>
   #refinements {
     margin-top: 20px;
+    margin-bottom: -15px;
     font-size: 18px;
     text-align: left;
+    overflow: scroll;
+    white-space: nowrap;
+    line-height: 40px;
 
     .tag {
       font-size: 14px;
       padding: 7px;
-      background-color: #2c3e50;
+      background-color: #263238;
       -webkit-border-radius: 4px;
       -moz-border-radius: 4px;
       border-radius: 4px;
       color: white;
       cursor: pointer;
       margin-right: 5px;
+
+      &.active {
+        background-color: #f98990;
+
+        &:hover {
+          color: #263238;
+        }
+      }
 
       &:hover {
         color: #f98990;

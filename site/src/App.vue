@@ -67,7 +67,6 @@
       })
 
       socket.on('supportcode', (json) => {
-        console.log(json)
         _this.updateSupportCode(json)
       })
 
