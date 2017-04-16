@@ -69,7 +69,6 @@ module.exports = () => {
     })
 
     socket.on('supportcode', () => {
-      console.log(cucumber.supportCode)
       socket.emit('supportcode', cucumber.supportCode)
     })
 

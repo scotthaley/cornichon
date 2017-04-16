@@ -10,12 +10,12 @@
                  v-bind:placeholders="placeholders.Scenarios"></searchbar>
       <div class="utility-bar">
         <refinements></refinements>
-        <scenario-queue></scenario-queue>
       </div>
       <searchresults v-model="placeholderData" v-bind:search="search" v-bind:sidebarData="sidebarData"
                      v-bind:supportCode="supportCode" v-bind:features="features"
                      v-bind:scenarios="scenarios"></searchresults>
     </div>
+    <scenario-queue></scenario-queue>
     <detailsview v-bind:supportCode="supportCode" v-bind:features="features" v-bind:scenarios="scenarios"></detailsview>
   </div>
 </template>
@@ -88,7 +88,6 @@
     },
     methods: {
       updateSupportCode: function (supportCode) {
-        console.log(supportCode)
         this.supportCode = supportCode
         this.placeholders['Steps'] = []
         for (let s in this.supportCode) {
@@ -113,7 +112,11 @@
   }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+  body {
+    margin: 0;
+    min-height: 100vh;
+  }
   #app {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -121,9 +124,12 @@
     text-align: center;
     color: #2c3e50;
     font-size: 32px;
-
+    display: flex;
+    height: 100%;
+    min-height: 100vh;
     .content {
-      padding-left: 160px;
+      flex: 1 1 auto;
+      padding: 0 .5em 3em;
     }
 
     .utility-bar {
@@ -131,6 +137,9 @@
       justify-content: space-between;
       align-items: center;
       padding: .2em .5em 0;
+    }
+    code.header {
+      white-space: normal;
     }
   }
 </style>
