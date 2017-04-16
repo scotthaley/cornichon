@@ -8,7 +8,10 @@
                  v-bind:placeholders="placeholders.Features"></searchbar>
       <searchbar v-show="sidebarData.searchMode === 'Scenarios'" v-model="search"
                  v-bind:placeholders="placeholders.Scenarios"></searchbar>
-      <refinements></refinements>
+      <div class="utility-bar">
+        <refinements></refinements>
+        <scenario-queue></scenario-queue>
+      </div>
       <searchresults v-model="placeholderData" v-bind:search="search" v-bind:sidebarData="sidebarData"
                      v-bind:supportCode="supportCode" v-bind:features="features"
                      v-bind:scenarios="scenarios"></searchresults>
@@ -24,6 +27,7 @@
   import sidebar from './components/SideBar'
   import detailsview from './components/DetailsView'
   import refinements from './components/Refinements'
+  import scenarioQueue from './components/ScenarioQueue.vue'
 
   const $ = require('jquery')
   const eventBus = require('@/eventBus')
@@ -36,7 +40,8 @@
       searchresults,
       sidebar,
       detailsview,
-      refinements
+      refinements,
+      scenarioQueue
     },
     data () {
       return {
@@ -109,6 +114,13 @@
 
     .content {
       padding-left: 160px;
+    }
+
+    .utility-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: .2em .5em 0;
     }
   }
 </style>

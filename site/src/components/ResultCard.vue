@@ -45,7 +45,8 @@
     <div v-if="scenario">
       <div class="wrapper">
         <pre><code class="gherkin header" ref="header">{{scenarioTitle}}</code></pre>
-        <i @click="runScenario(scenario.internalID)" class="fa fa-plus add"></i>
+        <!--<i @click="runScenario(scenario.internalID)" class="fa fa-plus add"></i>-->
+        <i @click="queueScenario(scenario.internalID)" class="fa fa-plus add"></i>
       </div>
       <div class="content">
         <span class="uri" v-text="scenario.uri" v-on:click="openFile(scenario.uri_full)"></span>
@@ -120,6 +121,9 @@
       },
       runScenario: function (internalID) {
         $.post('http://localhost:8088/runScenario', {internalID}, null, 'json')
+      },
+      queueScenario: function (internalID) {
+        this.$store.dispatch('QUEUE_SCENARIO', internalID)
       }
     },
     computed: {

@@ -58,7 +58,6 @@
 
 <style lang="scss" scoped>
   #refinements {
-    margin-top: 20px;
     font-size: 18px;
     text-align: left;
 
