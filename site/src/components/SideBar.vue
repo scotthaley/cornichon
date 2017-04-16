@@ -54,7 +54,7 @@
     overflow: hidden;
     flex: 0 0 150px;
     background-color: #263238;
-    font-family: monospace;
+    width: 150px;
 
     .sidebar-wrapper {
       position: fixed;
