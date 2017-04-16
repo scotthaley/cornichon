@@ -30,6 +30,10 @@
 
       let _codemirror = CodeMirror(this.$refs.container, _options)
 
+      _codemirror.on('change', function (cm) {
+        _this.$emit('input', cm.getValue())
+      })
+
       $(this.$refs.save).click(function () {
         _this.$emit('updated', _codemirror.getValue())
       })

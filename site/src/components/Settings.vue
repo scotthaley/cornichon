@@ -1,7 +1,7 @@
 <template>
   <div class="settings">
     <h3>User Settings</h3>
-    <div v-for="(values, key) in settings.dropdowns">
+    <div v-for="(values, key) in options.dropdowns">
       <span class="key">{{key}}</span>
       <select v-model="values[0]">
         <option v-for="value in values" class="value">{{value}}</option>
@@ -9,8 +9,9 @@
     </div>
     <div>
       <h4>Setup Command</h4>
-      <codemirror v-bind:value="settings.custom['Setup Command']" :options="{ hideButtons: true }"></codemirror>
+      <codemirror v-model="settings.custom['Setup Command']" :options="{ hideButtons: true }"></codemirror>
     </div>
+    <button @click="save">Save</button>
   </div>
 </template>
 
@@ -24,15 +25,22 @@ export default {
   },
   data () {
     return {
-      settings: {
+      options: {
         'dropdowns': {
           'Font-size': ['12', '14', '16'],
           'theme': ['solarized', 'mono blue', 'frankenstein']
-        },
-        'custom': {
-          'Setup Command': ''
         }
       }
+    }
+  },
+  computed: {
+    settings: function () {
+      return this.$store.state.settings
+    }
+  },
+  methods: {
+    save: function () {
+      this.$store.dispatch('SETTINGS', this.settings)
     }
   }
 }

@@ -13,8 +13,18 @@ var app = (function () {
     })
   }
 
+  function post (what, data) {
+    return new Promise((resolve) => {
+      socket.once(what, (json) => {
+        resolve(json)
+      })
+      socket.emit(what, data)
+    })
+  }
+
   var api = {
     fetch,
+    post,
     socket
   }
 

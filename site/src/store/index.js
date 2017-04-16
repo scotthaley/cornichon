@@ -6,7 +6,7 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
-    settings: ['1', '2', '3'],
+    settings: {},
     tags: [],
     scenario_queue: [],
     scenarios: [],
@@ -30,6 +30,9 @@ const store = new Vuex.Store({
     },
     ADD_SCENARIO (state, scenario) {
       state.scenario_queue.push(scenario)
+    },
+    UPDATE_SETTINGS (state, settings) {
+      state.settings = settings
     }
   },
   actions: {
@@ -43,6 +46,14 @@ const store = new Vuex.Store({
     },
     QUEUE_SCENARIO ({ commit }, scenario) {
       commit('ADD_SCENARIO', scenario)
+    },
+    SETTINGS ({ commit }, settings) {
+      app.post('saveSettings', settings)
+        .then(function (res) {
+          if (res) {
+            commit('UPDATE_SETTINGS', settings)
+          }
+        })
     }
   }
 })
