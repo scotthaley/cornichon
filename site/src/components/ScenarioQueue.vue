@@ -15,7 +15,7 @@ export default {
   name: 'ScenarioQueue',
   computed: {
     scenarios () {
-      return this.$store.state.scenarios
+      return this.$store.state.scenario_queue
     }
   },
   methods: {

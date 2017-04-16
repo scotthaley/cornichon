@@ -45,7 +45,6 @@
     <div v-if="scenario">
       <div class="wrapper">
         <pre><code class="gherkin header" ref="header">{{scenarioTitle}}</code></pre>
-        <!--<i @click="runScenario(scenario.internalID)" class="fa fa-plus add"></i>-->
         <i @click="queueScenario(scenario.internalID)" class="fa fa-plus add"></i>
       </div>
       <div class="content">

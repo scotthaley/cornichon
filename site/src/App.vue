@@ -14,7 +14,7 @@
       <searchresults v-bind:search="search" v-bind:sidebarData="sidebarData"></searchresults>
     </div>
     <scenario-queue></scenario-queue>
-    <detailsview v-bind:supportCode="supportCode" v-bind:features="features" v-bind:scenarios="scenarios"></detailsview>
+    <detailsview></detailsview>
   </div>
 </template>
 
