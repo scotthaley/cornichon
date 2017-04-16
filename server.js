@@ -59,7 +59,7 @@ module.exports = () => {
   })
 
   app.post('/openFile', (req, res) => {
-    require('opn')(req.body.path)
+    require('open')(req.body.path)
     res.send(true)
   })
 
