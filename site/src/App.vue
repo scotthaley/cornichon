@@ -57,18 +57,6 @@
     computed: {},
     mounted () {
       const _this = this
-      $.get('http://localhost:8088/features')
-        .done(function (json) {
-          _this.updateFeatures(json)
-        })
-      $.get('http://localhost:8088/supportcode')
-        .done(function (json) {
-          _this.updateSupportCode(json)
-        })
-      $.get('http://localhost:8088/scenarios')
-        .done(function (json) {
-          _this.updateScenarios(json)
-        })
 
       eventBus.on('details', function () {
         $('body').css('overflow', 'hidden')
@@ -76,9 +64,31 @@
       eventBus.on('details-closed', function () {
         $('body').css('overflow', 'auto')
       })
+
+      let socket = io.connect('http://localhost:8088')
+
+      socket.on('features', (json) => {
+        _this.updateFeatures(json)
+      })
+
+      socket.on('supportcode', (json) => {
+        console.log(json)
+        _this.updateSupportCode(json)
+      })
+
+      socket.on('scenarios', (json) => {
+        _this.updateScenarios(json)
+      })
+
+      socket.on('connect', () => {
+        socket.emit('features')
+        socket.emit('supportcode')
+        socket.emit('scenarios')
+      })
     },
     methods: {
       updateSupportCode: function (supportCode) {
+        console.log(supportCode)
         this.supportCode = supportCode
         this.placeholders['Steps'] = []
         for (let s in this.supportCode) {

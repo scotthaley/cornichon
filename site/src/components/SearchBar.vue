@@ -24,12 +24,16 @@
     },
     data () {
       return {
-        search: ''
+        search: '',
+        loaded: false
       }
     },
     watch: {
       placeholders: function () {
-        this.initSuperplaceholder()
+        if (!this.loaded) {
+          this.initSuperplaceholder()
+        }
+        this.loaded = true
       }
     },
     methods: {

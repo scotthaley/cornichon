@@ -25,32 +25,33 @@ const stripIndent = require('strip-indent')
 const cucumberExpression = require('cucumber-expressions')
 
 module.exports = (() => {
-  let features = null
   let supportCode = null
   let scenarios = null
   let scenarioMap = []
   let fullScenarioMap = {}
+  let features = null
   let featureMap = []
   let tags = []
   let cID = 100
   let cli = null
 
-  const init = function () {
+  const init = async function () {
     const _this = this
     this.cli = getCli()
     cucumber.clearSupportCodeFns()
-    fullScenarioMap = {}
-    featureMap = []
-    scenarioMap = []
 
-    getFeatures(this.cli).then(f => {
-      _this.features = f
-      _this.tags = getTags(_this.features)
-      _this.scenarios = getScenarios(_this.features)
-      return getSupportCode(_this.cli, _this.features)
-    }).then(c => {
-      _this.supportCode = c
-    })
+    supportCode = []
+    scenarios = []
+    scenarioMap = []
+    fullScenarioMap = {}
+    features = []
+    featureMap = []
+    tags = []
+
+    this.features = await getFeatures(this.cli)
+    this.tags = getTags(_this.features)
+    this.scenarios = getScenarios(_this.features)
+    this.supportCode = await getSupportCode(this.cli, this.features)
   }
 
   const getCli = () => {
