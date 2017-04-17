@@ -23,6 +23,9 @@ defineSupportCode(function ({Given, When, Then}) {
     return console.log(`Passed params: ${param1}, ${param2}`);
   });
 
+  When('I make a test fail', function () { /* {cornichon: d38770db-7975-e374-e672-fc739e88aeb0} */
+    return undefinedVariable
+  })
 
   Then('I should see some results', function () { /* {cornichon: b06e1722-ee5a-c3d9-28f5-6512aa8df87e} */
     return console.log('Did you see stuff?');

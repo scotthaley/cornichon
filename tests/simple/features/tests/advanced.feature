@@ -18,4 +18,5 @@ Feature: More advanced feature
   Scenario: This is the same scenario
   This is the scenario description
     When I pass a parameter like "<strong>banana</strong>"
+    When I make a test fail
     Then I should see some results
