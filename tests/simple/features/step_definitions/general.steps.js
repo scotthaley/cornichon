@@ -6,7 +6,7 @@ const {defineSupportCode} = require('cucumber');
 
 defineSupportCode(function ({Given, When, Then}) {
   Given('I\'m running a simple test', function () { /* {cornichon: 1490418241081} */
-    let moreCode = 4;
+    let moreCode = 6;
 
     moreCode += 2;
     return console.log(`Running a simple test ${moreCode}`);

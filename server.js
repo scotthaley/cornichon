@@ -20,10 +20,8 @@ module.exports = () => {
   let server = require('http').createServer(app);
   let io = require('socket.io')(server);
 
-  const watchFileChange = require('./watchFileChange')(() => {
-    io.emit('features', cucumber.features)
-    io.emit('supportcode', cucumber.supportCode)
-    io.emit('scenarios', cucumber.scenarios)
+  require('./watchFileChange')(() => {
+    io.emit('refresh')
   })
 
   app.use('/static', express.static(path.join(__dirname, './site/dist/static/')))
@@ -64,6 +62,12 @@ module.exports = () => {
   })
 
   io.on('connect', (socket) => {
+    socket.on('runScenario', (internalID) => {
+      cucumber.runScenario(internalID).then((result) => {
+        socket.emit('runScenario', result)
+      })
+    })
+
     socket.on('tags', () => {
       socket.emit('tags', cucumber.tags)
     })
