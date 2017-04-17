@@ -3,7 +3,7 @@
     <h3>User Settings</h3>
     <div v-for="(values, key) in options.dropdowns">
       <span class="key">{{key}}</span>
-      <select v-model="values[0]">
+      <select v-model="settings.custom[key]">
         <option v-for="value in values" class="value">{{value}}</option>
       </select>
     </div>
@@ -28,7 +28,7 @@ export default {
       options: {
         'dropdowns': {
           'Font-size': ['12', '14', '16'],
-          'theme': ['solarized', 'mono blue', 'frankenstein']
+          'Code Style': ['material', 'solarized', 'neo']
         }
       }
     }

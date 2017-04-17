@@ -17,30 +17,55 @@
     computed: {
       showButtons: function () {
         return !this.options || (this.options && !this.options.readOnly && !this.options.hideButtons)
+      },
+      _options: function () {
+        let _options = this.options || {}
+        _options.mode = _options.mode || 'gfm'
+        _options.lineNumbers = _options.lineNumbers || true
+
+        _options.theme = _options.theme || 'material'
+        if (this.$store.state.settings.custom && this.$store.state.settings.custom['Code Style']) {
+          _options.theme = this.$store.state.settings.custom['Code Style']
+        }
+        _options.value = this.value
+        _options.autoRefresh = true
+
+        return _options
+      }
+    },
+    data: function () {
+      return {
+        cm: null
+      }
+    },
+    methods: {
+      updateOptions: function () {
+        if (this.cm) {
+          this.cm.setOption('theme', this._options.theme)
+          this.cm.setOption('value', this._options.value)
+        }
       }
     },
     mounted () {
       const _this = this
-      let _options = this.options || {}
-      _options.mode = _options.mode || 'gfm'
-      _options.lineNumbers = _options.lineNumbers || true
-      _options.theme = _options.theme || 'material'
-      _options.value = this.value
-      _options.autoRefresh = true
+      this.cm = CodeMirror(this.$refs.container, this._options)
 
-      let _codemirror = CodeMirror(this.$refs.container, _options)
-
-      _codemirror.on('change', function (cm) {
-        _this.$emit('input', cm.getValue())
+      this.cm.on('change', function () {
+        _this.$emit('input', _this.cm.getValue())
       })
 
       $(this.$refs.save).click(function () {
-        _this.$emit('updated', _codemirror.getValue())
+        _this.$emit('updated', _this.cm.getValue())
       })
 
       $(this.$refs.cancel).click(function () {
         _this.$emit('cancel')
       })
+    },
+    watch: {
+      _options: function () {
+        this.updateOptions()
+      }
     }
   }
 </script>
