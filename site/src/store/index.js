@@ -4,6 +4,14 @@ import { app } from '../store/app'
 
 Vue.use(Vuex)
 
+app.socket.on('refresh', function () {
+  store.dispatch('FETCH', 'tags')
+  store.dispatch('FETCH', 'supportcode')
+  store.dispatch('FETCH', 'features')
+  store.dispatch('FETCH', 'scenarios')
+  store.dispatch('FETCH', 'settings')
+})
+
 const store = new Vuex.Store({
   state: {
     settings: {},
