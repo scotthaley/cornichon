@@ -90,11 +90,11 @@
         $(this.$refs.card).removeClass('open')
         setTimeout(this.codeHighlight, 50)
       },
-      'featureTitle': function () {
+      'feature': function () {
         $(this.$refs.card).removeClass('open')
         setTimeout(this.codeHighlight, 50)
       },
-      'scenarioTitle': function () {
+      'scenario': function () {
         $(this.$refs.card).removeClass('open')
         setTimeout(this.codeHighlight, 50)
       }
