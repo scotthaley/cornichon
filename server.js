@@ -63,6 +63,11 @@ module.exports = () => {
 
   io.on('connect', (socket) => {
     socket.on('runScenario', (internalID) => {
+      let envVars = cornichon.getSettings().custom.envVars
+      for (let i in envVars) {
+        let e = envVars[i]
+        process.env[e.name] = e.value
+      }
       cucumber.runScenario(internalID).then((result) => {
         result.scenario = internalID
         for (let i in result.stepResults) {
