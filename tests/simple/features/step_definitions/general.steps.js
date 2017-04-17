@@ -16,11 +16,16 @@ defineSupportCode(function ({Given, When, Then}) {
   });
 
   When('I pass a parameter like {stringInDoubleQuotes}', function (param) { /* {cornichon: d69d6202-e292-528b-83ec-8d728e11d6f3} */
+    return console.log(`Passed param: ${param}`);
   });
 
   When('I pass multiple parameters like {stringInDoubleQuotes} and {stringInDoubleQuotes}', function (param1, param2) { /* {cornichon: 098b3174-8654-d46f-b4d0-07432ccd49ff} */
+    return console.log(`Passed params: ${param1}, ${param2}`);
   });
 
+  When('I make a test fail', function () { /* {cornichon: d38770db-7975-e374-e672-fc739e88aeb0} */
+    return undefinedVariable
+  })
 
   Then('I should see some results', function () { /* {cornichon: 55061547-54f1-2716-b530-662092d55227} */
     return console.log('Did you see stuff?');

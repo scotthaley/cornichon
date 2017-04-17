@@ -61,7 +61,7 @@ const store = new Vuex.Store({
         })
     },
     QUEUE_SCENARIO ({ commit }, scenario) {
-      commit('ADD_SCENARIO', {scenario})
+      commit('ADD_SCENARIO', {scenario, lastResult: {status: 'queued'}})
     },
     SETTINGS ({ commit }, settings) {
       app.post('saveSettings', settings)
@@ -75,7 +75,6 @@ const store = new Vuex.Store({
       return new Promise((resolve) => {
         app.post('runScenario', internalID)
           .then(function (res) {
-            console.log(res)
             commit('UPDATE_SCENARIO_IN_QUEUE', {internalID, res})
             resolve(res)
           })
