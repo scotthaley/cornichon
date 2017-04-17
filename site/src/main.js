@@ -22,6 +22,8 @@ require('script-loader!node_modules/codemirror/mode/meta.js')
 require('node_modules/font-awesome/css/font-awesome.min.css')
 require('node_modules/codemirror/lib/codemirror.css')
 require('node_modules/codemirror/theme/material.css')
+require('node_modules/codemirror/theme/solarized.css')
+require('node_modules/codemirror/theme/neo.css')
 require('node_modules/highlightjs/styles/mono-blue.css')
 require('@/assets/pacifico.css')
 document.addEventListener('DOMContentLoaded', () => {

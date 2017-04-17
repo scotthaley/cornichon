@@ -1,17 +1,20 @@
 <template>
   <div class="settings">
-    <h3>User Settings</h3>
+    <h1>Settings</h1>
+    <hr>
     <div v-for="(values, key) in options.dropdowns">
-      <span class="key">{{key}}</span>
-      <select v-model="values[0]">
+      <div class="key name">{{key}}</div>
+      <select v-model="settings.custom[key]">
         <option v-for="value in values" class="value">{{value}}</option>
       </select>
     </div>
     <div>
-      <h4>Setup Command</h4>
+      <div class="name">Setup Command</div>
       <codemirror v-model="settings.custom['Setup Command']" :options="{ hideButtons: true }"></codemirror>
     </div>
-    <button @click="save">Save</button>
+    <div class="buttons">
+      <button @click="save">Save</button>
+    </div>
   </div>
 </template>
 
@@ -27,8 +30,7 @@ export default {
     return {
       options: {
         'dropdowns': {
-          'Font-size': ['12', '14', '16'],
-          'theme': ['solarized', 'mono blue', 'frankenstein']
+          'Code Style': ['material', 'solarized', 'neo']
         }
       }
     }
@@ -46,3 +48,32 @@ export default {
 }
 
 </script>
+
+<style lang="scss" scoped>
+  .settings {
+    text-align: left;
+    font-size: 18px;
+
+    .name {
+      margin-top: 15px;
+      margin-bottom: 5px;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-top: 15px;
+      margin-bottom: 0;
+    }
+
+    hr {
+      margin-top: 5px;
+    }
+
+    select {
+      width: 100%;
+      font-size: 20px;
+    }
+  }
+
+
+</style>

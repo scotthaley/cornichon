@@ -27,7 +27,8 @@ module.exports = (() => {
     }
     return {
       custom: {
-        'Setup Command': ''
+        'Setup Command': '',
+        'Code Style': 'material'
       }
     }
   }

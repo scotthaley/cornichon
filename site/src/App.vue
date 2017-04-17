@@ -8,7 +8,7 @@
                  v-bind:placeholders="placeholders.features"></searchbar>
       <searchbar v-show="sidebarData.searchMode === 'Scenarios'" v-model="search"
                  v-bind:placeholders="placeholders.scenarios"></searchbar>
-      <div class="utility-bar">
+      <div class="utility-bar" v-if="sidebarData.searchMode !== 'Settings'">
         <refinements></refinements>
       </div>
       <searchresults v-bind:search="search" v-bind:sidebarData="sidebarData"></searchresults>
@@ -98,6 +98,25 @@
     }
     code.header {
       white-space: normal;
+    }
+  }
+
+  .buttons {
+    margin-top: 10px;
+    width: 100%;
+    text-align: right;
+
+    button {
+      cursor: pointer;
+      background-color: #263238;
+      color: white;
+      padding: 10px;
+      width: 150px;
+      border: none;
+
+      &:hover {
+        color: #8be9fd;
+      }
     }
   }
 </style>
