@@ -61,7 +61,7 @@ const store = new Vuex.Store({
         })
     },
     QUEUE_SCENARIO ({ commit }, scenario) {
-      commit('ADD_SCENARIO', {scenario})
+      commit('ADD_SCENARIO', {scenario, lastResult: {status: 'queued'}})
     },
     SETTINGS ({ commit }, settings) {
       app.post('saveSettings', settings)
