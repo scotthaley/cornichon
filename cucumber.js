@@ -323,7 +323,7 @@ module.exports = (() => {
   }
 
   const mappedStep = (step, stepDef) => {
-    let stepMatch = stepDef ? stepDef.expression.match(step.name) : null
+    let stepMatch = stepDef ? stepDef.expression.match(step.pattern) : null
 
     let mStep = {
       pattern: step.pattern || step.name,
@@ -361,7 +361,7 @@ module.exports = (() => {
       supportCodeLibrary
     })
 
-    await scenarioRunner.run()
+    return scenarioRunner.run()
   }
 
   return {

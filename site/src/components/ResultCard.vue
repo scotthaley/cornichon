@@ -4,7 +4,7 @@
       <pre><code class="gherkin header" ref="header" v-html="stepTitle"></code></pre>
       <div class="content">
         <span class="uri" v-text="step.uri" v-on:click="openFile(step.uri_full)"></span>
-        <div class="usage" ref="usage"> 
+        <div class="usage" ref="usage">
           <h1 class="first">Usage<i ref="editusage" class="edit-usage fa fa-pencil fa-1x"></i></h1>
           <div ref="marked" class="marked" v-html="usageHTML"></div>
           <codemirror class="codemirror_usage" v-bind:value="step.usage" v-on:updated="updateUsage"
@@ -44,7 +44,7 @@
 
     <div v-if="scenario">
       <div class="wrapper">
-        <pre><code class="gherkin header" ref="header">{{scenarioTitle}}</code></pre>
+        <pre><code class="gherkin header" ref="header" v-html="scenarioTitle"></code></pre>
         <i @click="queueScenario(scenario.internalID)" class="fa fa-plus add"></i>
       </div>
       <div class="content">
