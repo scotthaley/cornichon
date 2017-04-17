@@ -39,6 +39,14 @@ const store = new Vuex.Store({
     ADD_SCENARIO (state, scenario) {
       state.scenario_queue.push(scenario)
     },
+    UPDATE_SCENARIO_IN_QUEUE (state, data) {
+      for (let i in state.scenario_queue) {
+        let s = state.scenario_queue[i]
+        if (s.scenario === data.internalID) {
+          s.lastResult = data.res
+        }
+      }
+    },
     UPDATE_SETTINGS (state, settings) {
       state.settings = settings
     }
@@ -53,7 +61,7 @@ const store = new Vuex.Store({
         })
     },
     QUEUE_SCENARIO ({ commit }, scenario) {
-      commit('ADD_SCENARIO', scenario)
+      commit('ADD_SCENARIO', {scenario})
     },
     SETTINGS ({ commit }, settings) {
       app.post('saveSettings', settings)
@@ -62,6 +70,16 @@ const store = new Vuex.Store({
             commit('UPDATE_SETTINGS', settings)
           }
         })
+    },
+    RUN_SCENARIO ({ commit }, internalID) {
+      return new Promise((resolve) => {
+        app.post('runScenario', internalID)
+          .then(function (res) {
+            console.log(res)
+            commit('UPDATE_SCENARIO_IN_QUEUE', {internalID, res})
+            resolve(res)
+          })
+      })
     }
   }
 })

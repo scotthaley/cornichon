@@ -5,11 +5,14 @@
 const {defineSupportCode} = require('cucumber');
 
 defineSupportCode(function ({Given, When, Then}) {
-  Given('I\'m running a simple test', function () { /* {cornichon: 1490418241081} */
+  Given('I\'m running a simple test', function (callback) { /* {cornichon: 1490418241081} */
     let moreCode = 6;
 
     moreCode += 2;
-    return console.log(`Running a simple test ${moreCode}`);
+    setTimeout(function () {
+      console.log(`Running a simple test ${moreCode}`);
+      callback()
+    }, 2000)
   });
 
   When('I pass a parameter like {stringInDoubleQuotes}', function (param) { /* {cornichon: 1490472816253} */
