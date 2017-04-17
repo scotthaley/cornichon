@@ -11,6 +11,12 @@ Feature: More advanced feature
     Then I should see some results
 
     Examples:
-      | fruit    | type       |
+      | fruit    | type        |
       | "apple"  | "undefined" |
       | "orange" | "defined"   |
+
+  Scenario: This is the same scenario
+  This is the scenario description
+    Given I'm running a simple test
+    When I pass a parameter like "<strong>banana</strong>"
+    Then I should see some results
