@@ -7,7 +7,7 @@ Feature: More advanced feature
     When I pass a parameter like <fruit>
     And I do an <type> step
     And I pass a parameter like <type>
-    And I pass two parameters like <type> and <fruit>
+    And I pass multiple parameters like <type> and <fruit>
     Then I should see some results
 
     Examples:

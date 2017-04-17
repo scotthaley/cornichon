@@ -209,7 +209,7 @@ module.exports = (() => {
             let includeScenario = false
             for (let st in scenario.steps) {
               let step = scenario.steps[st]
-              if (stepDef.expression.match(step.name)) {
+              if (stepDef.expression.match(step.pattern)) {
                 includeFeature = true
                 includeScenario = true
               }
@@ -326,7 +326,7 @@ module.exports = (() => {
     let stepMatch = stepDef ? stepDef.expression.match(step.name) : null
 
     let mStep = {
-      pattern: step.name,
+      pattern: step.pattern || step.name,
       name: step.name,
       currentStep: stepMatch != null,
       line: step.line,

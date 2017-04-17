@@ -92,12 +92,16 @@ module.exports = () => {
 
   server.listen(8088, () => {
     console.log('http://localhost:8088')
-    require('child_process').exec(cornichon.getSettings().custom['Setup Command'], (e, stdout, stderr) => {
-      console.log('Setup Command:', stdout)
-      if (stderr) {
-        console.log('Setup Command Error:', stderr)
-      }
-    })
+    let settings = cornichon.getSettings()
+    let setupCommand = settings.custom['Setup Command'].replace(/(?:\r\n|\r|\n)/g, ' && ')
+    if (setupCommand !== '') {
+      require('child_process').exec(setupCommand, (e, stdout, stderr) => {
+        console.log('Setup Command:', stdout)
+        if (stderr) {
+          console.log('Setup Command Error:', stderr)
+        }
+      })
+    }
     if (process.env.DEBUG !== 'true') {
       require('open')('http://localhost:8088', 'chrome')
     }
