@@ -12,15 +12,15 @@
         </span>
       </div>
       <p class="scenario" v-for="scenario in scenarios">
-        {{scenario}}
+        {{scenario.scenario}}
+        <i v-if="scenario.lastResult && scenario.lastResult.status === 'passed'" class="success fa fa-check-circle"></i>
+        <i v-if="scenario.lastResult && scenario.lastResult.status !== 'passed'" class="error fa fa-times-circle"></i>
       </p>
     </div>
   </div>
 </template>
 
 <script>
-// const $ = require('jquery')
-const app = require('../store/app')
 
 export default {
   name: 'ScenarioQueue',
@@ -37,10 +37,8 @@ export default {
   methods: {
     runScenarios: async function () {
       var scenarios = this.scenarios
-      for (let i = 0; i <= scenarios.length; i++) {
-        await app.post('runScenario', scenarios[i]).then(function (res) {
-          console.log(res)
-        })
+      for (let i = 0; i < scenarios.length; i++) {
+        await this.$store.dispatch('RUN_SCENARIO', scenarios[i].scenario)
       }
     },
     openClose: function () {
@@ -116,6 +114,15 @@ export default {
     text-transform: uppercase;
     cursor: pointer;
     white-space: nowrap;
+    i {
+      float: right;
+      &.success {
+        color: green;
+      }
+      &.error {
+        color: red;
+      }
+    }
   }
 }
 

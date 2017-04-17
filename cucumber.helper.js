@@ -3,6 +3,7 @@
  */
 
 const fs = require('fs')
+const Guid = require('guid')
 
 module.exports = (() => {
   const readLine = (uri, line) => {
@@ -82,11 +83,12 @@ module.exports = (() => {
   }
 
   const getStepID = step => {
-    let matches = step.code.match(/{cornichon: [0-9]+}/)
+    let matches = step.code.match(/{cornichon: .*\w}/)
     if (matches) {
-      return matches[0].match(/[0-9]+/)[0]
+      return matches[0].match(/.*\w/)[0]
     }
-    let ID = new Date().getTime().toString()
+    var guid = Guid.create()
+    let ID = guid
     writeLine(step.uri_full, step.line - 1, ` /* {cornichon: ${ID}} */`)
     return ID
   }
