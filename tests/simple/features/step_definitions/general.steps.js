@@ -15,11 +15,11 @@ defineSupportCode(function ({Given, When, Then}) {
     }, 2000)
   });
 
-  When('I pass a parameter like {stringInDoubleQuotes}', function (param) { /* {cornichon: d69d6202-e292-528b-83ec-8d728e11d6f3} */
+  When('I pass a parameter like {stringInDoubleQuotes}', function (param) { /* {cornichon: 98f0b7a9-4753-4bc4-9dd4-15be54fb53d0} */
     return console.log(`Passed param: ${param}`);
   });
 
-  When('I pass multiple parameters like {stringInDoubleQuotes} and {stringInDoubleQuotes}', function (param1, param2) { /* {cornichon: 098b3174-8654-d46f-b4d0-07432ccd49ff} */
+  When('I pass multiple parameters like {stringInDoubleQuotes} and {stringInDoubleQuotes}', function (param1, param2) { /* {cornichon: 1ee8249a-aac9-05bd-9a45-8d8fcc2a571e} */
     return console.log(`Passed params: ${param1}, ${param2}`);
   });
 
@@ -27,7 +27,7 @@ defineSupportCode(function ({Given, When, Then}) {
     return undefinedVariable
   })
 
-  Then('I should see some results', function () { /* {cornichon: 55061547-54f1-2716-b530-662092d55227} */
+  Then('I should see some results', function () { /* {cornichon: b06e1722-ee5a-c3d9-28f5-6512aa8df87e} */
     return console.log('Did you see stuff?');
   });
 });
