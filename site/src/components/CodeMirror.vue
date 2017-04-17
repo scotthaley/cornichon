@@ -96,22 +96,4 @@
     }
   }
 
-  .buttons {
-    margin-top: 10px;
-    width: 100%;
-    text-align: right;
-
-    button {
-      cursor: pointer;
-      background-color: #263238;
-      color: white;
-      padding: 10px;
-      width: 150px;
-      border: none;
-
-      &:hover {
-        color: #8be9fd;
-      }
-    }
-  }
 </style>
