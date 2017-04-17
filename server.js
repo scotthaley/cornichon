@@ -64,6 +64,10 @@ module.exports = () => {
   io.on('connect', (socket) => {
     socket.on('runScenario', (internalID) => {
       cucumber.runScenario(internalID).then((result) => {
+        result.scenario = internalID
+        for (let i in result.stepResults) {
+          delete result.stepResults[i].step
+        }
         socket.emit('runScenario', result)
       })
     })
