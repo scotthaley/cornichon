@@ -237,7 +237,7 @@ module.exports = (() => {
   const getFeatureID = (feature) => {
     for (let f = 0; f < featureMap.length; f++) {
       let testF = featureMap[f]
-      if (feature.name === testF.name && feature.uri === testF.uri && eqSet(feature.tags, testF.tags) && feature.line === testF.line && testF.internalID) {
+      if (feature.name === testF.name && feature.uri === testF.uri && feature.line === testF.line && testF.internalID) {
         return testF.internalID
       }
     }
@@ -284,7 +284,7 @@ module.exports = (() => {
   const getScenarioID = (scenario) => {
     for (let s = 0; s < scenarioMap.length; s++) {
       let testS = scenarioMap[s]
-      if (scenario.name === testS.name && scenario.uri === testS.uri && eqSet(scenario.tags, testS.tags) && testS.internalID) {
+      if (scenario.name === testS.name && scenario.uri === testS.uri && testS.internalID) {
         return testS.internalID
       }
     }
@@ -337,12 +337,6 @@ module.exports = (() => {
     return mStep
   }
 
-  const eqSet = (as, bs) => {
-    if (as.size !== bs.size) return false
-    for (var a of as) if (!bs.includes(a)) return false
-    return true
-  }
-
   async function runScenario (internalID) {
     const cli = this.cli
     const configuration = await cli.getConfiguration()
@@ -376,7 +370,6 @@ module.exports = (() => {
     features,
     supportCode,
     scenarios,
-    eqSet,
     runScenario,
     cli
   }
