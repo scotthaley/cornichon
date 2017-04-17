@@ -11,7 +11,7 @@
                       v-on:cancel="cancelUsage"></codemirror>
         </div>
         <h1>Code</h1>
-        <codemirror class="codemirror" v-bind:value="step.code" :options="{ readOnly: true, mode: 'javascript', firstLineNumber: step.line }"></codemirror>
+        <codemirror class="codemirror" v-model="step.code" :options="{ readOnly: true, mode: 'javascript', firstLineNumber: step.line }"></codemirror>
         <h1>Features</h1>
         <div v-for="feature in mappedFeatures">
           <pre><code class="gherkin" v-html="feature"></code></pre>
@@ -86,7 +86,7 @@
       codemirror
     },
     watch: {
-      'stepTitle': function () {
+      'step': function () {
         $(this.$refs.card).removeClass('open')
         setTimeout(this.codeHighlight, 50)
       },
