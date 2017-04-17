@@ -131,7 +131,7 @@
     height: 100%;
     min-height: 100vh;
     .content {
-      flex: 1 1 auto;
+      flex: 1 1;
       padding: 0 .5em 3em;
     }
 
