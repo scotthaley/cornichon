@@ -1,8 +1,30 @@
 <template>
   <div id="detailsview" ref="main">
     <div class="content" ref="content">
-      <resultcard v-bind:modal="true" v-bind:step="step" v-bind:scenario="scenario"
+      <resultcard v-if="!results" v-bind:modal="true" v-bind:step="step" v-bind:scenario="scenario"
                   v-bind:feature="feature"></resultcard>
+      <div v-if="results" class="results">
+        <div class="header">
+          <h1>Scenario: "{{resultScenario.name}}"</h1>
+          <i v-if="results.status === 'passed'" class="success fa fa-check-circle"></i>
+          <i v-if="results.status !== 'passed'" class="error fa fa-times-circle"></i>
+        </div>
+        <div class="steps">
+          <div class="step" v-for="step in resultSteps">
+            <span v-if="step.stepDefinition" :class="{success: step.status === 'passed'}">{{step.stepDefinition.pattern}}</span>
+            <i v-if="step.status === 'passed'" class="success fa fa-check-circle"></i>
+            <i v-if="step.status !== 'passed'" class="error fa fa-times-circle"></i>
+          </div>
+        </div>
+        <div class="status">
+          <div v-if="results.status === 'passed'" class="success">
+            <span>{{resultSteps.length}} steps completed in {{results.duration}} milliseconds</span>
+          </div>
+          <div v-if="results.status !== 'passed'" class="error">
+            <span>Scenario did not complete</span>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="overlay" ref="overlay"></div>
   </div>
@@ -23,7 +45,8 @@
       return {
         step: null,
         scenario: null,
-        feature: null
+        feature: null,
+        results: null
       }
     },
     computed: {
@@ -35,12 +58,32 @@
       },
       scenarios: function () {
         return this.$store.state.scenarios
+      },
+      resultScenario: function () {
+        return this.getScenarioByID(this.results.scenario)
+      },
+      resultSteps: function () {
+        if (!this.results) {
+          return []
+        }
+        let steps = []
+        for (let i in this.results.stepResults) {
+          let s = this.results.stepResults[i]
+          if (s.stepDefinition.pattern) {
+            steps.push(s)
+          }
+        }
+        return steps
       }
     },
     mounted () {
       const _this = this
-      eventBus.on('details', function (id) {
-        _this.showDetails(id)
+      eventBus.on('details', function (id, data) {
+        if (id === 'results') {
+          _this.showScenarioResults(data)
+        } else {
+          _this.showDetails(id)
+        }
       })
 
       $(this.$refs.overlay).click(function () {
@@ -48,6 +91,14 @@
       })
     },
     methods: {
+      getScenarioByID: function (id) {
+        for (let s in this.scenarios) {
+          let scenario = this.scenarios[s]
+          if (scenario.internalID === id) {
+            return scenario
+          }
+        }
+      },
       showDetails: function (id) {
         const _this = this
         setTimeout(function () {
@@ -61,11 +112,19 @@
           this.showStep(id)
         }
       },
+      showScenarioResults: function (results) {
+        this.step = null
+        this.scenario = null
+        this.feature = null
+        this.results = results
+        this.showModal()
+      },
       showStep: function (id) {
         for (let s in this.supportCode) {
           let step = this.supportCode[s]
           if (step.cornichonID === id) {
             this.step = step
+            this.results = null
             this.scenario = null
             this.feature = null
             this.showModal()
@@ -79,6 +138,7 @@
           if (feature.internalID === id) {
             this.feature = feature
             this.step = null
+            this.results = null
             this.scenario = null
             this.showModal()
             return
@@ -92,6 +152,7 @@
             this.scenario = scenario
             this.step = null
             this.feature = null
+            this.results = null
             this.showModal()
             return
           }
@@ -137,6 +198,67 @@
       background-color: white;
       overflow: auto;
       border: 2px solid white;
+      padding: 0;
+
+      .results {
+        background-color: #2c3e50;
+        width: 100%;
+        height: 100%;
+        text-align: left;
+
+        .header {
+          padding: 10px;
+          width: 100%;
+          border-bottom: 1px solid white;
+          box-sizing: border-box;
+
+          i {
+            float: right;
+            font-size: 32px;
+          }
+        }
+
+        i {
+          color: #42b983;
+          &.error {
+            color: #dd4444;
+          }
+          font-size: 22px;
+        }
+
+        .step {
+          span {
+            font-size: 20px;
+            padding: 10px;
+            color: #dd4444;
+            &.success {
+              color: #42b983;
+            }
+          }
+        }
+
+        .status {
+          margin-top: 10px;
+          color: white;
+          border-top: 1px solid white;
+          font-size: 16px;
+          padding: 10px;
+
+          color: #dd4444;
+          .success {
+            color: #42b983;
+          }
+        }
+
+        h1 {
+          font-size: 32px;
+          margin: 0;
+          color: white;
+          background-color: transparent;
+          width: auto;
+          display: inline-block;
+        }
+      }
     }
   }
 </style>

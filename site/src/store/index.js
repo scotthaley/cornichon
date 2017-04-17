@@ -75,7 +75,6 @@ const store = new Vuex.Store({
       return new Promise((resolve) => {
         app.post('runScenario', internalID)
           .then(function (res) {
-            console.log(res)
             commit('UPDATE_SCENARIO_IN_QUEUE', {internalID, res})
             resolve(res)
           })

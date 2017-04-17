@@ -195,8 +195,8 @@ module.exports = (() => {
         // needs to happen after stepDef.code is set, before stripping ID
         stepDef.cornichonID = cucumberHelper.getStepID(stepDef)
         // remove ID from function code
-        stepDef.code = stepDef.code.replace(/\/\* ?{cornichon: [0-9]+} ?\*\//, '')
-        stepDef.code = stepDef.code.replace(/ ?{cornichon: [0-9]+}/, '')
+        stepDef.code = stepDef.code.replace(/\/\* ?{cornichon: .*\w} ?\*\//, '')
+        stepDef.code = stepDef.code.replace(/ ?{cornichon: .*\w}/, '')
         stepDef.keyword = cucumberHelper.getStepKeyword(stepDef)
         stepDef.usage = cornichon.getUsage(stepDef.cornichonID) || 'No usage information provided.'
         stepDef.features = []

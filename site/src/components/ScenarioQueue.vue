@@ -1,5 +1,6 @@
 <template>
-  <div id="scenario-queue" :class="{expanded: scenarios.length && queueOpen, minimized: scenarios.length && !queueOpen}">
+  <div id="scenario-queue"
+       :class="{expanded: scenarios.length && queueOpen, minimized: scenarios.length && !queueOpen}">
     <div class="wrapper">
       <div class="header">
         <span @click="openClose()" class="icon">
@@ -12,7 +13,7 @@
         </span>
       </div>
       <p class="scenario" v-for="scenario in scenarios">
-        {{scenario.scenario}}
+        <span @click="openResults(scenario.lastResult)">{{scenario.scenario}}</span>
         <i v-if="scenario.lastResult.status === 'passed'" class="success fa fa-check-circle"></i>
         <i v-if="scenario.lastResult.status === 'running'" class="running fa fa-ellipsis-h"></i>
         <i v-if="scenario.lastResult.status !== 'passed' && scenario.lastResult.status !== 'queued' && scenario.lastResult.status !== 'running'" class="error fa fa-times-circle"></i>
@@ -22,6 +23,7 @@
 </template>
 
 <script>
+const eventBus = require('@/eventBus')
 
 export default {
   name: 'ScenarioQueue',
@@ -48,56 +50,73 @@ export default {
         await this.$store.dispatch('RUN_SCENARIO', scenarios[i].scenario)
       }
     },
-    openClose: function () {
-      this.queueOpen = !this.queueOpen
+    computed: {
+      scenarios () {
+        return this.$store.state.scenario_queue
+      }
+    },
+    methods: {
+      runScenarios: async function () {
+        var scenarios = this.scenarios
+        for (let i = 0; i < scenarios.length; i++) {
+          await this.$store.dispatch('RUN_SCENARIO', scenarios[i].scenario)
+        }
+      },
+      openClose: function () {
+        this.queueOpen = !this.queueOpen
+      },
+      openResults: function (results) {
+        eventBus.emit('details', 'results', results)
+      }
     }
   }
-}
 
 </script>
 
 <style lang="scss">
-#scenario-queue {
-  background-color: #263238;
-  overflow: hidden;
-  background: #eaeef3;
-  font-size: 1rem;
-  width: 0;
-  opacity: 0;
-  transition: width .33s ease-in-out, opacity .33s ease-in-out;
-  .title {
-    cursor: pointer;
-    display: flex;
-    width: 100%;
-    justify-content: center;
-    align-items: center;
-    align-self: flex-end;
-    font-size: .8em;
-    background: #263238;
-    padding: .15em .75em;
-    color:#eaeef3;
-    .play {
-      font-size: .65em;
-      margin-left: .65em;
+
+  #scenario-queue {
+    background-color: #263238;
+    overflow: hidden;
+    background: #eaeef3;
+    font-size: 1rem;
+    width: 0;
+    opacity: 0;
+    transition: width .33s ease-in-out, opacity .33s ease-in-out;
+    .title {
+      cursor: pointer;
+      display: flex;
+      width: 100%;
+      justify-content: center;
+      align-items: center;
+      align-self: flex-end;
+      font-size: .8em;
+      background: #263238;
+      padding: .15em .75em;
+      color: #eaeef3;
+      .play {
+        font-size: .65em;
+        margin-left: .65em;
+      }
     }
-  }
-  .title, .scenario {
-    opacity:1;
+  .title,
+  .scenario {
+    opacity: 1;
     visibility: visible;
     transition: opacity 1s ease;
   }
   .wrapper {
-    width:0;
+    width: 0;
     padding: .5em;
     height: 95vh;
     overflow-y: scroll;
     position: fixed;
-    top:0;
-    right:0;
+    top: 0;
+    right: 0;
   }
   &.expanded {
     width: 220px;
-    opacity:1;
+    opacity: 1;
     .wrapper {
       width: 205px;
     }
@@ -106,12 +125,12 @@ export default {
     width: 37px;
     opacity: 1;
     .wrapper {
-      width:35px;
+      width: 35px;
     }
-    .title, .scenario {
+    .title,
+    .scenario {
       opacity: 0;
       visibility: hidden;
-      // transition: opacity .5s ease-in-out;
     }
   }
   .header {
@@ -127,23 +146,24 @@ export default {
       right: 0;
       font-size: 1.25rem;
     }
-  }
-  .scenario {
-    border-bottom: 2px solid #000;
-    text-align: left;
-    text-transform: uppercase;
-    cursor: pointer;
-    white-space: nowrap;
-    i {
-      float: right;
-      &.success {
-        color: green;
-      }
-      &.error {
-        color: red;
+    .scenario {
+      border-bottom: 2px solid #000;
+      text-align: left;
+      text-transform: uppercase;
+      cursor: pointer;
+      white-space: nowrap;
+      i {
+        float: right;
+        &.success {
+          color: green;
+        }
+        &.error {
+          color: red;
+        }
       }
     }
   }
 }
+
 
 </style>
