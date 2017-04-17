@@ -25,6 +25,7 @@
     "cycle": "^1.0.3",
     "express": "^4.15.2",
     "fs-extra": "^2.1.2",
+    "guid": "0.0.12",
     "js-beautify": "^1.6.12",
     "open": "0.0.5",
     "promise-map": "^1.2.0",

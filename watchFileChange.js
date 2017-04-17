@@ -11,7 +11,7 @@ const watchFileChange = function(cb){
       await cucumber.init()
       cb();
     })
-    .on('error', function(error) {console.error('Error happened', error);})
+    .on('error', function(error) {console.error('Error happened', error)})
 
 }
 
