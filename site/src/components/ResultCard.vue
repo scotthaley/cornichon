@@ -1,17 +1,20 @@
 <template>
   <div class="resultcard" ref="card" v-bind:class="{ modal }">
     <div v-if="step">
-      <pre><code class="gherkin header" ref="header" v-html="stepTitle"></code></pre>
-      <div class="content">
+      <div class="wrapper" @click="toggleCard">
+        <pre><code class="gherkin header" ref="header" v-html="stepTitle"></code></pre>
+      </div>
+      <div class="content" v-if="open">
         <span class="uri" v-text="step.uri" v-on:click="openFile(step.uri_full)"></span>
         <div class="usage" ref="usage">
-          <h1 class="first">Usage<i ref="editusage" class="edit-usage fa fa-pencil fa-1x"></i></h1>
+          <h1 class="first">Usage<i ref="editusage" class="edit-usage fa fa-pencil fa-1x" @click="usageOpen = true"></i></h1>
           <div ref="marked" class="marked" v-html="usageHTML"></div>
-          <codemirror class="codemirror_usage" v-bind:value="step.usage" v-on:updated="updateUsage"
-                      v-on:cancel="cancelUsage"></codemirror>
+          <codemirror class="codemirror_usage" v-if="usageOpen" :value="step.usage" @updated="updateUsage"
+                      @cancel="cancelUsage"></codemirror>
         </div>
         <h1>Code</h1>
-        <codemirror class="codemirror" v-model="step.code" :options="{ readOnly: true, mode: 'javascript', firstLineNumber: step.line }"></codemirror>
+        <codemirror class="codemirror" v-model="step.code"
+                    :options="{ readOnly: true, mode: 'javascript', firstLineNumber: step.line }"></codemirror>
         <h1>Features</h1>
         <div v-for="feature in mappedFeatures">
           <pre><code class="gherkin" v-html="feature"></code></pre>
@@ -24,8 +27,10 @@
     </div>
 
     <div v-if="feature">
-      <pre><code class="gherkin header" ref="header" v-text="featureTitle"></code></pre>
-      <div class="content">
+      <div class="wrapper" @click="toggleCard">
+        <pre><code class="gherkin header" ref="header" v-text="featureTitle"></code></pre>
+      </div>
+      <div class="content" v-if="open">
         <span class="uri" v-text="feature.uri" v-on:click="openFile(feature.uri_full)"></span>
         <div v-if="feature.description != ''">
           <h1>Description</h1>
@@ -43,11 +48,11 @@
     </div>
 
     <div v-if="scenario">
-      <div class="wrapper">
+      <div class="wrapper" @click="toggleCard">
         <pre><code class="gherkin header" ref="header" v-html="scenarioTitle"></code></pre>
         <i @click="queueScenario(scenario.internalID)" class="fa fa-plus add"></i>
       </div>
-      <div class="content">
+      <div class="content" v-if="open">
         <span class="uri" v-text="scenario.uri" v-on:click="openFile(scenario.uri_full)"></span>
         <div v-if="scenario.description != ''">
           <h1>Description</h1>
@@ -85,21 +90,31 @@
     components: {
       codemirror
     },
+    data () {
+      return {
+        openToggled: false,
+        usageOpen: false
+      }
+    },
     watch: {
       'step': function () {
-        $(this.$refs.card).removeClass('open')
+        this.openToggled = false
         setTimeout(this.codeHighlight, 50)
       },
       'feature': function () {
-        $(this.$refs.card).removeClass('open')
+        this.openToggled = false
         setTimeout(this.codeHighlight, 50)
       },
       'scenario': function () {
-        $(this.$refs.card).removeClass('open')
+        this.openToggled = false
         setTimeout(this.codeHighlight, 50)
       }
     },
     methods: {
+      toggleCard: function () {
+        this.openToggled = !this.openToggled
+        setTimeout(this.codeHighlight, 50)
+      },
       codeHighlight: function () {
         $(this.$refs.card).find('pre code').each(function (i, block) {
           hljs.highlightBlock(block)
@@ -107,12 +122,12 @@
       },
       updateUsage: function (markdown) {
         $.post('http://localhost:8088/updateUsage', {markdown, cornichonID: this.step.cornichonID}, null, 'json')
-        $(this.$refs.usage).removeClass('open')
+        this.usageOpen = false
         this.step.usage = markdown
         setTimeout(this.codeHighlight, 50)
       },
       cancelUsage: function () {
-        $(this.$refs.usage).removeClass('open')
+        this.usageOpen = false
       },
       openFile: function (path) {
         path = path.replace(/\\/g, '/')
@@ -126,6 +141,9 @@
       }
     },
     computed: {
+      open: function () {
+        return this.openToggled || this.modal
+      },
       usageHTML: function () {
         return marked(this.step.usage)
       },
@@ -218,13 +236,6 @@
       this.codeHighlight()
 
       var _this = this
-      $(this.$refs.header).click(function () {
-        $(_this.$refs.card).toggleClass('open')
-      })
-
-      $(this.$refs.editusage).click(function () {
-        $(_this.$refs.usage).addClass('open')
-      })
 
       $(this.$refs.card).on('click', '.step:not(.currentStep), .scenario, .feature', function (e) {
         let $el = $(e.target).closest('[data-id]')
@@ -251,16 +262,11 @@
     font-size: 24px;
     text-align: left;
 
-    &.open, &.modal {
+    &.modal {
       padding-bottom: 5px;
-
-      .content {
-        display: block;
-      }
     }
 
     .content {
-      display: none;
       margin: 20px;
       font-size: 18px;
     }
@@ -290,9 +296,9 @@
 
     .usage {
       &:not(.open) {
-        .codemirror_usage {
-          display: none;
-        }
+        /*.codemirror_usage {*/
+          /*display: none;*/
+        /*}*/
         &:hover {
           .edit-usage {
             display: inline;
