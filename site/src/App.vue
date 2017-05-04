@@ -1,17 +1,20 @@
 <template>
   <div id="app">
-    <sidebar v-model="sidebarData"></sidebar>
+    <sidebar></sidebar>
     <div class="content" ref="content">
-      <searchbar v-show="sidebarData.searchMode === 'Steps'" v-model="search"
-                 v-bind:placeholders="placeholders.supportcode"></searchbar>
-      <searchbar v-show="sidebarData.searchMode === 'Features'" v-model="search"
-                 v-bind:placeholders="placeholders.features"></searchbar>
-      <searchbar v-show="sidebarData.searchMode === 'Scenarios'" v-model="search"
-                 v-bind:placeholders="placeholders.scenarios"></searchbar>
-      <div class="utility-bar" v-if="sidebarData.searchMode !== 'Settings'">
-        <refinements></refinements>
+      <div v-if="currentPage !== 'Settings'">
+        <searchbar v-show="currentPage === 'Steps'" v-model="search"
+                   v-bind:placeholders="placeholders.supportcode"></searchbar>
+        <searchbar v-show="currentPage === 'Features'" v-model="search"
+                   v-bind:placeholders="placeholders.features"></searchbar>
+        <searchbar v-show="currentPage === 'Scenarios'" v-model="search"
+                   v-bind:placeholders="placeholders.scenarios"></searchbar>
+        <div class="utility-bar" v-if="currentPage !== 'Settings'">
+          <refinements></refinements>
+        </div>
+        <searchresults v-bind:search="search"></searchresults>
       </div>
-      <searchresults v-bind:search="search" v-bind:sidebarData="sidebarData"></searchresults>
+      <settings v-if="currentPage === 'Settings'"></settings>
     </div>
     <scenario-queue></scenario-queue>
     <detailsview></detailsview>
@@ -26,6 +29,7 @@
   import detailsview from './components/DetailsView'
   import refinements from './components/Refinements'
   import scenarioQueue from './components/ScenarioQueue.vue'
+  import settings from './components/Settings'
 
   const $ = require('jquery')
   const eventBus = require('@/eventBus')
@@ -39,17 +43,20 @@
       sidebar,
       detailsview,
       refinements,
-      scenarioQueue
+      scenarioQueue,
+      settings
     },
     data () {
       return {
-        search: '',
-        sidebarData: {}
+        search: ''
       }
     },
     computed: {
       placeholders: function () {
         return this.$store.state.placeholders
+      },
+      currentPage: function () {
+        return this.$store.state.currentPage
       }
     },
     beforeMount () {

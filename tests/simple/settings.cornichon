@@ -1,6 +1,6 @@
 {
 	"custom": {
-		"Setup Command": "dfdfdffd dddf\ndd",
+		"Setup Command": "echo test",
 		"Code Style": "material"
 	}
 }

@@ -86,12 +86,9 @@ export default {
         name: '',
         value: ''
       },
-      editableConfiguration: null
-    }
-  },
-  computed: {
-    settings: function () {
-      return this.$store.state.settings
+      editableConfiguration: null,
+      settings: this.$store.state.settings,
+      test: 'hello'
     }
   },
   methods: {
@@ -143,7 +140,7 @@ export default {
 
     table {
       border-collapse: collapse;
-      width: 100%; 
+      width: 100%;
       th {
         width: 50%;
       }

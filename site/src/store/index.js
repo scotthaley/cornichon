@@ -14,6 +14,7 @@ app.socket.on('refresh', function () {
 
 const store = new Vuex.Store({
   state: {
+    currentPage: 'Steps',
     settings: {},
     tags: [],
     scenario_queue: [],
@@ -24,7 +25,8 @@ const store = new Vuex.Store({
       supportcode: [],
       features: [],
       scenarios: []
-    }
+    },
+    open_cards: []
   },
   mutations: {
     SET (state, {name, res}) {
@@ -49,6 +51,21 @@ const store = new Vuex.Store({
     },
     UPDATE_SETTINGS (state, settings) {
       state.settings = settings
+    },
+    UPDATE_OPEN_CARD (state, data) {
+      if (data.open) {
+        if (!state.open_cards.includes(data.id)) {
+          state.open_cards.push(data.id)
+        }
+      } else {
+        let i = state.open_cards.indexOf(data.id)
+        if (i >= 0) {
+          state.open_cards.splice(i, 1)
+        }
+      }
+    },
+    UPDATE_PAGE (state, page) {
+      state.currentPage = page
     }
   },
   actions: {
@@ -79,6 +96,15 @@ const store = new Vuex.Store({
             resolve(res)
           })
       })
+    },
+    OPEN_CARD ({ commit }, id) {
+      commit('UPDATE_OPEN_CARD', {open: true, id})
+    },
+    CLOSE_CARD ({ commit }, id) {
+      commit('UPDATE_OPEN_CARD', {open: false, id})
+    },
+    CHANGE_PAGE ({ commit }, page) {
+      commit('UPDATE_PAGE', page)
     }
   }
 })

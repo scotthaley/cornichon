@@ -1,33 +1,28 @@
 <template>
   <div id="searchresults" ref="container">
-    <div v-if="sidebarData.searchMode === 'Steps'" v-for="result in filteredSupportCode">
+    <div v-if="currentPage === 'Steps'" v-for="result in filteredSupportCode">
       <resultcard v-bind:step="result"></resultcard>
     </div>
-    <div v-if="sidebarData.searchMode === 'Features'" v-for="result in filteredFeatures">
+    <div v-if="currentPage === 'Features'" v-for="result in filteredFeatures">
       <resultcard v-bind:feature="result"></resultcard>
     </div>
-    <div v-if="sidebarData.searchMode === 'Scenarios'" v-for="result in filteredScenarios">
+    <div v-if="currentPage === 'Scenarios'" v-for="result in filteredScenarios">
       <resultcard v-bind:scenario="result"></resultcard>
-    </div>
-    <div v-if="sidebarData.searchMode === 'Settings'">
-      <settings></settings>
     </div>
   </div>
 </template>
 
 <script>
   import resultcard from './ResultCard'
-  import settings from './Settings'
 
   const fuzzy = require('fuzzy')
   const eventBus = require('@/eventBus')
 
   export default {
     name: 'searchresults',
-    props: ['value', 'search', 'sidebarData'],
+    props: ['value', 'search'],
     components: {
-      resultcard,
-      settings
+      resultcard
     },
     data () {
       return {
@@ -41,6 +36,9 @@
       })
     },
     computed: {
+      currentPage: function () {
+        return this.$store.state.currentPage
+      },
       features: function () {
         return this.$store.state.features
       },

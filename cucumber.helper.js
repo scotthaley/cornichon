@@ -85,7 +85,7 @@ module.exports = (() => {
   const getStepID = step => {
     let matches = step.code.match(/{cornichon: .*\w}/)
     if (matches) {
-      return matches[0].match(/.*\w/)[0]
+      return matches[0].match(/([0-9,a-z,A-Z]+-)+[0-9,a-z,A-Z]+/)[0]
     }
     var guid = Guid.create()
     let ID = guid

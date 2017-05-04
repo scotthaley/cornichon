@@ -3,45 +3,36 @@
     <div class="sidebar-wrapper">
       <h1 class="long-shadow">Cornichon</h1>
       <ul class="radio" data-radio="searchMode">
-        <li class="selected"><i class="fa fa-puzzle-piece"></i>Steps</li>
-        <li><i class="fa fa-cube"></i>Scenarios</li>
-        <li><i class="fa fa-cubes"></i>Features</li>
-        <li><i class="fa fa-cog"></i>Settings</li>
+        <li v-for="item in menuItems" :class="{selected: item.selected}" @click="toggle(item)">
+          <i class="fa" :class="item.icon"></i>
+          {{ item.name }}
+        </li>
       </ul>
     </div>
   </div>
 </template>
 
 <script>
-  const $ = require('jquery')
-
   export default {
     name: 'sidebar',
-    props: ['value'],
     data () {
       return {
-        searchMode: 'Steps'
+        menuItems: [
+          {name: 'Steps', icon: 'fa-puzzle-piece', selected: true},
+          {name: 'Scenarios', icon: 'fa-cube', selected: false},
+          {name: 'Features', icon: 'fa-cubes', selected: false},
+          {name: 'Settings', icon: 'fa-cog', selected: false}
+        ]
       }
     },
     methods: {
-      updateModel: function () {
-        let newValue = {
-          searchMode: this.searchMode
+      toggle: function (item) {
+        for (let i in this.menuItems) {
+          this.menuItems[i].selected = false
         }
-        this.$emit('input', newValue)
+        item.selected = true
+        this.$store.dispatch('CHANGE_PAGE', item.name)
       }
-    },
-    mounted () {
-      const _this = this
-      $('ul.radio').click('li', function (e) {
-        $(this).find('li').each(function () {
-          $(this).removeClass('selected')
-        })
-        $(e.target).addClass('selected')
-        _this[$(this).data('radio')] = $(e.target).text()
-        _this.updateModel()
-      })
-      this.updateModel()
     }
   }
 </script>

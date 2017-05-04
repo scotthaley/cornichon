@@ -112,7 +112,14 @@
     },
     methods: {
       toggleCard: function () {
-        this.openToggled = !this.openToggled
+        if (this.modal) {
+          return
+        }
+        if (this.open) {
+          this.$store.dispatch('CLOSE_CARD', this.id)
+        } else {
+          this.$store.dispatch('OPEN_CARD', this.id)
+        }
         setTimeout(this.codeHighlight, 50)
       },
       codeHighlight: function () {
@@ -141,8 +148,17 @@
       }
     },
     computed: {
+      id: function () {
+        if (this.step) {
+          return this.step.cornichonID
+        } else if (this.scenario) {
+          return this.scenario.internalID
+        } else if (this.feature) {
+          return this.feature.internalID
+        }
+      },
       open: function () {
-        return this.openToggled || this.modal
+        return this.$store.state.open_cards.includes(this.id) || this.modal
       },
       usageHTML: function () {
         return marked(this.step.usage)

@@ -52,7 +52,6 @@ module.exports = () => {
 
   app.post('/updateUsage', (req, res) => {
     cornichon.updateUsage(req.body.cornichonID, req.body.markdown)
-    cucumber.init()
     res.send(true)
   })
 
