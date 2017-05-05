@@ -18,6 +18,8 @@ const store = new Vuex.Store({
     settings: {},
     tags: [],
     scenario_queue: [],
+    queue_locked: false,
+    queue_running: false,
     scenarios: [],
     features: [],
     supportcode: [],
@@ -44,10 +46,19 @@ const store = new Vuex.Store({
     UPDATE_SCENARIO_IN_QUEUE (state, data) {
       for (let i in state.scenario_queue) {
         let s = state.scenario_queue[i]
-        if (s.scenario === data.internalID) {
+        if (s.scenario.internalID === data.internalID) {
           s.lastResult = data.res
         }
       }
+    },
+    UPDATE_SCENARIO_LIST (state, scenarios) {
+      state.scenario_queue = scenarios
+    },
+    UPDATE_QUEUE_LOCKED  (state, locked) {
+      state.queue_locked = locked
+    },
+    UPDATE_QUEUE_RUNNING (state, running) {
+      state.queue_running = running
     },
     UPDATE_SETTINGS (state, settings) {
       state.settings = settings
@@ -78,7 +89,15 @@ const store = new Vuex.Store({
         })
     },
     QUEUE_SCENARIO ({ commit }, scenario) {
-      commit('ADD_SCENARIO', {scenario, lastResult: {status: 'queued'}})
+      commit('UPDATE_QUEUE_RUNNING', false)
+      commit('UPDATE_QUEUE_LOCKED', false)
+      commit('ADD_SCENARIO', {scenario: scenario, lastResult: {status: 'queued'}})
+    },
+    LOCK_QUEUE ({ commit }) {
+      commit('UPDATE_QUEUE_LOCKED', true)
+    },
+    RELEASE_QUEUE ({ commit }) {
+      commit('UPDATE_QUEUE_LOCKED', false)
     },
     SETTINGS ({ commit }, settings) {
       app.post('saveSettings', settings)
@@ -88,14 +107,26 @@ const store = new Vuex.Store({
           }
         })
     },
-    RUN_SCENARIO ({ commit }, internalID) {
+    RUN_SCENARIO ({ commit }, scenario) {
+      commit('UPDATE_QUEUE_RUNNING', true)
+      let internalID = scenario.internalID
       return new Promise((resolve) => {
         app.post('runScenario', internalID)
           .then(function (res) {
+            for (let i in res.stepResults) {
+              let s = res.stepResults[i]
+              s.stepDefinition = scenario.steps[i - 1]
+            }
             commit('UPDATE_SCENARIO_IN_QUEUE', {internalID, res})
             resolve(res)
           })
       })
+    },
+    QUEUE_STARTED ({ commit }) {
+      commit('UPDATE_QUEUE_RUNNING', true)
+    },
+    QUEUE_STOPPED ({ commit }) {
+      commit('UPDATE_QUEUE_RUNNING', false)
     },
     OPEN_CARD ({ commit }, id) {
       commit('UPDATE_OPEN_CARD', {open: true, id})

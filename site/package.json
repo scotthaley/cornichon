@@ -23,6 +23,8 @@
     "script-loader": "^0.7.0",
     "superplaceholder": "^0.1.1",
     "vue": "^2.2.2",
+    "vue-simple-spinner": "^1.2.1",
+    "vuedraggable": "^2.10.0",
     "vuex": "^2.3.0"
   },
   "devDependencies": {

@@ -7,13 +7,13 @@
           <i class="fa fa-times icon" v-if="queueOpen"></i>
           <i class="fa fa-plus-circle icon" v-if="!queueOpen"></i>
         </span>
-        <span class="title button" @click="runScenarios()">
-          Start
-          <i class="fa fa-play play"></i>
+        <span class="title button" @click="openQueueRunner()">
+          Open Queue
+          <i class="fa fa-folder-open-o play"></i>
         </span>
       </div>
       <p class="scenario" v-for="scenario in scenarios">
-        <span @click="openResults(scenario.lastResult)">{{scenario.scenario}}</span>
+        <span @click="openResults(scenario.lastResult)">{{scenario.scenario.name}}</span>
         <i v-if="scenario.lastResult.status === 'passed'" class="success fa fa-check-circle"></i>
         <i v-if="scenario.lastResult.status === 'running'" class="running fa fa-ellipsis-h"></i>
         <i v-if="scenario.lastResult.status !== 'passed' && scenario.lastResult.status !== 'queued' && scenario.lastResult.status !== 'running'" class="error fa fa-times-circle"></i>
@@ -23,8 +23,6 @@
 </template>
 
 <script>
-const eventBus = require('@/eventBus')
-
 export default {
   name: 'ScenarioQueue',
   data () {
@@ -38,24 +36,11 @@ export default {
     }
   },
   methods: {
-    runScenarios: async function () {
-      var scenarios = this.scenarios
-
-      scenarios = scenarios.map(function (s) {
-        s.lastResult.status = 'queued'
-        return s
-      })
-      for (let i = 0; i < scenarios.length; i++) {
-        scenarios[i].lastResult.status = 'running'
-        await this.$store.dispatch('RUN_SCENARIO', scenarios[i].scenario)
-      }
+    openQueueRunner: function () {
+      this.$store.dispatch('CHANGE_PAGE', 'Queue')
     },
     openClose: function () {
       this.queueOpen = !this.queueOpen
-    },
-    openResults: function (results) {
-      console.log(results)
-      eventBus.emit('details', 'results', results)
     }
   }
 }
@@ -96,16 +81,17 @@ export default {
     width:0;
     padding: .5em;
     height: 95vh;
-    overflow-y: scroll;
+    overflow-y: auto;
+    overflow-x: hidden;
     position: fixed;
     top:0;
     right:0;
   }
   &.expanded {
-    width: 220px;
+    width: 320px;
     opacity:1;
     .wrapper {
-      width: 205px;
+      width: 305px;
     }
   }
   &.minimized {
@@ -137,9 +123,14 @@ export default {
     .scenario {
       border-bottom: 1px solid #000;
       text-align: left;
-      text-transform: uppercase;
       cursor: pointer;
-      white-space: nowrap;
+      span {
+        width: 250px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: inline-block;
+      }
       i {
         float: right;
         &.success {

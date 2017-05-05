@@ -2,7 +2,7 @@
   <div id="app">
     <sidebar></sidebar>
     <div class="content" ref="content">
-      <div v-if="currentPage !== 'Settings'">
+      <div v-if="currentPage === 'Steps' || currentPage === 'Scenarios' || currentPage === 'Features'">
         <searchbar v-show="currentPage === 'Steps'" v-model="search"
                    v-bind:placeholders="placeholders.supportcode"></searchbar>
         <searchbar v-show="currentPage === 'Features'" v-model="search"
@@ -15,8 +15,9 @@
         <searchresults v-bind:search="search"></searchresults>
       </div>
       <settings v-if="currentPage === 'Settings'"></settings>
+      <queue-runner v-if="currentPage === 'Queue'"></queue-runner>
     </div>
-    <scenario-queue></scenario-queue>
+    <scenario-queue v-if="currentPage === 'Steps' || currentPage === 'Scenarios' || currentPage === 'Features'"></scenario-queue>
     <detailsview></detailsview>
   </div>
 </template>
@@ -28,8 +29,9 @@
   import sidebar from './components/SideBar'
   import detailsview from './components/DetailsView'
   import refinements from './components/Refinements'
-  import scenarioQueue from './components/ScenarioQueue.vue'
+  import scenarioQueue from './components/ScenarioQueue'
   import settings from './components/Settings'
+  import queueRunner from './components/QueueRunner'
 
   const $ = require('jquery')
   const eventBus = require('@/eventBus')
@@ -44,7 +46,8 @@
       detailsview,
       refinements,
       scenarioQueue,
-      settings
+      settings,
+      queueRunner
     },
     data () {
       return {

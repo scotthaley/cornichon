@@ -11,9 +11,10 @@
         </div>
         <div class="steps">
           <div class="step" v-for="step in resultSteps">
-            <span v-if="step.stepDefinition" :class="{success: step.status === 'passed'}">{{step.stepDefinition.pattern}}</span>
+            <span v-if="step.stepDefinition" :class="step.status">{{step.stepDefinition.name}}</span>
             <i v-if="step.status === 'passed'" class="success fa fa-check-circle"></i>
-            <i v-if="step.status !== 'passed'" class="error fa fa-times-circle"></i>
+            <i v-if="step.status === 'undefined'" class="undefined fa fa-question-circle"></i>
+            <i v-if="step.status === 'failed'" class="error fa fa-times-circle"></i>
           </div>
         </div>
         <div class="status">
@@ -69,7 +70,7 @@
         let steps = []
         for (let i in this.results.stepResults) {
           let s = this.results.stepResults[i]
-          if (s.stepDefinition.pattern) {
+          if (s.stepDefinition && s.stepDefinition.pattern) {
             steps.push(s)
           }
         }
@@ -223,6 +224,9 @@
           &.error {
             color: #dd4444;
           }
+          &.undefined {
+            color: darkorange;
+          }
           font-size: 22px;
         }
 
@@ -231,8 +235,14 @@
             font-size: 20px;
             padding: 10px;
             color: #dd4444;
-            &.success {
+            &.passed {
               color: #42b983;
+            }
+            &.undefined {
+              color: darkorange;
+            }
+            &.skipped {
+              color: #6b7186;
             }
           }
         }

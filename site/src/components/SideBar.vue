@@ -3,7 +3,7 @@
     <div class="sidebar-wrapper">
       <h1 class="long-shadow">Cornichon</h1>
       <ul class="radio" data-radio="searchMode">
-        <li v-for="item in menuItems" :class="{selected: item.selected}" @click="toggle(item)">
+        <li v-for="item in menuItems" :class="{selected: isSelected(item)}" @click="toggle(item)">
           <i class="fa" :class="item.icon"></i>
           {{ item.name }}
         </li>
@@ -18,19 +18,22 @@
     data () {
       return {
         menuItems: [
-          {name: 'Steps', icon: 'fa-puzzle-piece', selected: true},
-          {name: 'Scenarios', icon: 'fa-cube', selected: false},
-          {name: 'Features', icon: 'fa-cubes', selected: false},
-          {name: 'Settings', icon: 'fa-cog', selected: false}
+          {name: 'Steps', icon: 'fa-puzzle-piece'},
+          {name: 'Scenarios', icon: 'fa-cube'},
+          {name: 'Features', icon: 'fa-cubes'},
+          {name: 'Queue', icon: 'fa-list-ul'},
+          {name: 'Settings', icon: 'fa-cog'}
         ]
       }
     },
     methods: {
-      toggle: function (item) {
-        for (let i in this.menuItems) {
-          this.menuItems[i].selected = false
+      isSelected: function (item) {
+        if (item.name === this.$store.state.currentPage) {
+          return true
         }
-        item.selected = true
+        return false
+      },
+      toggle: function (item) {
         this.$store.dispatch('CHANGE_PAGE', item.name)
       }
     }
