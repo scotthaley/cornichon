@@ -1,9 +1,11 @@
 <template>
   <div class="queue-runner">
     <div class="tools">
-      <button v-if="!running" @click="runScenarios()">Run Scenarios</button>
       <button v-if="running" @click="stopQueue()" class="red">Stop</button>
-      <a @click="editQueue()">Edit Queue</a>
+      <button v-if="!running" @click="runScenarios()">Run Scenarios</button>
+      <span v-if="locked">
+        <a @click="editQueue()">Edit Queue</a>
+      </span>
     </div>
 
     <div class="queue-list" v-if="!locked">

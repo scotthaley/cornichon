@@ -43,6 +43,15 @@ const store = new Vuex.Store({
     ADD_SCENARIO (state, scenario) {
       state.scenario_queue.push(scenario)
     },
+    REMOVE_SCENARIO (state, internalID) {
+      let i = 0
+      for (i; i < state.scenario_queue.length; i++) {
+        if (state.scenario_queue[i].scenario.internalID === internalID) {
+          break
+        }
+      }
+      state.scenario_queue.splice(i, 1)
+    },
     UPDATE_SCENARIO_IN_QUEUE (state, data) {
       for (let i in state.scenario_queue) {
         let s = state.scenario_queue[i]
@@ -92,6 +101,9 @@ const store = new Vuex.Store({
       commit('UPDATE_QUEUE_RUNNING', false)
       commit('UPDATE_QUEUE_LOCKED', false)
       commit('ADD_SCENARIO', {scenario: scenario, lastResult: {status: 'queued'}})
+    },
+    REMOVE_SCENARIO_FROM_QUEUE ({ commit }, internalID) {
+      commit('REMOVE_SCENARIO', internalID)
     },
     LOCK_QUEUE ({ commit }) {
       commit('UPDATE_QUEUE_LOCKED', true)
