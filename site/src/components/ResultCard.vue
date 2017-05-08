@@ -2,7 +2,9 @@
   <div class="resultcard" ref="card" v-bind:class="{ modal }">
     <div v-if="step">
       <div class="wrapper" @click="toggleCard">
-        <pre><code class="gherkin header" ref="header" v-html="stepTitle"></code></pre>
+        <div class="label">
+          <pre><code class="gherkin header" ref="header" v-html="stepTitle"></code></pre>
+        </div>
       </div>
       <div class="content" v-if="open">
         <span class="uri" v-text="step.uri" v-on:click="openFile(step.uri_full)"></span>
@@ -29,7 +31,9 @@
 
     <div v-if="feature">
       <div class="wrapper" @click="toggleCard">
-        <pre><code class="gherkin header" ref="header" v-text="featureTitle"></code></pre>
+        <div class="label">
+          <pre><code class="gherkin header" ref="header" v-text="featureTitle"></code></pre>
+        </div>
       </div>
       <div class="content" v-if="open">
         <span class="uri" v-text="feature.uri" v-on:click="openFile(feature.uri_full)"></span>
