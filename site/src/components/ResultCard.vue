@@ -7,7 +7,8 @@
       <div class="content" v-if="open">
         <span class="uri" v-text="step.uri" v-on:click="openFile(step.uri_full)"></span>
         <div class="usage" ref="usage">
-          <h1 class="first">Usage<i ref="editusage" class="edit-usage fa fa-pencil fa-1x" @click="usageOpen = true"></i></h1>
+          <h1 class="first">Usage<i ref="editusage" class="edit-usage fa fa-pencil fa-1x" @click="usageOpen = true"></i>
+          </h1>
           <div ref="marked" class="marked" v-html="usageHTML"></div>
           <codemirror class="codemirror_usage" v-if="usageOpen" :value="step.usage" @updated="updateUsage"
                       @cancel="cancelUsage"></codemirror>
@@ -49,8 +50,11 @@
 
     <div v-if="scenario">
       <div class="wrapper" @click="toggleCard">
-        <pre><code class="gherkin header" ref="header" v-html="scenarioTitle"></code></pre>
-        <i @click.stop="queueScenario(scenario)" class="fa fa-plus add"></i>
+        <div class="label">
+          <pre><code class="gherkin header" ref="header" v-html="scenarioTitle"></code></pre>
+        </div>
+        <i v-if="!scenario_queued" @click.stop="queueScenario()" class="fa fa-plus add"></i>
+        <i v-if="scenario_queued" @click.stop="removeScenarioFromQueue()" class="fa fa-times remove"></i>
       </div>
       <div class="content" v-if="open">
         <span class="uri" v-text="scenario.uri" v-on:click="openFile(scenario.uri_full)"></span>
@@ -143,8 +147,11 @@
       runScenario: function (internalID) {
         $.post('http://localhost:8088/runScenario', {internalID}, null, 'json')
       },
-      queueScenario: function (scenario) {
-        this.$store.dispatch('QUEUE_SCENARIO', scenario)
+      queueScenario: function () {
+        this.$store.dispatch('QUEUE_SCENARIO', this.scenario)
+      },
+      removeScenarioFromQueue: function () {
+        this.$store.dispatch('REMOVE_SCENARIO_FROM_QUEUE', this.scenario.internalID)
       }
     },
     computed: {
@@ -156,6 +163,14 @@
         } else if (this.feature) {
           return this.feature.internalID
         }
+      },
+      scenario_queued: function () {
+        for (let i in this.$store.state.scenario_queue) {
+          if (this.$store.state.scenario_queue[i].scenario.internalID === this.scenario.internalID) {
+            return true
+          }
+        }
+        return false
       },
       open: function () {
         return this.$store.state.open_cards.includes(this.id) || this.modal
@@ -289,17 +304,33 @@
 
     .wrapper {
       position: relative;
+      display: flex;
 
-      i.add {
+      .label {
+        flex-grow: 1;
+      }
+
+      i {
         color: #999;
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        right: 20px;
         cursor: pointer;
+        width: 60px;
+        background-color: #eaeef3;
+        display: flex;
+        justify-content: center;
+        align-items: center;
 
         &:hover {
-          color: #263238;
+          color: #eaeef3;
+          background-color: #2e383c;
+        }
+
+        &.remove {
+          color: #dd4444;
+
+          &:hover {
+            color: #2e383c;
+            background-color: #dd4444;
+          }
         }
       }
     }
@@ -313,7 +344,7 @@
     .usage {
       &:not(.open) {
         /*.codemirror_usage {*/
-          /*display: none;*/
+        /*display: none;*/
         /*}*/
         &:hover {
           .edit-usage {

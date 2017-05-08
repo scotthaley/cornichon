@@ -38,7 +38,7 @@
       openResults: function () {
         eventBus.emit('details', 'results', this.scenario.lastResult)
       },
-      removeScenario: function (internalID) {
+      removeScenario: function () {
         this.$store.dispatch('REMOVE_SCENARIO_FROM_QUEUE', this.scenario.scenario.internalID)
       }
     }
