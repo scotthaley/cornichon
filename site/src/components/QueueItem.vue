@@ -30,14 +30,24 @@
             <td class="delete-row"><span @click="clearRow(rowIndex)"><i class="fa fa-times"></i></span></td>
           </tr>
         </table>
-        <button class="new" @click="addRow()">New Row</button>
-        <button class="clear" @click="clearRows()">Clear Rows</button>
+        <button class="green" @click="addRow()">New Row</button>
+        <button class="red" @click="clearRows()">Clear Rows</button>
+        <span v-if="createList">
+          <span v-for="(value, header) in includeHeaders" class="header-check">
+            <label :for="`${header}-check`">{{ header }}</label>
+            <input type="checkbox" :id="`${header}-check`" v-model="includeHeaders[header]"/>
+          </span>
+        </span>
+        <input v-if="createList" v-model="newOutlineListName" placeholder="List Name"/>
+        <button :class="{green: createList}" @click="saveOutlineList()">Save List</button>
+        <select v-model="loadListName">
+          <option disabled value="">Select a list to load...</option>
+          <option v-for="lName in outlineListNames" :value="lName">{{ lName }}</option>
+        </select>
+        <button v-if="loadListName !== ''" @click="loadList()">Load List</button>
       </div>
     </div>
     <div v-if="scenario.table && locked" class="outline-items">
-      <!--<div class="outline-item" v-for="(row, rowIndex) in table.rows">-->
-      <!--<div v-if="typeof index !== 'undefined'" class="index"><span>{{ index + 1 }}.{{ rowIndex + 1}}</span></div>-->
-      <!--</div>-->
       <div class="table">
         <table>
           <tr class="outline-header">
@@ -75,7 +85,43 @@
     components: {
       spinner
     },
+    data () {
+      return {
+        rowsModified: false,
+        newOutlineListName: '',
+        createList: false,
+        loadListName: '',
+        includeHeaders: {}
+      }
+    },
     methods: {
+      saveOutlineList: function () {
+        if (!this.createList) {
+          this.createList = true
+          this.includeHeaders = {}
+          for (let h in this.table.headers) {
+            this.includeHeaders[this.table.headers[h]] = true
+          }
+        } else {
+          let headers = []
+          let rows = []
+          for (let r in this.table.rows) {
+            rows.push(Object.assign({}, this.table.rows[r]))
+          }
+          let _this = this
+          Object.keys(this.includeHeaders).forEach(function (h) {
+            if (_this.includeHeaders[h]) {
+              headers.push(h)
+            } else {
+              for (let r in rows) {
+                delete rows[r][h]
+              }
+            }
+          })
+          this.$store.dispatch('CREATE_OUTLINE_LIST', {signature: headers, name: this.newOutlineListName, list: rows})
+          this.createList = false
+        }
+      },
       showDetails: function () {
         eventBus.emit('details', this.scenario.scenario.internalID)
       },
@@ -98,8 +144,9 @@
       },
       clearRows: function () {
         let blankRow = {}
+        let _this = this
         Object.keys(this.table.headers).forEach(function (key) {
-          blankRow[key] = ''
+          blankRow[_this.table.headers[key]] = ''
         })
         this.table.rows = [blankRow]
         this.updateTable()
@@ -111,10 +158,32 @@
         this.$forceUpdate()
       },
       updateTable: function () {
+        this.rowsModified = true
         this.$store.commit('UPDATE_SCENARIO_IN_QUEUE', {
           internalID: this.scenario.scenario.internalID,
           table: this.table
         })
+      },
+      loadList: function () {
+        let list = this.outlineLists[this.loadListName]
+        let _this = this
+        for (let i in list) {
+          if (!this.table.rows[i]) {
+            let blankRow = {}
+            let _this = this
+            Object.keys(this.table.headers).forEach(function (key) {
+              blankRow[_this.table.headers[key]] = ''
+            })
+            this.table.rows.push(blankRow)
+          }
+          Object.keys(list[i]).forEach(function (column) {
+            _this.table.rows[i][column] = list[i][column]
+          })
+        }
+        this.table.rows.length = list.length // truncate
+        this.updateTable()
+        this.$forceUpdate()
+        this.loadListName = ''
       }
     },
     computed: {
@@ -123,6 +192,32 @@
       },
       stepStatus: function () {
         return this.scenario.lastResult.status
+      },
+      outlineListNames: function () {
+        let lists = []
+        if (this.outlineLists) {
+          Object.keys(this.outlineLists).forEach(function (name) {
+            lists.push(name)
+          })
+          return lists
+        }
+        return null
+      },
+      outlineLists: function () {
+        let lists = {}
+        let _this = this
+        let oLists = this.$store.state.outline_lists
+        Object.keys(oLists).forEach(function (signature) {
+          let sig = signature.split('.')
+          for (let s in sig) {
+            if (_this.table.headers.includes(sig[s])) {
+              Object.keys(oLists[signature]).forEach(function (listName) {
+                lists[listName] = oLists[signature][listName]
+              })
+            }
+          }
+        })
+        return lists
       }
     },
     mounted () {
@@ -332,17 +427,35 @@
       div.table {
         flex-grow: 1;
 
+        .header-check {
+          label {
+            font-size: 16px;
+            margin-left: 5px;
+          }
+
+          input {
+            width: auto;
+          }
+        }
+
+        input {
+          /*background-color: transparent;*/
+          font-size: 20px;
+          width: 200px;
+        }
+
         button {
           border: none;
           padding: 5px 15px;
           border-radius: 5px;
           color: white;
           cursor: pointer;
+          background-color: #6b7186;
 
-          &.new {
+          &.green {
             background-color: #42b983;
           }
-          &.clear {
+          &.red {
             background-color: #dd4444;
           }
           &:hover {
@@ -387,6 +500,7 @@
             background-color: transparent;
             width: 100%;
             height: 100%;
+            margin: 5px 0 0;
           }
         }
       }

@@ -54,9 +54,11 @@
           if (this.running) {
             if (scenarios[i].table) {
               for (let t = 0; t < scenarios[i].table.rows.length; t++) {
-                scenarios[i].lastResult[t].status = 'running'
-                eventBus.emit('queue_updated')
-                await this.$store.dispatch('RUN_SCENARIO', {scenario: scenarios[i].scenario, outlineRow: scenarios[i].table.rows[t], outlineRowIndex: t})
+                if (this.running) {
+                  scenarios[i].lastResult[t].status = 'running'
+                  eventBus.emit('queue_updated')
+                  await this.$store.dispatch('RUN_SCENARIO', {scenario: scenarios[i].scenario, outlineRow: scenarios[i].table.rows[t], outlineRowIndex: t})
+                }
               }
             } else {
               scenarios[i].lastResult.status = 'running'

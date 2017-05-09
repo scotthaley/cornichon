@@ -22,6 +22,7 @@ const store = new Vuex.Store({
     scenario_queue: [],
     queue_locked: false,
     queue_running: false,
+    outline_lists: {},
     scenarios: [],
     features: [],
     supportcode: [],
@@ -122,6 +123,9 @@ const store = new Vuex.Store({
     },
     UPDATE_PAGE (state, page) {
       state.currentPage = page
+    },
+    UPDATE_OUTLINE_LISTS (state, data) {
+      state.outline_lists = data
     }
   },
   actions: {
@@ -177,6 +181,12 @@ const store = new Vuex.Store({
     },
     QUEUE_STOPPED ({ commit }) {
       commit('UPDATE_QUEUE_RUNNING', false)
+    },
+    CREATE_OUTLINE_LIST ({ commit }, data) {
+      app.post('createOutlineList', data)
+        .then(function (res) {
+          commit('UPDATE_OUTLINE_LISTS', res)
+        })
     },
     OPEN_CARD ({ commit }, id) {
       commit('UPDATE_OPEN_CARD', {open: true, id})
