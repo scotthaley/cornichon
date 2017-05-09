@@ -253,10 +253,10 @@
         table {
           width: 100%;
           border-collapse: collapse;
-          font-size: 20px;
+          font-size: 18px;
 
           tr {
-            background-color: #eaeef3;
+            background-color: #c5d9ee;
 
             &.outline-header {
               background-color: #2e383c;
@@ -265,12 +265,13 @@
                 font-weight: normal;
               }
             }
-            border-bottom: 1px solid #D2D6DB;
+            border-bottom: 1px solid #6b7186;
           }
 
           th {
             padding: 0 10px;
             text-align: center;
+            font-size: 20px;
             + th:not(:last-child) {
               border-left: 1px solid #D2D6DB;
             }
@@ -279,15 +280,15 @@
           td {
             padding: 10px;
             + td:not(:last-child) {
-              border-left: 1px solid #D2D6DB;
+              border-left: 1px solid #6b7186;
             }
             &:last-child {
               width: 1px;
               white-space: nowrap;
               padding: 0 10px;
+              text-align: right;
               .results {
                 font-size: 16px;
-                color: #6b7186;
                 vertical-align: middle;
                 &:hover {
                   cursor: pointer;

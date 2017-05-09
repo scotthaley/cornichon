@@ -359,9 +359,6 @@ module.exports = (() => {
     if (outlineRow) {
       let mScenario = scenarioIDMap[internalID]
       for (let i in scenario.steps) {
-        if (parseInt(i) === 0 || parseInt(i) === scenario.steps.length - 1) {
-          continue
-        }
         let mappedStep = mScenario.steps[parseInt(i)]
         scenario.steps[i].name = mappedStep.name
         Object.keys(outlineRow).forEach(function (column) {

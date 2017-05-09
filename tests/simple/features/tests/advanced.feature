@@ -20,3 +20,23 @@ Feature: More advanced feature
     When I pass a parameter like "<strong>banana</strong>"
     When I make a test fail
     Then I should see some results
+
+  Scenario Outline: Working scenario outline
+    When I pass a parameter like <fruit>
+    And I pass a parameter like <vegetable>
+    And I pass multiple parameters like <vegetable> and <fruit>
+    Then I should see some results
+
+    Examples:
+      | fruit    | vegetable |
+      | "apple"  | "Celery"  |
+      | "orange" | "Lettuce" |
+
+  Scenario Outline: Working scenario outline with one variable
+    When I pass a parameter like <fruit>
+    Then I should see some results
+
+    Examples:
+      | fruit    |
+      | "apple"  |
+      | "orange" |
