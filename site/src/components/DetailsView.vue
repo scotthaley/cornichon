@@ -11,7 +11,7 @@
         </div>
         <div class="steps">
           <div class="step" v-for="step in resultSteps">
-            <span v-if="step.stepDefinition" :class="step.status">{{step.stepDefinition.name}}</span>
+            <span v-if="step.stepDefinition" :class="step.status">{{step.step.name}}</span>
             <i v-if="step.status === 'passed'" class="success fa fa-check-circle"></i>
             <i v-if="step.status === 'undefined'" class="undefined fa fa-question-circle"></i>
             <i v-if="step.status === 'failed'" class="error fa fa-times-circle"></i>

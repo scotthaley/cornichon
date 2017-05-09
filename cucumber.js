@@ -29,6 +29,7 @@ module.exports = (() => {
   let scenarios = null
   let scenarioMap = []
   let fullScenarioMap = {}
+  let scenarioIDMap = {}
   let features = null
   let featureMap = []
   let tags = []
@@ -309,7 +310,7 @@ module.exports = (() => {
     for (let st in scenario.steps) {
       steps.push(mappedStep(scenario.steps[st], stepDef))
     }
-    return {
+    let mScenario = {
       name: scenario.name,
       line: scenario.line,
       tags: scenario.tags,
@@ -320,6 +321,8 @@ module.exports = (() => {
       steps,
       internalID
     }
+    scenarioIDMap[internalID] = mScenario
+    return mScenario
   }
 
   const mappedStep = (step, stepDef) => {
@@ -337,7 +340,7 @@ module.exports = (() => {
     return mStep
   }
 
-  async function runScenario (internalID) {
+  async function runScenario (internalID, outlineRow) {
     const cli = this.cli
     const configuration = await cli.getConfiguration()
     const supportCodeLibrary = cli.getSupportCodeLibrary(configuration.supportCodePaths)
@@ -352,7 +355,20 @@ module.exports = (() => {
       listeners: formatters.concat(supportCodeLibrary.listeners)
     })
 
-    let scenario = fullScenarioMap[internalID]
+    let scenario = Object.assign({}, fullScenarioMap[internalID])
+    if (outlineRow) {
+      let mScenario = scenarioIDMap[internalID]
+      for (let i in scenario.steps) {
+        if (parseInt(i) === 0 || parseInt(i) === scenario.steps.length - 1) {
+          continue
+        }
+        let mappedStep = mScenario.steps[parseInt(i)]
+        scenario.steps[i].name = mappedStep.name
+        Object.keys(outlineRow).forEach(function (column) {
+          scenario.steps[i].name = scenario.steps[i].name.replace(new RegExp(`<${column}>`, 'g'), outlineRow[column])
+        })
+      }
+    }
 
     const scenarioRunner = new ScenarioRunner({
       eventBroadcaster,

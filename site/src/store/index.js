@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import { app } from '../store/app'
 
+const eventBus = require('@/eventBus')
+
 Vue.use(Vuex)
 
 app.socket.on('refresh', function () {
@@ -41,6 +43,24 @@ const store = new Vuex.Store({
       }
     },
     ADD_SCENARIO (state, scenario) {
+      if (scenario.scenario.keyword === 'Scenario Outline') {
+        let headers = []
+        let rows = []
+        let lastResult = []
+        Object.keys(scenario.scenario.table).forEach(function (key) {
+          headers.push(key)
+          let column = scenario.scenario.table[key]
+          for (let i in column) {
+            while (!rows[i]) {
+              rows.push({})
+              lastResult.push({status: 'queued'})
+            }
+            rows[i][key] = column[i]
+          }
+        })
+        scenario.table = {headers, rows}
+        scenario.lastResult = lastResult
+      }
       state.scenario_queue.push(scenario)
     },
     REMOVE_SCENARIO (state, internalID) {
@@ -56,9 +76,25 @@ const store = new Vuex.Store({
       for (let i in state.scenario_queue) {
         let s = state.scenario_queue[i]
         if (s.scenario.internalID === data.internalID) {
-          s.lastResult = data.res
+          if (data.res) {
+            if (data.outlineRow) {
+              s.lastResult[data.outlineRowIndex] = data.res
+            } else {
+              s.lastResult = data.res
+            }
+          }
+          if (data.table) {
+            s.table = data.table
+            for (let i = 0; i < data.table.rows.length; i++) {
+              if (!s.lastResult[i]) {
+                s.lastResult[i] = {status: 'queued'}
+              }
+            }
+            s.lastResult.length = data.table.rows.length // truncate lastResult records without corresponding data row
+          }
         }
       }
+      eventBus.emit('queue_updated')
     },
     UPDATE_SCENARIO_LIST (state, scenarios) {
       state.scenario_queue = scenarios
@@ -119,17 +155,19 @@ const store = new Vuex.Store({
           }
         })
     },
-    RUN_SCENARIO ({ commit }, scenario) {
+    RUN_SCENARIO ({ commit }, data) {
       commit('UPDATE_QUEUE_RUNNING', true)
-      let internalID = scenario.internalID
+      let internalID = data.scenario.internalID
+      let outlineRow = data.outlineRow
+      let outlineRowIndex = data.outlineRowIndex
       return new Promise((resolve) => {
-        app.post('runScenario', internalID)
+        app.post('runScenario', {internalID, outlineRow})
           .then(function (res) {
             for (let i in res.stepResults) {
               let s = res.stepResults[i]
-              s.stepDefinition = scenario.steps[i - 1]
+              s.stepDefinition = data.scenario.steps[i - 1]
             }
-            commit('UPDATE_SCENARIO_IN_QUEUE', {internalID, res})
+            commit('UPDATE_SCENARIO_IN_QUEUE', {internalID, res, outlineRow, outlineRowIndex})
             resolve(res)
           })
       })

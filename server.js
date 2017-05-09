@@ -61,16 +61,26 @@ module.exports = () => {
   })
 
   io.on('connect', (socket) => {
-    socket.on('runScenario', (internalID) => {
+    socket.on('runScenario', (data) => {
+      let internalID = data.internalID
       let envVars = cornichon.getSettings().custom.envVars
       for (let i in envVars) {
         let e = envVars[i]
         process.env[e.name] = e.value
       }
-      cucumber.runScenario(internalID).then((result) => {
+      cucumber.runScenario(internalID, data.outlineRow).then((result) => {
         result.scenario = internalID
         for (let i in result.stepResults) {
-          delete result.stepResults[i].step
+          delete result.stepResults[i].step.scenario
+          if (data.outlineRow && result.stepResults[i].step) {
+            let name = result.stepResults[i].step.name
+            if (name) {
+              Object.keys(data.outlineRow).forEach(function (column) {
+                name = name.replace(RegExp(`<${column}>`, 'g'), data.outlineRow[column])
+              })
+              result.stepResults[i].step.name = name
+            }
+          }
         }
         socket.emit('runScenario', result)
       })

@@ -9,7 +9,7 @@
     </div>
 
     <div class="queue-list" v-if="!locked">
-      <draggable v-model="scenarios">
+      <draggable v-model="scenarios" :options="{handle: '.header'}">
         <queue-item v-for="s in scenarios" :scenario="s" :key="s.scenario.internalID"></queue-item>
       </draggable>
     </div>
@@ -23,6 +23,8 @@
 <script>
   import queueItem from './QueueItem'
   import draggable from 'vuedraggable'
+
+  const eventBus = require('@/eventBus')
 
   export default {
     name: 'queueRunner',
@@ -38,13 +40,28 @@
         let scenarios = this.scenarios
 
         scenarios = scenarios.map(function (s) {
-          s.lastResult.status = 'queued'
+          if (s.table) {
+            s.lastResult = s.lastResult.map(function (lr) {
+              lr.status = 'queued'
+              return lr
+            })
+          } else {
+            s.lastResult.status = 'queued'
+          }
           return s
         })
         for (let i = 0; i < scenarios.length; i++) {
           if (this.running) {
-            scenarios[i].lastResult.status = 'running'
-            await this.$store.dispatch('RUN_SCENARIO', scenarios[i].scenario)
+            if (scenarios[i].table) {
+              for (let t = 0; t < scenarios[i].table.rows.length; t++) {
+                scenarios[i].lastResult[t].status = 'running'
+                eventBus.emit('queue_updated')
+                await this.$store.dispatch('RUN_SCENARIO', {scenario: scenarios[i].scenario, outlineRow: scenarios[i].table.rows[t], outlineRowIndex: t})
+              }
+            } else {
+              scenarios[i].lastResult.status = 'running'
+              await this.$store.dispatch('RUN_SCENARIO', {scenario: scenarios[i].scenario})
+            }
           }
         }
         this.stopQueue()
