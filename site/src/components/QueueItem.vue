@@ -177,7 +177,9 @@
             this.table.rows.push(blankRow)
           }
           Object.keys(list[i]).forEach(function (column) {
-            _this.table.rows[i][column] = list[i][column]
+            if (this.table.rows[i][column]) {
+              _this.table.rows[i][column] = list[i][column]
+            }
           })
         }
         this.table.rows.length = list.length // truncate
