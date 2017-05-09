@@ -52,7 +52,7 @@
               <span v-if="scenario.lastResult[rowIndex].status !== 'running' && scenario.lastResult[rowIndex].status !== 'queued'"
                     class="results"
                     @click="openResults(rowIndex)">View Results</span>
-              <spinner v-if="scenario.lastResult[rowIndex].status === 'running'" size="small"></spinner>
+              <span class="spinner"><spinner v-if="scenario.lastResult[rowIndex].status === 'running'" size="small" line-bg-color="#c5d9ee"></spinner></span>
               <span v-if="scenario.lastResult[rowIndex].status === 'passed'"><i class="fa fa-check"></i></span>
               <span v-if="scenario.lastResult[rowIndex].status === 'failed'"><i class="fa fa-times"></i></span>
               <span v-if="scenario.lastResult[rowIndex].status === 'undefined'"><i class="fa fa-question"></i></span>
@@ -88,8 +88,9 @@
       },
       addRow: function () {
         let blankRow = {}
+        let _this = this
         Object.keys(this.table.headers).forEach(function (key) {
-          blankRow[key] = ''
+          blankRow[_this.table.headers[key]] = ''
         })
         this.table.rows.push(blankRow)
         this.updateTable()
@@ -287,6 +288,9 @@
               white-space: nowrap;
               padding: 0 10px;
               text-align: right;
+              .spinner {
+                display: inline-block;
+              }
               .results {
                 font-size: 16px;
                 vertical-align: middle;
