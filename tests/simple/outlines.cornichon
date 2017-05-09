@@ -1,0 +1,53 @@
+{
+	"fruit": {
+		"fruits": [
+			{
+				"fruit": "\"apple\""
+			},
+			{
+				"fruit": "\"orange\""
+			},
+			{
+				"fruit": "\"grape\""
+			},
+			{
+				"fruit": "\"cucumber\""
+			}
+		]
+	},
+	"fruit.vegetable": {
+		"fruits & vegetables": [
+			{
+				"fruit": "\"apple\"",
+				"vegetable": "\"Celery\""
+			},
+			{
+				"fruit": "\"orange\"",
+				"vegetable": "\"Lettuce\""
+			},
+			{
+				"fruit": "\"grape\"",
+				"vegetable": "\"Tomato\""
+			},
+			{
+				"fruit": "\"cucumber\"",
+				"vegetable": "\"Asparagus\""
+			}
+		],
+	"vegetable": {
+		"veggies": [
+			{
+				"vegetable": "\"Celery\""
+			},
+			{
+				"vegetable": "\"Lettuce\""
+			},
+			{
+				"vegetable": "\"Tomato\""
+			},
+			{
+				"vegetable": "\"Asparagus\""
+			}
+		]
+	}
+}

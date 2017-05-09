@@ -110,6 +110,15 @@ module.exports = () => {
       cornichon.saveSettings(settings)
       socket.emit('saveSettings', true)
     })
+
+    socket.on('outlineLists', () => {
+      socket.emit('outlineLists', cornichon.getOutlineLists())
+    })
+
+    socket.on('createOutlineList', (data) => {
+      let newLists = cornichon.createOutlineList(data)
+      socket.emit('createOutlineList', newLists)
+    })
   })
 
   server.listen(8088, () => {

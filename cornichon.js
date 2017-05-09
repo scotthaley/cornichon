@@ -15,6 +15,27 @@ module.exports = (() => {
     return JSON.parse(fs.readFileSync(usagePath, 'utf8'))
   }
 
+  const getOutlineLists = () => {
+    let outlinesPath = path.join(process.cwd(), 'outlines.cornichon')
+    if (!fs.existsSync(outlinesPath)) {
+      fs.writeFileSync(outlinesPath, '{}')
+      return {}
+    }
+    return JSON.parse(fs.readFileSync(outlinesPath, 'utf8'))
+  }
+
+  const createOutlineList = (data) => {
+    let outlineLists = getOutlineLists()
+    let signature = data.signature.join('.')
+    if (!outlineLists[signature]) {
+      outlineLists[signature] = {}
+    }
+    outlineLists[signature][data.name] = data.list
+    let outlinesPath = path.join(process.cwd(), 'outlines.cornichon')
+    fs.writeFileSync(outlinesPath, JSON.stringify(outlineLists, null, '\t'))
+    return outlineLists
+  }
+
   const saveSettings = settings => {
     let settingsPath = path.join(process.cwd(), 'settings.cornichon')
     fs.writeFileSync(settingsPath, JSON.stringify(settings, null, '\t'))
@@ -52,6 +73,8 @@ module.exports = (() => {
   return {
     updateUsage,
     getUsage,
+    getOutlineLists,
+    createOutlineList,
     saveSettings,
     getSettings
   }
