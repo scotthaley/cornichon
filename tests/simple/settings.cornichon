@@ -1,6 +1,12 @@
 {
 	"custom": {
 		"Setup Command": "echo test",
-		"Code Style": "material"
+		"Code Style": "material",
+		"envVars": [
+			{
+				"name": "test",
+				"value": "this is my environment variable"
+			}
+		]
 	}
 }

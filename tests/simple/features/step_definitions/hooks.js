@@ -3,13 +3,11 @@
  */
 
 const {defineSupportCode} = require('cucumber')
-const fileStart = 'include'
-const basePath = `../../${fileStart}`
-const includedText = require(basePath + 'This')
+let test = process.env.test
 
 defineSupportCode(function ({Before, After}) {
   Before(function () {
-    console.log(`This is my before (${includedText}`)
+    console.log(`This is my before ${test}`)
   })
 
   After(function () {

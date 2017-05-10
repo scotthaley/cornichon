@@ -41,6 +41,12 @@ module.exports = (() => {
     this.cli = getCli()
     cucumber.clearSupportCodeFns()
 
+    let envVars = cornichon.getSettings().custom.envVars
+    for (let i in envVars) {
+      let e = envVars[i]
+      process.env[e.name] = e.value
+    }
+
     supportCode = []
     scenarios = []
     scenarioMap = []
