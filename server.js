@@ -119,6 +119,15 @@ module.exports = () => {
       let newLists = cornichon.createOutlineList(data)
       socket.emit('createOutlineList', newLists)
     })
+
+    socket.on('queueLists', () => {
+      socket.emit('queueLists', cornichon.getQueueLists())
+    })
+
+    socket.on('createQueueList', (data) => {
+      let newLists = cornichon.createQueueList(data)
+      socket.emit('createQueueList', newLists)
+    })
   })
 
   server.listen(8088, () => {

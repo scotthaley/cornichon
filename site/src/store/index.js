@@ -14,6 +14,25 @@ app.socket.on('refresh', function () {
   store.dispatch('FETCH', 'settings')
 })
 
+const findScenarioID = (state, scenario) => {
+  for (let i in state.scenarios) {
+    let s = state.scenarios[i]
+    if (s.keyword !== scenario.keyword) {
+      continue
+    }
+    if (s.name !== scenario.name) {
+      continue
+    }
+    if (s.description !== scenario.description) {
+      continue
+    }
+    if (s.uri !== scenario.uri) {
+      continue
+    }
+    return s.internalID
+  }
+}
+
 const store = new Vuex.Store({
   state: {
     currentPage: 'Steps',
@@ -23,6 +42,7 @@ const store = new Vuex.Store({
     queue_locked: false,
     queue_running: false,
     outline_lists: {},
+    queue_lists: {},
     scenarios: [],
     features: [],
     supportcode: [],
@@ -126,6 +146,22 @@ const store = new Vuex.Store({
     },
     UPDATE_OUTLINE_LISTS (state, data) {
       state.outline_lists = data
+    },
+    UPDATE_QUEUE_LISTS (state, data) {
+      state.queue_lists = data
+    },
+    SET_SCENARIO_QUEUE (state, list) {
+      let toRemove = []
+      for (let i in list) {
+        list[i].scenario.internalID = findScenarioID(state, list[i].scenario)
+        if (!list[i].scenario.internalID) {
+          toRemove.push(i)
+        }
+      }
+      for (let i in toRemove) {
+        list.splice(toRemove[i], 1)
+      }
+      state.scenario_queue = list
     }
   },
   actions: {
@@ -187,6 +223,15 @@ const store = new Vuex.Store({
         .then(function (res) {
           commit('UPDATE_OUTLINE_LISTS', res)
         })
+    },
+    CREATE_QUEUE_LIST ({ commit, state }, name) {
+      app.post('createQueueList', {name, list: state.scenario_queue})
+        .then(function (res) {
+          commit('UPDATE_QUEUE_LISTS', res)
+        })
+    },
+    LOAD_QUEUE_LIST ({ commit, state }, name) {
+      commit('SET_SCENARIO_QUEUE', state.queue_lists[name])
     },
     OPEN_CARD ({ commit }, id) {
       commit('UPDATE_OPEN_CARD', {open: true, id})

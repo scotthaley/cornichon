@@ -6,6 +6,17 @@
       <span v-if="locked">
         <a @click="editQueue()">Edit Queue</a>
       </span>
+      <div class="list-tools">
+        <span v-if="scenarios.length">
+          <input v-if="saveList" v-model="saveListName" placeholder="List Name"/>
+          <button @click="saveListClicked()" :class="{green: saveList}">Save Queue</button>
+        </span>
+        <select v-model="saveListName">
+          <option disabled value="">Select a queue list to load...</option>
+          <option v-for="(list, key) in queueLists" :value="key">{{ key }}</option>
+        </select>
+        <button v-if="saveListName !== ''" @click="loadQueue">Load Queue</button>
+      </div>
     </div>
 
     <div class="queue-list" v-if="!locked">
@@ -15,7 +26,8 @@
     </div>
 
     <div class="queue-list locked" v-if="locked">
-      <queue-item v-for="(s, index) in scenarios" :scenario="s" :locked="true" :index="index" :key="s.scenario.internalID"></queue-item>
+      <queue-item v-for="(s, index) in scenarios" :scenario="s" :locked="true" :index="index"
+                  :key="s.scenario.internalID"></queue-item>
     </div>
   </div>
 </template>
@@ -32,7 +44,24 @@
       queueItem,
       draggable
     },
+    data () {
+      return {
+        saveList: false,
+        saveListName: ''
+      }
+    },
     methods: {
+      loadQueue: function () {
+        this.$store.dispatch('LOAD_QUEUE_LIST', this.saveListName)
+      },
+      saveListClicked: function () {
+        if (!this.saveList) {
+          this.saveList = true
+        } else {
+          this.saveList = false
+          this.$store.dispatch('CREATE_QUEUE_LIST', this.saveListName)
+        }
+      },
       runScenarios: async function () {
         this.$store.dispatch('LOCK_QUEUE')
         this.$store.dispatch('QUEUE_STARTED')
@@ -57,7 +86,11 @@
                 if (this.running) {
                   scenarios[i].lastResult[t].status = 'running'
                   eventBus.emit('queue_updated')
-                  await this.$store.dispatch('RUN_SCENARIO', {scenario: scenarios[i].scenario, outlineRow: scenarios[i].table.rows[t], outlineRowIndex: t})
+                  await this.$store.dispatch('RUN_SCENARIO', {
+                    scenario: scenarios[i].scenario,
+                    outlineRow: scenarios[i].table.rows[t],
+                    outlineRowIndex: t
+                  })
                 }
               }
             } else {
@@ -83,6 +116,9 @@
         set (value) {
           this.$store.commit('UPDATE_SCENARIO_LIST', value)
         }
+      },
+      queueLists: function () {
+        return this.$store.state.queue_lists
       },
       locked: function () {
         return this.$store.state.queue_locked
@@ -127,6 +163,25 @@
 
         &:hover {
           color: #2e383c;
+        }
+      }
+
+      .list-tools {
+        margin-top: 15px;
+
+        button {
+          font-size: 16px;
+          padding: 5px 10px;
+          background-color: #6b7186;
+          &:hover {
+            color: #93a1a1;
+          }
+          &.green {
+            background-color: #42b983;
+            &:hover {
+              color: #1d75b3;
+            }
+          }
         }
       }
     }

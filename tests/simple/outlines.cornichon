@@ -33,7 +33,8 @@
 				"fruit": "\"cucumber\"",
 				"vegetable": "\"Asparagus\""
 			}
-		],
+		]
+	},
 	"vegetable": {
 		"veggies": [
 			{

@@ -177,7 +177,7 @@
             this.table.rows.push(blankRow)
           }
           Object.keys(list[i]).forEach(function (column) {
-            if (this.table.rows[i][column]) {
+            if (typeof _this.table.rows[i][column] !== 'undefined') {
               _this.table.rows[i][column] = list[i][column]
             }
           })

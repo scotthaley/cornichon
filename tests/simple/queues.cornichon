@@ -1,0 +1,226 @@
+{
+	"Test List": [
+		{
+			"scenario": {
+				"name": "This is the same scenario",
+				"line": 18,
+				"tags": [],
+				"uri": "features\\tests\\advanced.feature",
+				"uri_full": "C:\\Users\\shaley\\Documents\\Workspace\\cornichon\\tests\\simple\\features\\tests\\advanced.feature",
+				"keyword": "Scenario",
+				"description": "This is the scenario description",
+				"steps": [
+					{
+						"pattern": "I'm running a simple test",
+						"name": "I'm running a simple test",
+						"currentStep": false,
+						"line": 4,
+						"uri": "features\\tests\\advanced.feature",
+						"uri_full": "C:\\Users\\shaley\\Documents\\Workspace\\cornichon\\tests\\simple\\features\\tests\\advanced.feature",
+						"keyword": "Given",
+						"cornichonID": "0c63ca6b-6e66-2472-f521-547444334ff7"
+					},
+					{
+						"pattern": "I pass a parameter like {stringInDoubleQuotes}",
+						"name": "I pass a parameter like \"<strong>banana</strong>\"",
+						"currentStep": false,
+						"line": 20,
+						"uri": "features\\tests\\advanced.feature",
+						"uri_full": "C:\\Users\\shaley\\Documents\\Workspace\\cornichon\\tests\\simple\\features\\tests\\advanced.feature",
+						"keyword": "When",
+						"cornichonID": "074eb486-34d1-d57d-1ad2-0218e5d91a91"
+					},
+					{
+						"pattern": "I make a test fail",
+						"name": "I make a test fail",
+						"currentStep": false,
+						"line": 21,
+						"uri": "features\\tests\\advanced.feature",
+						"uri_full": "C:\\Users\\shaley\\Documents\\Workspace\\cornichon\\tests\\simple\\features\\tests\\advanced.feature",
+						"keyword": "When",
+						"cornichonID": "3c67b4ba-a4a1-776e-44f7-3babe85f9b99"
+					},
+					{
+						"pattern": "I should see some results",
+						"name": "I should see some results",
+						"currentStep": false,
+						"line": 22,
+						"uri": "features\\tests\\advanced.feature",
+						"uri_full": "C:\\Users\\shaley\\Documents\\Workspace\\cornichon\\tests\\simple\\features\\tests\\advanced.feature",
+						"keyword": "Then",
+						"cornichonID": "98d44ebc-ca0a-9073-cbb3-7c007ce47c92"
+					}
+				],
+				"internalID": "scenario-102",
+				"feature": {
+					"name": "More advanced feature",
+					"uri": "features\\tests\\advanced.feature",
+					"uri_full": "C:\\Users\\shaley\\Documents\\Workspace\\cornichon\\tests\\simple\\features\\tests\\advanced.feature",
+					"tags": [],
+					"line": 1,
+					"keyword": "Feature",
+					"description": "",
+					"internalID": "feature-100"
+				},
+				"otherScenarios": []
+			},
+			"lastResult": {
+				"status": "queued"
+			}
+		},
+		{
+			"scenario": {
+				"name": "Working scenario outline with one variable",
+				"line": 41,
+				"tags": [],
+				"uri": "features\\tests\\advanced.feature",
+				"uri_full": "C:\\Users\\shaley\\Documents\\Workspace\\cornichon\\tests\\simple\\features\\tests\\advanced.feature",
+				"keyword": "Scenario Outline",
+				"description": "",
+				"steps": [
+					{
+						"pattern": "I'm running a simple test",
+						"name": "I'm running a simple test",
+						"currentStep": false,
+						"line": 4,
+						"uri": "features\\tests\\advanced.feature",
+						"uri_full": "C:\\Users\\shaley\\Documents\\Workspace\\cornichon\\tests\\simple\\features\\tests\\advanced.feature",
+						"keyword": "Given",
+						"cornichonID": "0c63ca6b-6e66-2472-f521-547444334ff7"
+					},
+					{
+						"pattern": "I pass a parameter like {stringInDoubleQuotes}",
+						"name": "I pass a parameter like <fruit>",
+						"currentStep": false,
+						"line": 36,
+						"uri": "features\\tests\\advanced.feature",
+						"uri_full": "C:\\Users\\shaley\\Documents\\Workspace\\cornichon\\tests\\simple\\features\\tests\\advanced.feature",
+						"keyword": "When",
+						"cornichonID": "074eb486-34d1-d57d-1ad2-0218e5d91a91"
+					},
+					{
+						"pattern": "I should see some results",
+						"name": "I should see some results",
+						"currentStep": false,
+						"line": 37,
+						"uri": "features\\tests\\advanced.feature",
+						"uri_full": "C:\\Users\\shaley\\Documents\\Workspace\\cornichon\\tests\\simple\\features\\tests\\advanced.feature",
+						"keyword": "Then",
+						"cornichonID": "98d44ebc-ca0a-9073-cbb3-7c007ce47c92"
+					}
+				],
+				"internalID": "scenario-104",
+				"table": {
+					"fruit": [
+						"\"apple\"",
+						"\"orange\""
+					]
+				},
+				"feature": {
+					"name": "More advanced feature",
+					"uri": "features\\tests\\advanced.feature",
+					"uri_full": "C:\\Users\\shaley\\Documents\\Workspace\\cornichon\\tests\\simple\\features\\tests\\advanced.feature",
+					"tags": [],
+					"line": 1,
+					"keyword": "Feature",
+					"description": "",
+					"internalID": "feature-100"
+				},
+				"otherScenarios": []
+			},
+			"lastResult": [
+				{
+					"status": "queued"
+				},
+				{
+					"status": "queued"
+				}
+			],
+			"table": {
+				"headers": [
+					"fruit"
+				],
+				"rows": [
+					{
+						"fruit": "\"apple\""
+					},
+					{
+						"fruit": "\"orange\""
+					}
+				]
+			}
+		},
+		{
+			"scenario": {
+				"name": "Simple scenario",
+				"line": 7,
+				"tags": [
+					{
+						"line": 1,
+						"name": "@feature-tag"
+					},
+					{
+						"line": 6,
+						"name": "@simple-tag"
+					}
+				],
+				"uri": "features\\tests\\simple.feature",
+				"uri_full": "C:\\Users\\shaley\\Documents\\Workspace\\cornichon\\tests\\simple\\features\\tests\\simple.feature",
+				"keyword": "Scenario",
+				"description": "This is the scenario description",
+				"steps": [
+					{
+						"pattern": "I'm running a simple test",
+						"name": "I'm running a simple test",
+						"currentStep": false,
+						"line": 9,
+						"uri": "features\\tests\\simple.feature",
+						"uri_full": "C:\\Users\\shaley\\Documents\\Workspace\\cornichon\\tests\\simple\\features\\tests\\simple.feature",
+						"keyword": "Given",
+						"cornichonID": "0c63ca6b-6e66-2472-f521-547444334ff7"
+					},
+					{
+						"pattern": "I pass a parameter like {stringInDoubleQuotes}",
+						"name": "I pass a parameter like \"<strong>banana</strong>\"",
+						"currentStep": false,
+						"line": 10,
+						"uri": "features\\tests\\simple.feature",
+						"uri_full": "C:\\Users\\shaley\\Documents\\Workspace\\cornichon\\tests\\simple\\features\\tests\\simple.feature",
+						"keyword": "When",
+						"cornichonID": "074eb486-34d1-d57d-1ad2-0218e5d91a91"
+					},
+					{
+						"pattern": "I should see some results",
+						"name": "I should see some results",
+						"currentStep": false,
+						"line": 11,
+						"uri": "features\\tests\\simple.feature",
+						"uri_full": "C:\\Users\\shaley\\Documents\\Workspace\\cornichon\\tests\\simple\\features\\tests\\simple.feature",
+						"keyword": "Then",
+						"cornichonID": "98d44ebc-ca0a-9073-cbb3-7c007ce47c92"
+					}
+				],
+				"internalID": "scenario-106",
+				"feature": {
+					"name": "Example feature",
+					"uri": "features\\tests\\simple.feature",
+					"uri_full": "C:\\Users\\shaley\\Documents\\Workspace\\cornichon\\tests\\simple\\features\\tests\\simple.feature",
+					"tags": [
+						{
+							"line": 1,
+							"name": "@feature-tag"
+						}
+					],
+					"line": 2,
+					"keyword": "Feature",
+					"description": "This is an example feature. Some details about the feature go here.\nMultiline descriptions look like this.",
+					"internalID": "feature-105"
+				},
+				"otherScenarios": []
+			},
+			"lastResult": {
+				"status": "queued"
+			}
+		}
+	]
+}

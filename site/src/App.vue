@@ -69,6 +69,7 @@
       this.$store.dispatch('FETCH', 'scenarios')
       this.$store.dispatch('FETCH', 'settings')
       this.$store.dispatch('FETCH', {data: 'outlineLists', name: 'outline_lists'})
+      this.$store.dispatch('FETCH', {data: 'queueLists', name: 'queue_lists'})
     },
     mounted () {
       eventBus.on('details', function () {

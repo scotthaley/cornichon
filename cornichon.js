@@ -36,6 +36,23 @@ module.exports = (() => {
     return outlineLists
   }
 
+  const getQueueLists = () => {
+    let queuePath = path.join(process.cwd(), 'queues.cornichon')
+    if (!fs.existsSync(queuePath)) {
+      fs.writeFileSync(queuePath, '{}')
+      return {}
+    }
+    return JSON.parse(fs.readFileSync(queuePath, 'utf8'))
+  }
+
+  const createQueueList = (data) => {
+    let queueLists = getQueueLists()
+    queueLists[data.name] = data.list
+    let queuePath = path.join(process.cwd(), 'queues.cornichon')
+    fs.writeFileSync(queuePath, JSON.stringify(queueLists, null, '\t'))
+    return queueLists
+  }
+
   const saveSettings = settings => {
     let settingsPath = path.join(process.cwd(), 'settings.cornichon')
     fs.writeFileSync(settingsPath, JSON.stringify(settings, null, '\t'))
@@ -75,6 +92,8 @@ module.exports = (() => {
     getUsage,
     getOutlineLists,
     createOutlineList,
+    getQueueLists,
+    createQueueList,
     saveSettings,
     getSettings
   }
