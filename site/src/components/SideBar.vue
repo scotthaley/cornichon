@@ -8,7 +8,7 @@
           {{ item.name }}
         </li>
       </ul>
-      <select v-if="profiles.length" v-model="currentProfile">
+      <select v-if="profiles" v-model="currentProfile">
         <option value="" disabled>Profile</option>
         <option v-for="p in profiles" :value="p">{{ p }}</option>
       </select>
