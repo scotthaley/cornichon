@@ -47,7 +47,8 @@
     data () {
       return {
         saveList: false,
-        saveListName: ''
+        saveListName: '',
+        parallelCount: 0
       }
     },
     methods: {
@@ -62,23 +63,60 @@
           this.$store.dispatch('CREATE_QUEUE_LIST', this.saveListName)
         }
       },
-      runScenarios: async function () {
-        this.$store.dispatch('LOCK_QUEUE')
-        this.$store.dispatch('QUEUE_STARTED')
-
+      runScenariosParallel: function () {
+        let _this = this
         let scenarios = this.scenarios
+        let scenariosFinished = true
 
-        scenarios = scenarios.map(function (s) {
-          if (s.table) {
-            s.lastResult = s.lastResult.map(function (lr) {
-              lr.status = 'queued'
-              return lr
-            })
-          } else {
-            s.lastResult.status = 'queued'
+        if (this.parallelCount < this.parallelSlots) {
+          for (let i = 0; i < scenarios.length; i++) {
+            if (this.running) {
+              if (scenarios[i].table) {
+                for (let t = 0; t < scenarios[i].table.rows.length; t++) {
+                  if (this.running && scenarios[i].lastResult[t].status === 'queued') {
+                    scenarios[i].lastResult[t].status = 'running'
+                    eventBus.emit('queue_updated')
+                    this.$store.dispatch('RUN_SCENARIO', {
+                      scenario: scenarios[i].scenario,
+                      outlineRow: scenarios[i].table.rows[t],
+                      outlineRowIndex: t
+                    }).then(function () {
+                      _this.parallelCount --
+                      _this.runScenariosParallel()
+                    })
+                    this.parallelCount ++
+                    if (this.parallelCount >= this.parallelSlots) {
+                      return
+                    }
+                  } else if (scenarios[i].lastResult[t].status === 'running') {
+                    scenariosFinished = false
+                  }
+                }
+              } else {
+                if (scenarios[i].lastResult.status === 'queued') {
+                  scenarios[i].lastResult.status = 'running'
+                  this.$store.dispatch('RUN_SCENARIO', {scenario: scenarios[i].scenario})
+                    .then(function () {
+                      _this.parallelCount --
+                      _this.runScenariosParallel()
+                    })
+                  this.parallelCount ++
+                  if (this.parallelCount >= this.parallelSlots) {
+                    return
+                  }
+                } else if (scenarios[i].lastResult.status === 'running') {
+                  scenariosFinished = false
+                }
+              }
+            }
           }
-          return s
-        })
+          if (scenariosFinished) {
+            this.stopQueue()
+          }
+        }
+      },
+      runScenariosSequential: async function () {
+        let scenarios = this.scenarios
         for (let i = 0; i < scenarios.length; i++) {
           if (this.running) {
             if (scenarios[i].table) {
@@ -100,6 +138,30 @@
           }
         }
         this.stopQueue()
+      },
+      runScenarios: async function () {
+        this.$store.dispatch('LOCK_QUEUE')
+        this.$store.dispatch('QUEUE_STARTED')
+
+        let scenarios = this.scenarios
+
+        scenarios = scenarios.map(function (s) {
+          if (s.table) {
+            s.lastResult = s.lastResult.map(function (lr) {
+              lr.status = 'queued'
+              return lr
+            })
+          } else {
+            s.lastResult.status = 'queued'
+          }
+          return s
+        })
+        this.scenarios = scenarios
+        if (this.isParallel) {
+          this.runScenariosParallel()
+        } else {
+          await this.runScenariosSequential()
+        }
       },
       stopQueue: function () {
         this.$store.dispatch('QUEUE_STOPPED')
@@ -125,6 +187,15 @@
       },
       running: function () {
         return this.$store.state.queue_running
+      },
+      profileObject: function () {
+        return this.$store.getters.currentProfileObject
+      },
+      parallelSlots: function () {
+        return this.profileObject ? parseInt(this.profileObject.parallelCount.value) : null
+      },
+      isParallel: function () {
+        return this.profileObject ? this.profileObject.parallel : false
       }
     }
   }

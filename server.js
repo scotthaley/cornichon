@@ -73,6 +73,7 @@ module.exports = () => {
         for (let i in result.stepResults) {
           delete result.stepResults[i].step.scenario
           if (data.outlineRow && result.stepResults[i].step) {
+            result.outlineRowIndex = data.outlineRowIndex
             let name = result.stepResults[i].step.name
             if (name) {
               Object.keys(data.outlineRow).forEach(function (column) {
@@ -127,6 +128,14 @@ module.exports = () => {
     socket.on('createQueueList', (data) => {
       let newLists = cornichon.createQueueList(data)
       socket.emit('createQueueList', newLists)
+    })
+
+    socket.on('setProfile', (profile) => {
+      cucumber.init(profile)
+        .then(() => {
+          socket.emit('setProfile')
+          socket.emit('refresh')
+        })
     })
   })
 

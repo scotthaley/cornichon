@@ -13,12 +13,24 @@ var app = (function () {
     })
   }
 
-  function post (what, data) {
+  function post (what, data, tester) {
     return new Promise((resolve) => {
-      socket.once(what, (json) => {
-        resolve(json)
-      })
+      registerListener(what, resolve, tester)
       socket.emit(what, data)
+    })
+  }
+
+  function registerListener (what, cb, tester) {
+    socket.once(what, (json) => {
+      if (!tester || tester(json)) {
+        cb(json)
+      } else {
+        if (tester(json)) {
+          cb(json)
+        } else {
+          registerListener(what, cb, tester)
+        }
+      }
     })
   }
 

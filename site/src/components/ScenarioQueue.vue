@@ -13,10 +13,7 @@
         </span>
       </div>
       <p class="scenario" v-for="scenario in scenarios">
-        <span @click="openResults(scenario.lastResult)">{{scenario.scenario.name}}</span>
-        <i v-if="scenario.lastResult.status === 'passed'" class="success fa fa-check-circle"></i>
-        <i v-if="scenario.lastResult.status === 'running'" class="running fa fa-ellipsis-h"></i>
-        <i v-if="scenario.lastResult.status !== 'passed' && scenario.lastResult.status !== 'queued' && scenario.lastResult.status !== 'running'" class="error fa fa-times-circle"></i>
+        <span>{{scenario.scenario.name}}</span>
       </p>
     </div>
   </div>
@@ -123,7 +120,6 @@ export default {
     .scenario {
       border-bottom: 1px solid #000;
       text-align: left;
-      cursor: pointer;
       span {
         width: 250px;
         white-space: nowrap;

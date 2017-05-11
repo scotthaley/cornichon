@@ -51,7 +51,25 @@ const store = new Vuex.Store({
       features: [],
       scenarios: []
     },
-    open_cards: []
+    open_cards: [],
+    currentProfile: ''
+  },
+  getters: {
+    profiles: function (state) {
+      if (state.settings.custom) {
+        let list = []
+        Object.keys(state.settings.custom.Profiles).forEach(function (key) {
+          list.push(key)
+        })
+        return list
+      }
+      return null
+    },
+    currentProfileObject: function (state) {
+      if (state.currentProfile !== '') {
+        return state.settings.custom.Profiles[state.currentProfile]
+      }
+    }
   },
   mutations: {
     SET (state, {name, res}) {
@@ -162,6 +180,9 @@ const store = new Vuex.Store({
         list.splice(toRemove[i], 1)
       }
       state.scenario_queue = list
+    },
+    UPDATE_CURRENT_PROFILE (state, profile) {
+      state.currentProfile = profile
     }
   },
   actions: {
@@ -171,7 +192,17 @@ const store = new Vuex.Store({
       app.fetch(data)
         .then(function (res) {
           store.commit('SET', {name, res})
+          if (name === 'scenarios') {
+            store.dispatch('FIX_SCENARIOS')
+          }
         })
+    },
+    FIX_SCENARIOS ({ commit, state }) {
+      let scenarioQueue = state.scenario_queue
+      for (let i in scenarioQueue) {
+        scenarioQueue[i].scenario.internalID = findScenarioID(state, scenarioQueue[i].scenario)
+      }
+      commit('UPDATE_SCENARIO_LIST', scenarioQueue)
     },
     QUEUE_SCENARIO ({ commit }, scenario) {
       commit('UPDATE_QUEUE_RUNNING', false)
@@ -201,7 +232,13 @@ const store = new Vuex.Store({
       let outlineRow = data.outlineRow
       let outlineRowIndex = data.outlineRowIndex
       return new Promise((resolve) => {
-        app.post('runScenario', {internalID, outlineRow})
+        app.post('runScenario', {internalID, outlineRow, outlineRowIndex}, function (json) {
+          if (typeof outlineRowIndex === 'undefined') {
+            return json.scenario === internalID
+          } else {
+            return json.scenario === internalID && json.outlineRowIndex === outlineRowIndex
+          }
+        })
           .then(function (res) {
             for (let i in res.stepResults) {
               let s = res.stepResults[i]
@@ -241,6 +278,12 @@ const store = new Vuex.Store({
     },
     CHANGE_PAGE ({ commit }, page) {
       commit('UPDATE_PAGE', page)
+    },
+    SET_CURRENT_PROFILE ({ commit }, profile) {
+      app.post('setProfile', profile)
+        .then(function () {
+          commit('UPDATE_CURRENT_PROFILE', profile)
+        })
     }
   }
 })

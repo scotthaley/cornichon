@@ -66,7 +66,8 @@ module.exports = (() => {
     return {
       custom: {
         'Setup Command': '',
-        'Code Style': 'material'
+        'Code Style': 'material',
+        'Profiles': {}
       }
     }
   }

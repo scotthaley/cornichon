@@ -8,6 +8,10 @@
           {{ item.name }}
         </li>
       </ul>
+      <select v-if="profiles.length" v-model="currentProfile">
+        <option value="" disabled>Profile</option>
+        <option v-for="p in profiles" :value="p">{{ p }}</option>
+      </select>
     </div>
   </div>
 </template>
@@ -24,6 +28,19 @@
           {name: 'Queue', icon: 'fa-list-ul'},
           {name: 'Settings', icon: 'fa-cog'}
         ]
+      }
+    },
+    computed: {
+      currentProfile: {
+        get () {
+          return this.$store.state.currentProfile
+        },
+        set (value) {
+          this.$store.dispatch('SET_CURRENT_PROFILE', value)
+        }
+      },
+      profiles: function () {
+        return this.$store.getters.profiles
       }
     },
     methods: {
@@ -52,9 +69,9 @@
 
     .sidebar-wrapper {
       position: fixed;
-      top:0;
-      left:0;
-      width:150px;
+      top: 0;
+      left: 0;
+      width: 150px;
       overflow: hidden;
     }
     h1 {
@@ -65,6 +82,17 @@
       margin-top: 0;
       user-select: none;
       cursor: default;
+    }
+
+    select {
+      width: 100%;
+      border: none;
+      background-color: transparent;
+      color: white;
+      font-size: 18px;
+      option {
+        color: #2e383c;
+      }
     }
 
     ul {
@@ -80,7 +108,7 @@
       user-select: none;
       cursor: pointer;
 
-      +li {
+      + li {
         border-top: none;
       }
 

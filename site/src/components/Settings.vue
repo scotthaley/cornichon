@@ -9,38 +9,38 @@
         </select>
       </div>
     </div>
-    <div class="card">
-      <div class="header">Environment Variables</div>
+    <div class="card environment">
+      <div class="header">
+        <span>Environment Profile</span>
+        <span v-if="profiles.length">
+          <span>:</span>
+          <select v-model="edittingProfile">
+            <option value="" disabled>Select a Profile</option>
+            <option v-for="(value, key) in settings.custom.Profiles" :value="key">{{ key }}</option>
+          </select>
+        </span>
+      </div>
       <div class="footer">
         <div>
           <!-- <input type="text" id="new-conf-name" class="large" placeholder="New Configuration"><br> -->
+          <div class="tools">
+            <input v-if="newProfile" v-model="newProfileName" placeholder="Profile Name"/>
+            <button class="green" @click="newProfileClicked()">New Profile</button>
+          </div>
 
-          <div>
+          <div v-if="edittingProfile !== ''">
             <table>
               <tr>
-                <th>
-                  Name
-                </th>
-                <th>
-                  Value
-                </th>
+                <th>Name</th>
+                <th>Value</th>
               </tr>
-              <tr v-for="envVar in settings.custom['envVars']">
-                <td>
-                  {{envVar.name}}
-                </td>
-                <td>
-                  {{envVar.value}}
-                  <i class="fa fa-times icon" @click="deleteEnvVar(envVar.name)"></i>
-                </td>
+              <tr v-for="envVar in currentProfile.envVars">
+                <td>{{envVar.name}}</td>
+                <td>{{envVar.value}}<i class="fa fa-times icon" @click="deleteEnvVar(envVar.name)"></i></td>
               </tr>
               <tr>
-                <td>
-                  <input type="text"class="large" v-model="envVar.name">
-                </td>
-                <td>
-                  <input type="text"class="large" v-model="envVar.value">
-                </td>
+                <td><input type="text" class="large" v-model="envVar.name"></td>
+                <td><input type="text" class="large" v-model="envVar.value"></td>
               </tr>
             </table>
 
@@ -50,8 +50,19 @@
 
           </div>
         </div>
-        <div class="configuration" v-for="conf in settings.custom.configurations">
-          {{configurations.name}}
+        <div>
+          <div v-for="(value, key) in environmentSettings" class="profile-setting">
+            <div v-if="typeof value === 'boolean'">
+              <span>{{ key }}: </span>
+              <input type="checkbox" v-model="environmentSettings[key]" @change="environmentSettingChanged()"/>
+            </div>
+            <div v-if="typeof value === 'object' && shouldShowSetting(value)">
+              <span>{{ key }}: </span>
+              <input v-if="typeof value.value === 'boolean'" type="checkbox" v-model="environmentSettings[key]" @change="environmentSettingChanged()"/>
+              <input v-if="value.type === 'text'" type="text" v-model="environmentSettings[key].value" @change="environmentSettingChanged()"/>
+              <input v-if="value.type === 'number'" type="number" v-model="environmentSettings[key].value" @change="environmentSettingChanged()"/>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -68,53 +79,109 @@
 </template>
 
 <script>
-import codemirror from './CodeMirror'
+  import codemirror from './CodeMirror'
 
-export default {
-  name: 'settings',
-  components: {
-    codemirror
-  },
-  data () {
-    return {
-      options: {
-        'dropdowns': {
-          'Code Style': ['material', 'solarized', 'neo']
+  export default {
+    name: 'settings',
+    components: {
+      codemirror
+    },
+    data () {
+      return {
+        options: {
+          'dropdowns': {
+            'Code Style': ['material', 'solarized', 'neo']
+          }
+        },
+        envVar: {
+          name: '',
+          value: ''
+        },
+        edittingProfile: '',
+        newProfileName: '',
+        newProfile: false,
+        editableConfiguration: null,
+        settings: this.$store.state.settings,
+        test: 'hello'
+      }
+    },
+    computed: {
+      currentProfile: {
+        get () {
+          if (this.edittingProfile !== '') {
+            return this.settings.custom.Profiles[this.edittingProfile]
+          }
+          return null
+        },
+        set (value) {
+          this.settings.custom.Profiles[this.edittingProfile] = value
         }
       },
-      envVar: {
-        name: '',
-        value: ''
+      profiles: function () {
+        return this.$store.getters.profiles
       },
-      editableConfiguration: null,
-      settings: this.$store.state.settings,
-      test: 'hello'
-    }
-  },
-  methods: {
-    save: function () {
-      this.$store.dispatch('SETTINGS', this.settings)
-    },
-    addEnvVar: function () {
-      this.settings.custom.envVars = this.settings.custom.envVars || []
-      this.settings.custom.envVars.push(this.envVar)
-      this.envVar = {
-        name: '',
-        value: ''
-      }
-      this.save()
-    },
-    deleteEnvVar: function (name) {
-      for (let i in this.settings.custom.envVars) {
-        let e = this.settings.custom.envVars[i]
-        if (e.name === name) {
-          delete this.settings.custom.envVars[i]
+      environmentSettings: {
+        get () {
+          if (this.currentProfile) {
+            let list = Object.assign({}, this.currentProfile)
+            delete list.envVars
+            return list
+          }
+          return null
         }
       }
-      this.save()
+    },
+    methods: {
+      environmentSettingChanged: function () {
+        this.$forceUpdate()
+        this.currentProfile = Object.assign(this.currentProfile, this.environmentSettings)
+      },
+      save: function () {
+        this.$store.dispatch('SETTINGS', this.settings)
+      },
+      newProfileClicked: function () {
+        if (!this.newProfile) {
+          this.newProfile = true
+        } else {
+          this.settings.custom.Profiles[this.newProfileName] = {
+            envVars: [],
+            parallel: false,
+            parallelCount: {
+              dependency: 'parallel',
+              value: '5',
+              type: 'number'
+            }
+          }
+          this.edittingProfile = this.newProfileName
+          this.newProfile = false
+        }
+      },
+      addEnvVar: function () {
+        this.settings.custom.Profiles[this.edittingProfile].envVars.push(this.envVar)
+        this.envVar = {
+          name: '',
+          value: ''
+        }
+        this.save()
+      },
+      deleteEnvVar: function (name) {
+        for (let i in this.settings.custom.envVars) {
+          let e = this.settings.custom.envVars[i]
+          if (e.name === name) {
+            delete this.settings.custom.envVars[i]
+          }
+        }
+        this.save()
+      },
+      shouldShowSetting: function (setting) {
+        if (!setting.dependency) {
+          return true
+        } else {
+          return this.environmentSettings[setting.dependency]
+        }
+      }
     }
   }
-}
 
 </script>
 
@@ -187,6 +254,48 @@ export default {
 
       .footer {
         padding: 15px;
+      }
+    }
+  }
+
+  .environment {
+    select {
+      border: none;
+      background-color: transparent;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    .tools {
+      margin-bottom: 15px;
+      button {
+        border: none;
+        background-color: #6b7186;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        &:hover {
+          color: #93a1a1;
+        }
+
+        &.green {
+          background-color: #42b983;
+          &:hover {
+            color: #1d75b3;
+          }
+        }
+
+      }
+    }
+
+    .profile-setting {
+      margin-top: 15px;
+      input {
+        width: 50px;
+        &[type=checkbox] {
+        width: 25px;
+      }
       }
     }
   }

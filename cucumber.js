@@ -36,15 +36,17 @@ module.exports = (() => {
   let cID = 100
   let cli = null
 
-  const init = async function () {
+  const init = async function (profile) {
     const _this = this
     this.cli = getCli()
     cucumber.clearSupportCodeFns()
 
-    let envVars = cornichon.getSettings().custom.envVars
-    for (let i in envVars) {
-      let e = envVars[i]
-      process.env[e.name] = e.value
+    if (profile) {
+      let envVars = cornichon.getSettings().custom.Profiles[profile].envVars
+      for (let i in envVars) {
+        let e = envVars[i]
+        process.env[e.name] = e.value
+      }
     }
 
     supportCode = []

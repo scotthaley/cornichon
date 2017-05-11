@@ -1,12 +1,36 @@
 {
 	"custom": {
-		"Setup Command": "echo test",
+		"Setup Command": "",
 		"Code Style": "material",
-		"envVars": [
-			{
-				"name": "test",
-				"value": "this is my environment variable"
+		"Profiles": {
+			"Browserstack": {
+				"envVars": [
+					{
+						"name": "test",
+						"value": "Browserstack"
+					}
+				],
+				"parallel": true,
+				"parallelCount": {
+					"dependency": "parallel",
+					"value": "2",
+					"type": "number"
+				}
+			},
+			"Local ": {
+				"envVars": [
+					{
+						"name": "test",
+						"value": "local environment"
+					}
+				],
+				"parallel": false,
+				"parallelCount": {
+					"dependency": "parallel",
+					"value": "5",
+					"type": "number"
+				}
 			}
-		]
+		}
 	}
 }
