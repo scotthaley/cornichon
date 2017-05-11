@@ -57,6 +57,7 @@ const store = new Vuex.Store({
   getters: {
     profiles: function (state) {
       if (state.settings.custom) {
+        console.log(state.settings.custom)
         let list = []
         Object.keys(state.settings.custom.Profiles).forEach(function (key) {
           list.push(key)

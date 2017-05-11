@@ -55,12 +55,14 @@
     font-size: 18px;
     text-align: left;
     overflow: auto;
-    white-space: nowrap;
     line-height: 40px;
 
     .tag {
+      display: inline-block;
+      line-height: 30px;
+      white-space: nowrap;
       font-size: 14px;
-      padding: 7px;
+      padding: 0 7px;
       background-color: #263238;
       -webkit-border-radius: 4px;
       -moz-border-radius: 4px;
