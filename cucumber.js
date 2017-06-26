@@ -122,7 +122,9 @@ module.exports = (() => {
       let features = yield Promise.all(resolveFeatures)
       let mappedFeatures = []
       for (let f = 0; f < features.length; f++) {
-        mappedFeatures.push(mappedFeature(features[f], features, true))
+        if (features[f]) {
+          mappedFeatures.push(mappedFeature(features[f], features, true))
+        }
       }
       return mappedFeatures
     }).catch(e => {
@@ -316,7 +318,9 @@ module.exports = (() => {
     fullScenarioMap[internalID] = fullScenarioMap[internalID] || Object.assign({}, scenario)
 
     for (let st in scenario.steps) {
-      steps.push(mappedStep(scenario.steps[st], stepDef))
+      if (scenario.steps[st]) {
+        steps.push(mappedStep(scenario.steps[st], stepDef))
+      }
     }
     let mScenario = {
       name: scenario.name,
