@@ -34,7 +34,7 @@ module.exports = (() => {
     let lineText = ''
     let columnNames = []
     let headerLine = 0
-    while (lineText && lineText.indexOf('Examples:') === -1) {
+    while (lineText !== null && lineText.indexOf('Examples:') === -1) {
       columnNames = lineText.split('|').reduce((result, item) => {
         let header = item.trim()
         if (header !== '') {
@@ -53,7 +53,7 @@ module.exports = (() => {
 
     cLine = headerLine + 2
     lineText = readLine(scenario.uri_full, cLine++)
-    while (lineText && lineText.match(/\|.*\|/)) {
+    while (lineText !== null && lineText.match(/\|.*\|/)) {
       let rowData = lineText.split('|').reduce((result, item) => {
         let dataItem = item.trim()
         if (dataItem !== '') {
