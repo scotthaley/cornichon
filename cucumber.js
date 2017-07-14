@@ -40,9 +40,10 @@ module.exports = (() => {
     const _this = this
     this.cli = getCli()
     cucumber.clearSupportCodeFns()
+    let settings = await cornichon.getSettings()
 
     if (profile) {
-      let envVars = cornichon.getSettings().custom.Profiles[profile].envVars
+      let envVars = settings.custom.Profiles[profile].envVars
       for (let i in envVars) {
         let e = envVars[i]
         process.env[e.name] = e.value
@@ -209,7 +210,8 @@ module.exports = (() => {
         stepDef.code = stepDef.code.replace(/\/\* ?{cornichon: .*\w} ?\*\//, '')
         stepDef.code = stepDef.code.replace(/ ?{cornichon: .*\w}/, '')
         stepDef.keyword = cucumberHelper.getStepKeyword(stepDef)
-        stepDef.usage = cornichon.getUsage(stepDef.cornichonID) || 'No usage information provided.'
+        stepDef.usage = yield cornichon.getUsage(stepDef.cornichonID)
+        stepDef.usage = stepDef.usage || 'No usage information provided.'
         stepDef.features = []
         stepDef.scenarios = []
         for (let f in features) {

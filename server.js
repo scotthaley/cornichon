@@ -5,7 +5,12 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
+const co = require('co')
 const path = require('path')
+const guid = require('guid')
+const kue = require('kue')
+kue.app.listen(8080)
+const scenarioQueue = kue.createQueue()
 
 const cucumber = require('./cucumber')
 cucumber.init()
@@ -16,6 +21,29 @@ module.exports = () => {
   let app = express()
   app.use(cors())
   app.use(bodyParser.urlencoded({ extended: false }))
+
+  scenarioQueue.process('scenario', 5, (job, done) => {
+    let data = job.data.data
+    console.log('scenario started:', data)
+    cucumber.runScenario(data.internalID, data.outlineRow).then((result) => {
+      result.scenario = data.internalID
+      for (let i in result.stepResults) {
+        delete result.stepResults[i].step.scenario
+        if (data.outlineRow && result.stepResults[i].step) {
+          result.outlineRowIndex = data.outlineRowIndex
+          let name = result.stepResults[i].step.name
+          if (name) {
+            Object.keys(data.outlineRow).forEach(function (column) {
+              name = name.replace(RegExp(`<${column}>`, 'g'), data.outlineRow[column])
+            })
+            result.stepResults[i].step.name = name
+          }
+        }
+      }
+      // socket.emit('runScenario', result)
+      done()
+    })
+  })
 
   let server = require('http').createServer(app);
   let io = require('socket.io')(server);
@@ -52,6 +80,7 @@ module.exports = () => {
 
   app.post('/updateUsage', (req, res) => {
     cornichon.updateUsage(req.body.cornichonID, req.body.markdown)
+    cucumber.init()
     res.send(true)
   })
 
@@ -62,28 +91,52 @@ module.exports = () => {
 
   io.on('connect', (socket) => {
     socket.on('runScenario', (data) => {
-      let internalID = data.internalID
-      let envVars = cornichon.getSettings().custom.envVars
-      for (let i in envVars) {
-        let e = envVars[i]
-        process.env[e.name] = e.value
-      }
-      cucumber.runScenario(internalID, data.outlineRow).then((result) => {
-        result.scenario = internalID
-        for (let i in result.stepResults) {
-          delete result.stepResults[i].step.scenario
-          if (data.outlineRow && result.stepResults[i].step) {
-            result.outlineRowIndex = data.outlineRowIndex
-            let name = result.stepResults[i].step.name
-            if (name) {
-              Object.keys(data.outlineRow).forEach(function (column) {
-                name = name.replace(RegExp(`<${column}>`, 'g'), data.outlineRow[column])
-              })
-              result.stepResults[i].step.name = name
-            }
-          }
+      co(function *() {
+        // let internalID = data.internalID
+        let settings = yield cornichon.getSettings()
+        let envVars = settings.custom.envVars
+        for (let i in envVars) {
+          let e = envVars[i]
+          process.env[e.name] = e.value
         }
-        socket.emit('runScenario', result)
+        scenarioQueue.create('scenario', {
+          title: `${data.jobID} - ${data.scenarioID}`,
+          data
+        }).save(err => {
+          if (err) {
+            console.log(err)
+          }
+        })
+        // cucumber.runScenario(internalID, data.outlineRow).then((result) => {
+        //   result.scenario = internalID
+        //   for (let i in result.stepResults) {
+        //     delete result.stepResults[i].step.scenario
+        //     if (data.outlineRow && result.stepResults[i].step) {
+        //       result.outlineRowIndex = data.outlineRowIndex
+        //       let name = result.stepResults[i].step.name
+        //       if (name) {
+        //         Object.keys(data.outlineRow).forEach(function (column) {
+        //           name = name.replace(RegExp(`<${column}>`, 'g'), data.outlineRow[column])
+        //         })
+        //         result.stepResults[i].step.name = name
+        //       }
+        //     }
+        //   }
+        //   socket.emit('runScenario', result)
+        // })
+      })
+    })
+
+    socket.on('queueStarted', (data) => {
+      co(function *() {
+        let history = yield cornichon.retrieveData('history')
+        if (!history.reports) {
+          history = {reports: []}
+        }
+        data.jobID = guid.raw()
+        history.reports.push(data)
+        yield cornichon.saveData(history, 'history')
+        socket.emit('queueStarted', data.jobID)
       })
     })
 
@@ -104,30 +157,39 @@ module.exports = () => {
     })
 
     socket.on('settings', () => {
-      socket.emit('settings', cornichon.getSettings())
+      cornichon.getSettings().then(settings => {
+        socket.emit('settings', settings)
+      })
     })
 
     socket.on('saveSettings', (settings) => {
-      cornichon.saveSettings(settings)
-      socket.emit('saveSettings', true)
+      cornichon.saveSettings(settings).then(() => {
+        socket.emit('saveSettings', true)
+      })
     })
 
     socket.on('outlineLists', () => {
-      socket.emit('outlineLists', cornichon.getOutlineLists())
+      cornichon.getOutlineLists().then(lists => {
+        socket.emit('outlineLists', lists)
+      })
     })
 
     socket.on('createOutlineList', (data) => {
-      let newLists = cornichon.createOutlineList(data)
-      socket.emit('createOutlineList', newLists)
+      cornichon.createOutlineList(data).then(newLists => {
+        socket.emit('createOutlineList', newLists)
+      })
     })
 
     socket.on('queueLists', () => {
-      socket.emit('queueLists', cornichon.getQueueLists())
+      cornichon.getQueueLists().then(lists => {
+        socket.emit('queueLists', lists)
+      })
     })
 
     socket.on('createQueueList', (data) => {
-      let newLists = cornichon.createQueueList(data)
-      socket.emit('createQueueList', newLists)
+      cornichon.createQueueList(data).then(newLists => {
+        socket.emit('createQueueList', newLists)
+      })
     })
 
     socket.on('setProfile', (profile) => {
@@ -141,18 +203,19 @@ module.exports = () => {
 
   server.listen(80, () => {
     console.log('listening...')
-    let settings = cornichon.getSettings()
-    let setupCommand = settings.custom['Setup Command'].replace(/(?:\r\n|\r|\n)/g, ' && ')
-    if (setupCommand !== '') {
-      require('child_process').exec(setupCommand, (e, stdout, stderr) => {
-        console.log('Setup Command:', stdout)
-        if (stderr) {
-          console.log('Setup Command Error:', stderr)
-        }
-      })
-    }
-    // if (process.env.DEBUG !== 'true') {
-    //   require('open')('http://localhost:8088', 'chrome')
-    // }
+    cornichon.getSettings().then(settings => {
+      let setupCommand = settings.custom['Setup Command'].replace(/(?:\r\n|\r|\n)/g, ' && ')
+      if (setupCommand !== '') {
+        require('child_process').exec(setupCommand, (e, stdout, stderr) => {
+          console.log('Setup Command:', stdout)
+          if (stderr) {
+            console.log('Setup Command Error:', stderr)
+          }
+        })
+      }
+      // if (process.env.DEBUG !== 'true') {
+      //   require('open')('http://localhost:8088', 'chrome')
+      // }
+    })
   })
 }

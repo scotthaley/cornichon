@@ -4,20 +4,56 @@
 
 const fs = require('fs')
 const path = require('path')
+const co = require('co')
+const config = require('./config')
+const monk = require('monk')
 
 module.exports = (() => {
-  const saveData = (data, table) => {
-    let filePath = path.join(process.cwd(), `${table}.cornichon`)
-    fs.writeFileSync(filePath, JSON.stringify(data, null, '\t'))
+  let db = null
+
+  if (config.mongo) {
+    db = monk(config.mongo.host)
   }
 
-  const retrieveData = (table, defaultData) => {
-    let filePath = path.join(process.cwd(), `${table}.cornichon`)
-    if (!fs.existsSync(filePath)) {
-      fs.writeFileSync(filePath, defaultData ? JSON.stringify(defaultData, null, '\t') : '{}')
-      return defaultData || {}
-    }
-    return JSON.parse(fs.readFileSync(filePath, 'utf8'))
+  const saveData = (data, collection) => {
+    return co(function *() {
+      if (db) {
+        let table = db.get(collection)
+        let doc = yield table.findOne({user: 'global'})
+        console.log('collection:', collection, 'length:', doc)
+        if (doc) {
+          return yield table.findOneAndUpdate({user: 'global'}, {$set: {value: data}})
+        } else {
+          return yield table.insert({user: 'global', value: data})
+        }
+      } else {
+        let filePath = path.join(process.cwd(), `${collection}.cornichon`)
+        fs.writeFileSync(filePath, JSON.stringify(data, null, '\t'))
+      }
+    })
+  }
+
+  const retrieveData = (collection, defaultData) => {
+    return co(function *() {
+      if (db) {
+        let table = db.get(collection)
+        let doc = yield table.findOne({user: 'global'})
+        if (doc) {
+          console.log('collection:', collection, 'doc:', doc)
+          return doc.value
+        } else {
+          yield saveData(defaultData || {}, collection)
+          return defaultData || {}
+        }
+      } else {
+        let filePath = path.join(process.cwd(), `${collection}.cornichon`)
+        if (!fs.existsSync(filePath)) {
+          fs.writeFileSync(filePath, defaultData ? JSON.stringify(defaultData, null, '\t') : '{}')
+          return defaultData || {}
+        }
+        return JSON.parse(fs.readFileSync(filePath, 'utf8'))
+      }
+    })
   }
 
   const getUsageData = () => {
@@ -29,14 +65,16 @@ module.exports = (() => {
   }
 
   const createOutlineList = (data) => {
-    let outlineLists = getOutlineLists()
-    let signature = data.signature.join('.')
-    if (!outlineLists[signature]) {
-      outlineLists[signature] = {}
-    }
-    outlineLists[signature][data.name] = data.list
-    saveData(outlineLists, 'outlines')
-    return outlineLists
+    return co(function *() {
+      let outlineLists = yield getOutlineLists()
+      let signature = data.signature.join('.')
+      if (!outlineLists[signature]) {
+        outlineLists[signature] = {}
+      }
+      outlineLists[signature][data.name] = data.list
+      yield saveData(outlineLists, 'outlines')
+      return outlineLists
+    })
   }
 
   const getQueueLists = () => {
@@ -44,14 +82,18 @@ module.exports = (() => {
   }
 
   const createQueueList = (data) => {
-    let queueLists = getQueueLists()
-    queueLists[data.name] = data.list
-    saveData(queueLists, 'queues')
-    return queueLists
+    return co(function *() {
+      let queueLists = yield getQueueLists()
+      queueLists[data.name] = data.list
+      yield saveData(queueLists, 'queues')
+      return queueLists
+    })
   }
 
   const saveSettings = settings => {
-    saveData(settings, 'settings')
+    return co(function *() {
+      saveData(settings, 'settings')
+    })
   }
 
   const getSettings = () => {
@@ -65,18 +107,25 @@ module.exports = (() => {
   }
 
   const saveUsage = usage => {
-    saveData(usage, 'usage')
+    return co(function *() {
+      yield saveData(usage, 'usage')
+    })
   }
 
   const updateUsage = (cornichonID, usage) => {
-    let usageData = getUsageData()
-    usageData[cornichonID] = usage
-    saveUsage(usageData)
+    return co(function *() {
+      let usageData = yield getUsageData()
+      usageData[cornichonID] = usage
+      yield saveUsage(usageData)
+    })
   }
 
   const getUsage = cornichonID => {
-    let usageData = getUsageData()
-    return usageData[cornichonID]
+    return co(function *() {
+      let usageData = yield getUsageData()
+      console.log('usage:', usageData)
+      return usageData[cornichonID]
+    })
   }
 
   return {
@@ -87,6 +136,8 @@ module.exports = (() => {
     getQueueLists,
     createQueueList,
     saveSettings,
-    getSettings
+    getSettings,
+    saveData,
+    retrieveData
   }
 })()

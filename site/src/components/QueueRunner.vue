@@ -115,34 +115,7 @@
           }
         }
       },
-      runScenariosSequential: async function () {
-        let scenarios = this.scenarios
-        for (let i = 0; i < scenarios.length; i++) {
-          if (this.running) {
-            if (scenarios[i].table) {
-              for (let t = 0; t < scenarios[i].table.rows.length; t++) {
-                if (this.running) {
-                  scenarios[i].lastResult[t].status = 'running'
-                  eventBus.emit('queue_updated')
-                  await this.$store.dispatch('RUN_SCENARIO', {
-                    scenario: scenarios[i].scenario,
-                    outlineRow: scenarios[i].table.rows[t],
-                    outlineRowIndex: t
-                  })
-                }
-              }
-            } else {
-              scenarios[i].lastResult.status = 'running'
-              await this.$store.dispatch('RUN_SCENARIO', {scenario: scenarios[i].scenario})
-            }
-          }
-        }
-        this.stopQueue()
-      },
       runScenarios: async function () {
-        this.$store.dispatch('LOCK_QUEUE')
-        this.$store.dispatch('QUEUE_STARTED')
-
         let scenarios = this.scenarios
 
         scenarios = scenarios.map(function (s) {
@@ -157,11 +130,35 @@
           return s
         })
         this.scenarios = scenarios
-        if (this.isParallel) {
-          this.runScenariosParallel()
-        } else {
-          await this.runScenariosSequential()
+
+        let scenariosToRun = []
+        for (let i = 0; i < scenarios.length; i++) {
+          if (scenarios[i].table) {
+            for (let t = 0; t < scenarios[i].table.rows.length; t++) {
+              let job = {
+                scenario: scenarios[i].scenario,
+                outlineRow: scenarios[i].table.rows[t],
+                outlineRowIndex: t,
+                scenarioID: `scenario-${i}-${t}`
+              }
+              scenariosToRun.push(job)
+            }
+          } else {
+            let job = {
+              scenario: scenarios[i].scenario,
+              scenarioID: `scenario-${i}`
+            }
+            scenariosToRun.push(job)
+          }
         }
+
+        this.$store.dispatch('LOCK_QUEUE')
+        this.$store.dispatch('QUEUE_STARTED', scenariosToRun).then(jobID => {
+          for (let i = 0; i < scenariosToRun.length; i++) {
+            scenariosToRun[i].jobID = jobID
+            this.$store.dispatch('RUN_SCENARIO', scenariosToRun[i])
+          }
+        })
       },
       stopQueue: function () {
         this.$store.dispatch('QUEUE_STOPPED')

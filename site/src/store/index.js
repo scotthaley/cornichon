@@ -232,8 +232,10 @@ const store = new Vuex.Store({
       let internalID = data.scenario.internalID
       let outlineRow = data.outlineRow
       let outlineRowIndex = data.outlineRowIndex
+      let scenarioID = data.scenarioID
+      let jobID = data.jobID
       return new Promise((resolve) => {
-        app.post('runScenario', {internalID, outlineRow, outlineRowIndex}, function (json) {
+        app.post('runScenario', {internalID, outlineRow, outlineRowIndex, scenarioID, jobID}, function (json) {
           if (typeof outlineRowIndex === 'undefined') {
             return json.scenario === internalID
           } else {
@@ -250,8 +252,9 @@ const store = new Vuex.Store({
           })
       })
     },
-    QUEUE_STARTED ({ commit }) {
+    QUEUE_STARTED ({ commit }, scenarios) {
       commit('UPDATE_QUEUE_RUNNING', true)
+      return app.post('queueStarted', scenarios)
     },
     QUEUE_STOPPED ({ commit }) {
       commit('UPDATE_QUEUE_RUNNING', false)
