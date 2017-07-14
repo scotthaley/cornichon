@@ -136,7 +136,7 @@
         })
       },
       updateUsage: function (markdown) {
-        $.post('http://localhost:8088/updateUsage', {markdown, cornichonID: this.step.cornichonID}, null, 'json')
+        $.post('/updateUsage', {markdown, cornichonID: this.step.cornichonID}, null, 'json')
         this.usageOpen = false
         this.step.usage = markdown
         setTimeout(this.codeHighlight, 50)
@@ -146,10 +146,10 @@
       },
       openFile: function (path) {
         path = path.replace(/\\/g, '/')
-        $.post('http://localhost:8088/openFile', {path}, null, 'json')
+        $.post('/openFile', {path}, null, 'json')
       },
       runScenario: function (internalID) {
-        $.post('http://localhost:8088/runScenario', {internalID}, null, 'json')
+        $.post('/runScenario', {internalID}, null, 'json')
       },
       queueScenario: function () {
         this.$store.dispatch('QUEUE_SCENARIO', this.scenario)
