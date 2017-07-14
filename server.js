@@ -139,8 +139,8 @@ module.exports = () => {
     })
   })
 
-  server.listen(8088, () => {
-    console.log('http://localhost:8088')
+  server.listen(80, () => {
+    console.log('listening...')
     let settings = cornichon.getSettings()
     let setupCommand = settings.custom['Setup Command'].replace(/(?:\r\n|\r|\n)/g, ' && ')
     if (setupCommand !== '') {
@@ -151,8 +151,8 @@ module.exports = () => {
         }
       })
     }
-    if (process.env.DEBUG !== 'true') {
-      require('open')('http://localhost:8088', 'chrome')
-    }
+    // if (process.env.DEBUG !== 'true') {
+    //   require('open')('http://localhost:8088', 'chrome')
+    // }
   })
 }

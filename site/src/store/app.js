@@ -1,7 +1,7 @@
 // const $ = require('jquery')
 
 var app = (function () {
-  var url = 'http://localhost:8088/'
+  var url = '/'
   let socket = io.connect(url)
 
   function fetch (what) {

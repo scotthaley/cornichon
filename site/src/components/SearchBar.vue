@@ -7,7 +7,7 @@
 <script>
   var superplaceholder = require('node_modules/superplaceholder/dist/superplaceholder.min.js')
 
-  import stepselector from './stepselector'
+  import stepselector from './StepSelector'
 
   export default {
     name: 'searchbar',

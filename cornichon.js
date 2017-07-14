@@ -6,22 +6,26 @@ const fs = require('fs')
 const path = require('path')
 
 module.exports = (() => {
-  const getUsageData = () => {
-    let usagePath = path.join(process.cwd(), 'usage.cornichon')
-    if (!fs.existsSync(usagePath)) {
-      fs.writeFileSync(usagePath, '{}')
-      return {}
+  const saveData = (data, table) => {
+    let filePath = path.join(process.cwd(), `${table}.cornichon`)
+    fs.writeFileSync(filePath, JSON.stringify(data, null, '\t'))
+  }
+
+  const retrieveData = (table, defaultData) => {
+    let filePath = path.join(process.cwd(), `${table}.cornichon`)
+    if (!fs.existsSync(filePath)) {
+      fs.writeFileSync(filePath, defaultData ? JSON.stringify(defaultData, null, '\t') : '{}')
+      return defaultData || {}
     }
-    return JSON.parse(fs.readFileSync(usagePath, 'utf8'))
+    return JSON.parse(fs.readFileSync(filePath, 'utf8'))
+  }
+
+  const getUsageData = () => {
+    return retrieveData('usage')
   }
 
   const getOutlineLists = () => {
-    let outlinesPath = path.join(process.cwd(), 'outlines.cornichon')
-    if (!fs.existsSync(outlinesPath)) {
-      fs.writeFileSync(outlinesPath, '{}')
-      return {}
-    }
-    return JSON.parse(fs.readFileSync(outlinesPath, 'utf8'))
+    return retrieveData('outlines')
   }
 
   const createOutlineList = (data) => {
@@ -31,50 +35,37 @@ module.exports = (() => {
       outlineLists[signature] = {}
     }
     outlineLists[signature][data.name] = data.list
-    let outlinesPath = path.join(process.cwd(), 'outlines.cornichon')
-    fs.writeFileSync(outlinesPath, JSON.stringify(outlineLists, null, '\t'))
+    saveData(outlineLists, 'outlines')
     return outlineLists
   }
 
   const getQueueLists = () => {
-    let queuePath = path.join(process.cwd(), 'queues.cornichon')
-    if (!fs.existsSync(queuePath)) {
-      fs.writeFileSync(queuePath, '{}')
-      return {}
-    }
-    return JSON.parse(fs.readFileSync(queuePath, 'utf8'))
+    return retrieveData('queues')
   }
 
   const createQueueList = (data) => {
     let queueLists = getQueueLists()
     queueLists[data.name] = data.list
-    let queuePath = path.join(process.cwd(), 'queues.cornichon')
-    fs.writeFileSync(queuePath, JSON.stringify(queueLists, null, '\t'))
+    saveData(queueLists, 'queues')
     return queueLists
   }
 
   const saveSettings = settings => {
-    let settingsPath = path.join(process.cwd(), 'settings.cornichon')
-    fs.writeFileSync(settingsPath, JSON.stringify(settings, null, '\t'))
+    saveData(settings, 'settings')
   }
 
   const getSettings = () => {
-    let settingsPath = path.join(process.cwd(), 'settings.cornichon')
-    if (fs.existsSync(settingsPath)) {
-      return JSON.parse(fs.readFileSync(settingsPath, 'utf8'))
-    }
-    return {
+    return retrieveData('settings', {
       custom: {
         'Setup Command': '',
         'Code Style': 'material',
         'Profiles': {}
       }
-    }
+    })
   }
 
   const saveUsage = usage => {
-    let usagePath = path.join(process.cwd(), 'usage.cornichon')
-    fs.writeFileSync(usagePath, JSON.stringify(usage, null, '\t'))
+    saveData(usage, 'usage')
   }
 
   const updateUsage = (cornichonID, usage) => {

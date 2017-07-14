@@ -13,7 +13,7 @@
 				"parallel": true,
 				"parallelCount": {
 					"dependency": "parallel",
-					"value": "2",
+					"value": "3",
 					"type": "number"
 				}
 			},
