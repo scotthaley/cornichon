@@ -21,7 +21,6 @@ module.exports = (() => {
       if (db) {
         let table = db.get(collection)
         let doc = yield table.findOne({user: 'global'})
-        console.log('collection:', collection, 'length:', doc)
         if (doc) {
           return yield table.findOneAndUpdate({user: 'global'}, {$set: {value: data}})
         } else {
@@ -40,7 +39,6 @@ module.exports = (() => {
         let table = db.get(collection)
         let doc = yield table.findOne({user: 'global'})
         if (doc) {
-          console.log('collection:', collection, 'doc:', doc)
           return doc.value
         } else {
           yield saveData(defaultData || {}, collection)
@@ -54,6 +52,30 @@ module.exports = (() => {
         }
         return JSON.parse(fs.readFileSync(filePath, 'utf8'))
       }
+    })
+  }
+
+  const updateHistory = (scenarioID, jobID, result) => {
+    return co(function *() {
+      let table = db.get('history')
+      let key = `value.reports.${jobID}.list.${scenarioID}.result`
+      console.log({$set: {[key]: result}})
+      return table.findOneAndUpdate({user: 'global'}, {$set: {[key]: result}})
+      // let history = yield retrieveData('history')
+      // for (let i = 0; i < history.reports.length; i++) {
+      //   let report = history.reports[i]
+      //   if (report.jobID === jobID) {
+      //     for (let a = 0; a < report.list.length; a++) {
+      //       let s = report.list[a]
+      //       if (s.scenarioID === scenarioID) {
+      //         s.result = result
+      //         saveData(history, 'history')
+      //         return history
+      //       }
+      //     }
+      //   }
+      // }
+      // return null
     })
   }
 
@@ -92,6 +114,41 @@ module.exports = (() => {
     })
   }
 
+  const updateQueueList = (data) => {
+    return co(function *() {
+      let queueLists = yield getQueueLists()
+      for (let i = 0; i < queueLists.length; i++) {
+        let l = queueLists[i]
+        if (l.internalID === data.internalID) {
+          l.name = data.name
+          l.list = data.list
+          break
+        }
+      }
+      yield saveData(queueLists, 'queues')
+      return queueLists
+    })
+  }
+
+  const deleteQueueList = (internalID) => {
+    return co(function *() {
+      let queueLists = yield getQueueLists()
+      let index = -1
+      for (let i = 0; i < queueLists.length; i++) {
+        let l = queueLists[i]
+        if (l.internalID === internalID) {
+          index = i
+          break
+        }
+      }
+      if (index !== -1) {
+        queueLists.splice(index, 1)
+      }
+      yield saveData(queueLists, 'queues')
+      return queueLists
+    })
+  }
+
   const saveSettings = settings => {
     return co(function *() {
       saveData(settings, 'settings')
@@ -125,7 +182,6 @@ module.exports = (() => {
   const getUsage = cornichonID => {
     return co(function *() {
       let usageData = yield getUsageData()
-      console.log('usage:', usageData)
       return usageData[cornichonID]
     })
   }
@@ -137,8 +193,11 @@ module.exports = (() => {
     createOutlineList,
     getQueueLists,
     createQueueList,
+    updateQueueList,
+    deleteQueueList,
     saveSettings,
     getSettings,
+    updateHistory,
     saveData,
     retrieveData
   }

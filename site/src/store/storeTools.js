@@ -5,7 +5,7 @@
 const config = require('../../../config')
 
 const storeTools = (function () {
-  let url = `http://localhost:${config.port}`
+  let url = `http://${config.host}:${config.port}`
   let socket = io.connect(url)
 
   function fetch (what) {

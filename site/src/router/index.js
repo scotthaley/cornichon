@@ -5,6 +5,7 @@ import Scenarios from '@/pages/Scenarios'
 import Features from '@/pages/Features'
 import ScenarioLists from '@/pages/ScenarioLists'
 import EditList from '@/pages/EditList'
+import History from '@/pages/History'
 
 Vue.use(Router)
 
@@ -30,6 +31,11 @@ export default new Router({
       path: '/Scenario-Lists',
       name: 'Scenario-Lists',
       component: ScenarioLists
+    },
+    {
+      path: '/History',
+      name: 'History',
+      component: History
     },
     {
       path: '/EditList/:id',

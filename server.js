@@ -10,7 +10,7 @@ const co = require('co')
 const path = require('path')
 const guid = require('guid')
 const kue = require('kue')
-kue.app.listen(8080)
+kue.app.listen(8088)
 const scenarioQueue = kue.createQueue()
 
 const cucumber = require('./cucumber')
@@ -41,6 +41,7 @@ module.exports = () => {
           }
         }
       }
+      cornichon.updateHistory(data.scenarioID, data.jobID, result)
       // socket.emit('runScenario', result)
       done()
     })
@@ -128,14 +129,22 @@ module.exports = () => {
       })
     })
 
+    socket.on('history', () => {
+      co(function *() {
+        let history = yield cornichon.retrieveData('history')
+        socket.emit('history', history)
+      })
+    })
+
     socket.on('queueStarted', (data) => {
       co(function *() {
         let history = yield cornichon.retrieveData('history')
         if (!history.reports) {
-          history = {reports: []}
+          history = {reports: {}}
         }
         data.jobID = guid.raw()
-        history.reports.push(data)
+        data.title = `${data.name} - ${Date.now().toString()}`
+        history.reports[data.jobID] = data
         yield cornichon.saveData(history, 'history')
         socket.emit('queueStarted', data.jobID)
       })
@@ -198,6 +207,18 @@ module.exports = () => {
     socket.on('createQueueList', (data) => {
       cornichon.createQueueList(data).then(newLists => {
         socket.emit('createQueueList', newLists)
+      })
+    })
+
+    socket.on('updateQueueList', (data) => {
+      cornichon.updateQueueList(data).then(newLists => {
+        socket.emit('updateQueueList', newLists)
+      })
+    })
+
+    socket.on('deleteQueueList', (data) => {
+      cornichon.deleteQueueList(data).then(newLists => {
+        socket.emit('deleteQueueList', newLists)
       })
     })
 
