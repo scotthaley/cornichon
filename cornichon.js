@@ -7,6 +7,7 @@ const path = require('path')
 const co = require('co')
 const config = require('./config')
 const monk = require('monk')
+const guid = require('guid')
 
 module.exports = (() => {
   let db = null
@@ -78,13 +79,14 @@ module.exports = (() => {
   }
 
   const getQueueLists = () => {
-    return retrieveData('queues')
+    return retrieveData('queues', [])
   }
 
   const createQueueList = (data) => {
     return co(function *() {
       let queueLists = yield getQueueLists()
-      queueLists[data.name] = data.list
+      data.internalID = guid.raw()
+      queueLists.push(data)
       yield saveData(queueLists, 'queues')
       return queueLists
     })

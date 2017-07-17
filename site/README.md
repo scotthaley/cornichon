@@ -1,6 +1,6 @@
-# cornichon-site
+# cornichon-interface
 
-> Frontend site for cornichon
+> A Vue.js project
 
 ## Build Setup
 

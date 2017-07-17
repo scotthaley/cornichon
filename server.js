@@ -5,6 +5,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
+const config = require('./config')
 const co = require('co')
 const path = require('path')
 const guid = require('guid')
@@ -168,6 +169,14 @@ module.exports = () => {
       })
     })
 
+    socket.on('updateUsage', (usage) => {
+      cornichon.updateUsage(usage.cornichonID, usage.markdown).then(() => {
+        return cucumber.init()
+      }).then(() => {
+        socket.emit('updateUsage', {steps: cucumber.supportCode, features: cucumber.features, scenarios: cucumber.scenarios})
+      })
+    })
+
     socket.on('outlineLists', () => {
       cornichon.getOutlineLists().then(lists => {
         socket.emit('outlineLists', lists)
@@ -201,7 +210,7 @@ module.exports = () => {
     })
   })
 
-  server.listen(80, () => {
+  server.listen(config.port, () => {
     console.log('listening...')
     cornichon.getSettings().then(settings => {
       let setupCommand = settings.custom['Setup Command'].replace(/(?:\r\n|\r|\n)/g, ' && ')

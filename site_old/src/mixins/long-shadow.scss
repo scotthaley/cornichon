@@ -1,0 +1,13 @@
+@mixin long-shadow($color, $length, $direction: right, $skew: 1, $fadeout: 0){
+  $shadow: '';
+  @for $i from 1 to $length - 1 {
+    $shadow: $shadow 
+    + $i * $skew * if($skew == left, -1, 1) + 'px ' 
+    + $i + 'px 0 '
+    + rgba($color, if($fadeout == 0, 1, (1 / $fadeout) - ($i / $length)))
+    + if($i < $length - 2, ',', '');
+  }
+
+ $shadow: unquote($shadow);
+ text-shadow: $shadow;
+}

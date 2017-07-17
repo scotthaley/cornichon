@@ -6,12 +6,11 @@ module.exports = {
   parserOptions: {
     sourceType: 'module'
   },
+  globals: {
+    io: false
+  },
   env: {
     browser: true,
-  },
-  globals: {
-    CodeMirror: false,
-    io: false
   },
   // https://github.com/feross/standard/blob/master/RULES.md#javascript-standard-style
   extends: 'standard',
