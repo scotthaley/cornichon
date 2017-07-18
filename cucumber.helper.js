@@ -34,7 +34,7 @@ module.exports = (() => {
     let lineText = ''
     let columnNames = []
     let headerLine = 0
-    while (lineText !== null && lineText.indexOf('Examples:') === -1) {
+    while (typeof lineText !== 'undefined' && lineText !== null && lineText.indexOf('Examples:') === -1) {
       columnNames = lineText.split('|').reduce((result, item) => {
         let header = item.trim()
         if (header !== '') {

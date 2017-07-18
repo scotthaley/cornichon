@@ -47,12 +47,13 @@ module.exports = () => {
     })
   })
 
-  let server = require('http').createServer(app);
-  let io = require('socket.io')(server);
+  let server = require('http').createServer(app)
+  let io = require('socket.io')(server)
 
-  require('./watchFileChange')(() => {
-    io.emit('refresh')
-  })
+  // Don't need this for hosted version
+  // require('./watchFileChange')(() => {
+  //   io.emit('refresh')
+  // })
 
   app.use('/static', express.static(path.join(__dirname, './site/dist/static/')))
 
