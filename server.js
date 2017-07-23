@@ -9,6 +9,7 @@ const config = require('./config')
 const co = require('co')
 const path = require('path')
 const guid = require('guid')
+const engines = require('consolidate')
 const kue = require('kue')
 kue.app.listen(8088)
 const scenarioQueue = kue.createQueue()
@@ -22,6 +23,8 @@ module.exports = () => {
   let app = express()
   app.use(cors())
   app.use(bodyParser.urlencoded({ extended: false }))
+  app.engine('html', engines.mustache)
+  app.set('view engine', 'html')
 
   scenarioQueue.process('scenario', 5, (job, done) => {
     let data = job.data.data
@@ -58,7 +61,7 @@ module.exports = () => {
   app.use('/static', express.static(path.join(__dirname, './site/dist/static/')))
 
   app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, './site/dist/index.html'))
+    res.render(path.join(__dirname, './site/dist/index.html'), {ioConfig: config, ioConfigStringified: JSON.stringify(config)})
   })
 
   app.get('/features', (req, res) => {
@@ -233,7 +236,7 @@ module.exports = () => {
   })
 
   server.listen(config.port, () => {
-    console.log('listening...')
+    console.log('listening on port: ', config.port)
     cornichon.getSettings().then(settings => {
       let setupCommand = settings.custom['Setup Command'].replace(/(?:\r\n|\r|\n)/g, ' && ')
       if (setupCommand !== '') {

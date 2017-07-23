@@ -59,14 +59,16 @@ const store = new Vuex.Store({
     },
     setHistory (state, history) {
       let reports = []
-      Object.keys(history.reports).forEach(jobID => {
-        let list = []
-        Object.keys(history.reports[jobID].list).forEach(scenarioID => {
-          list.push(history.reports[jobID].list[scenarioID])
+      if (history.reports) {
+        Object.keys(history.reports).forEach(jobID => {
+          let list = []
+          Object.keys(history.reports[jobID].list).forEach(scenarioID => {
+            list.push(history.reports[jobID].list[scenarioID])
+          })
+          history.reports[jobID].list = list
+          reports.push(history.reports[jobID])
         })
-        history.reports[jobID].list = list
-        reports.push(history.reports[jobID])
-      })
+      }
       state.history = reports
     },
     setQueueLists (state, lists) {

@@ -4,6 +4,11 @@
     <meta charset="utf-8">
     <title>cornichon-interface</title>
     <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet" type="text/css">
+    <script>
+      /*eslint-disable */
+      <%= htmlWebpackPlugin.options.expressConfig %>
+      /*eslint-enable */
+    </script>
     <script src="http://<%= htmlWebpackPlugin.options.config.host %>:<%= htmlWebpackPlugin.options.config.port %>/socket.io/socket.io.js"></script>
   </head>
   <body>

@@ -53,7 +53,11 @@ var webpackConfig = merge(baseWebpackConfig, {
       filename: config.build.index,
       template: 'index.html',
       inject: true,
-      config: require('../../config'),
+      config: {
+        host: '{{ ioConfig.host }}',
+        port: '{{ ioConfig.port }}'
+      },
+      expressConfig: 'var expressConfig = {{{ ioConfigStringified }}}',
       minify: {
         removeComments: true,
         collapseWhitespace: true,

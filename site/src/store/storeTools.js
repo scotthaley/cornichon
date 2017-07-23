@@ -2,7 +2,12 @@
  * Created by scotthaley on 7/15/17.
  */
 
-const config = require('../../../config')
+let config = {}
+if (typeof HOST_CONFIG !== 'undefined') {
+  config = HOST_CONFIG
+} else if (typeof expressConfig !== 'undefined') {
+  config = expressConfig
+}
 
 const storeTools = (function () {
   let url = `http://${config.host}:${config.port}`

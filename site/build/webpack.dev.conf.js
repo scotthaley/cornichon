@@ -11,6 +11,11 @@ Object.keys(baseWebpackConfig.entry).forEach(function (name) {
   baseWebpackConfig.entry[name] = ['./build/dev-client'].concat(baseWebpackConfig.entry[name])
 })
 
+let configObj = {
+  port: process.env.IOPORT,
+  host: process.env.IOHOST
+}
+console.log(configObj)
 module.exports = merge(baseWebpackConfig, {
   module: {
     rules: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap })
@@ -29,7 +34,14 @@ module.exports = merge(baseWebpackConfig, {
       filename: 'index.html',
       template: 'index.html',
       inject: true,
-      config: require('../../config')
+      config: configObj,
+      expressConfig: ''
+    }),
+    new webpack.DefinePlugin({
+      'HOST_CONFIG': {
+        'port': `"${configObj.port}"`,
+        'host': `"${configObj.host}"`
+      }
     }),
     new FriendlyErrorsPlugin()
   ]

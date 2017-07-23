@@ -11,7 +11,7 @@
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
-    "vue": "^2.3.3",
+    "vue": "^2.4.2",
     "vue-router": "^2.6.0"
   },
   "devDependencies": {
@@ -33,7 +33,7 @@
     "eslint-config-standard": "^6.2.1",
     "eslint-friendly-formatter": "^3.0.0",
     "eslint-loader": "^1.7.1",
-    "eslint-plugin-html": "^3.0.0",
+    "eslint-plugin-html": "^3.1.1",
     "eslint-plugin-promise": "^3.4.0",
     "eslint-plugin-standard": "^2.0.1",
     "eventsource-polyfill": "^0.9.6",
@@ -55,14 +55,14 @@
     "semver": "^5.3.0",
     "shelljs": "^0.7.6",
     "url-loader": "^0.5.8",
-    "vue-codemirror": "^3.1.0",
+    "vue-codemirror": "^3.1.2",
     "vue-codemirror-lite": "^1.0.1",
     "vue-loader": "^12.1.0",
     "vue-material": "^0.7.4",
     "vue-split-pane": "0.0.1",
     "vue-splitpane": "^1.0.0",
     "vue-style-loader": "^3.0.1",
-    "vue-template-compiler": "^2.3.3",
+    "vue-template-compiler": "^2.4.2",
     "vuedraggable": "^2.14.1",
     "vuex": "^2.3.1",
     "webpack": "^2.6.1",

@@ -7,7 +7,9 @@ module.exports = {
     sourceType: 'module'
   },
   globals: {
-    io: false
+    io: false,
+    'HOST_CONFIG': true,
+    expressConfig: true
   },
   env: {
     browser: true,
