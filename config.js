@@ -1,13 +1,13 @@
 
 const path = require('path')
-const fs = require('fs')
 
 let config = {
   mongo: {
     host: 'mongodb://127.0.0.1:27017/cornichon'
   },
   port: 80,
-  host: 'localhost'
+  host: 'localhost',
+  parallel: 1
 }
 try {
   let filePath = path.join(process.cwd(), 'cornichon-config.js')

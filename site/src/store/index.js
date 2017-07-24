@@ -2,6 +2,8 @@
  * Created by scotthaley on 7/15/17.
  */
 
+const Guid = require('guid')
+
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { storeTools } from './storeTools'
@@ -36,7 +38,9 @@ const store = new Vuex.Store({
     features: [],
     queueLists: [],
     history: [],
-    settings: {}
+    settings: {
+      Profiles: {}
+    }
   },
   mutations: {
     setSteps (state, steps) {
@@ -103,6 +107,12 @@ const store = new Vuex.Store({
     },
     setSettings (state, settings) {
       state.settings = settings
+    },
+    newProfile (state, id) {
+      state.settings.Profiles[id] = {name: 'New Profile'}
+    },
+    updateProfile (state, data) {
+      state.settings.Profiles[data.id] = data.settings
     }
   },
   actions: {
@@ -151,22 +161,28 @@ const store = new Vuex.Store({
         commit('setQueueLists', data)
       })
     },
+    new_profile ({ commit }) {
+      let id = Guid.raw()
+      commit('newProfile', id)
+      return id
+    },
+    update_profile ({ dispatch, commit }, data) {
+      commit('updateProfile', data)
+      dispatch('save_settings')
+    },
+    save_settings ({ state }) {
+      storeTools.post('saveSettings', state.settings)
+    },
     queue_started ({ commit }, scenarios) {
       return storeTools.post('queueStarted', scenarios)
     },
     run_scenario ({commit}, data) {
-      console.log(data)
-      let internalID = data.scenario.internalID
-      let outlineRow = data.outlineRow
-      let outlineRowIndex = data.outlineRowIndex
-      let scenarioID = data.scenarioID
-      let jobID = data.jobID
       return new Promise((resolve) => {
-        storeTools.post('runScenario', {internalID, outlineRow, outlineRowIndex, scenarioID, jobID}, function (json) {
-          if (typeof outlineRowIndex === 'undefined') {
-            return json.scenario === internalID
+        storeTools.post('runScenario', data, function (json) {
+          if (typeof data.outlineRowIndex === 'undefined') {
+            return json.scenario === data.internalID
           } else {
-            return json.scenario === internalID && json.outlineRowIndex === outlineRowIndex
+            return json.scenario === data.internalID && json.outlineRowIndex === data.outlineRowIndex
           }
         })
           .then(function (res) {

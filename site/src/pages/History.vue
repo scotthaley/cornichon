@@ -8,7 +8,8 @@
         <div v-if="selectedReport">
           <md-list>
             <md-list-item v-for="s in selectedReport.list" :key="s.scenarioID">
-              <div style="display: flex; flex-direction: row; flex: 1">
+              <div style="display: flex; flex-direction: row; flex-grow: 1; height: 48px; align-items: center">
+                <div class="profile">{{profileName(s.profile)}}</div>
                 <div style="flex: 1;" v-html="`<span class='keyword-1'>${s.scenario.keyword}</span>: ${s.scenario.name}`"></div>
                 <md-icon v-if="s.result.status === 'passed'" style="color: #00C506">check</md-icon>
                 <md-icon v-if="s.result.status === 'failed'" style="color: #C53B47">close</md-icon>
@@ -45,9 +46,25 @@
         }
         return null
       }
+    },
+    methods: {
+      profileName: function (id) {
+        return this.$store.state.settings.Profiles[id].name
+      }
     }
   }
 </script>
 
 <style lang="scss" scoped>
+  .profile {
+    display: flex;
+    min-width: 70px;
+    padding-left: 5px;
+    margin-right: 10px;
+    margin-left: -16px;
+    background-color: #8340c5;
+    color: white;
+    height: 100%;
+    align-items: center;
+  }
 </style>

@@ -7,6 +7,8 @@ const ScenarioFilter = cucumber.ScenarioFilter
 const FeatureParser = cucumber.FeatureParser
 const Cli = cucumber.Cli
 const path = require('path')
+// const Redis = require('ioredis')
+// let redis = new Redis()
 
 const cucumberDir = path.parse(require.resolve('cucumber')).dir
 
@@ -43,7 +45,7 @@ module.exports = (() => {
     let settings = await cornichon.getSettings()
 
     if (profile) {
-      let envVars = settings.custom.Profiles[profile].envVars
+      let envVars = settings.Profiles[profile].env
       for (let i in envVars) {
         let e = envVars[i]
         process.env[e.name] = e.value

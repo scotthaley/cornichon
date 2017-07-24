@@ -10,6 +10,7 @@ const co = require('co')
 const path = require('path')
 const guid = require('guid')
 const engines = require('consolidate')
+const { spawn } = require('child_process')
 const kue = require('kue')
 kue.app.listen(8088)
 const scenarioQueue = kue.createQueue()
@@ -26,28 +27,46 @@ module.exports = () => {
   app.engine('html', engines.mustache)
   app.set('view engine', 'html')
 
-  scenarioQueue.process('scenario', 5, (job, done) => {
+  scenarioQueue.process('scenario', config.parallel, (job, done) => {
     let data = job.data.data
     console.log('scenario started:', data)
-    cucumber.runScenario(data.internalID, data.outlineRow).then((result) => {
-      result.scenario = data.internalID
-      for (let i in result.stepResults) {
-        delete result.stepResults[i].step.scenario
-        if (data.outlineRow && result.stepResults[i].step) {
-          result.outlineRowIndex = data.outlineRowIndex
-          let name = result.stepResults[i].step.name
-          if (name) {
-            Object.keys(data.outlineRow).forEach(function (column) {
-              name = name.replace(RegExp(`<${column}>`, 'g'), data.outlineRow[column])
-            })
-            result.stepResults[i].step.name = name
-          }
-        }
-      }
-      cornichon.updateHistory(data.scenarioID, data.jobID, result)
-      // socket.emit('runScenario', result)
+
+    let env = Object.assign({}, process.env)
+    env.JOB = JSON.stringify(data)
+
+    let ls = spawn('node', [`${path.join(__dirname, '/scenarioRunner.js')}`], {env})
+
+    ls.stdout.on('data', data => {
+      console.log('stdout:', data.toString('utf8'))
+    })
+
+    ls.stderr.on('data', data => {
+      console.log('stderr:', data.toString('utf8'))
+    })
+
+    ls.on('close', code => {
+      console.log('Scenario finished with code:', code)
       done()
     })
+    // cucumber.runScenario(data.internalID, data.outlineRow).then((result) => {
+    //   result.scenario = data.internalID
+    //   for (let i in result.stepResults) {
+    //     delete result.stepResults[i].step.scenario
+    //     if (data.outlineRow && result.stepResults[i].step) {
+    //       result.outlineRowIndex = data.outlineRowIndex
+    //       let name = result.stepResults[i].step.name
+    //       if (name) {
+    //         Object.keys(data.outlineRow).forEach(function (column) {
+    //           name = name.replace(RegExp(`<${column}>`, 'g'), data.outlineRow[column])
+    //         })
+    //         result.stepResults[i].step.name = name
+    //       }
+    //     }
+    //   }
+    //   cornichon.updateHistory(data.scenarioID, data.jobID, result)
+    //   // socket.emit('runScenario', result)
+    //   done()
+    // })
   })
 
   let server = require('http').createServer(app)
@@ -98,15 +117,11 @@ module.exports = () => {
   io.on('connect', (socket) => {
     socket.on('runScenario', (data) => {
       co(function *() {
-        // let internalID = data.internalID
         let settings = yield cornichon.getSettings()
-        let envVars = settings.custom.envVars
-        for (let i in envVars) {
-          let e = envVars[i]
-          process.env[e.name] = e.value
-        }
+        console.log(data.profile)
+        console.log(settings)
         scenarioQueue.create('scenario', {
-          title: `${data.jobID} - ${data.scenarioID}`,
+          title: `${settings.Profiles[data.profile].name} - ${data.jobID} - ${data.scenarioID}`,
           data
         }).save(err => {
           if (err) {
@@ -238,14 +253,16 @@ module.exports = () => {
   server.listen(config.port, () => {
     console.log('listening on port: ', config.port)
     cornichon.getSettings().then(settings => {
-      let setupCommand = settings.custom['Setup Command'].replace(/(?:\r\n|\r|\n)/g, ' && ')
-      if (setupCommand !== '') {
-        require('child_process').exec(setupCommand, (e, stdout, stderr) => {
-          console.log('Setup Command:', stdout)
-          if (stderr) {
-            console.log('Setup Command Error:', stderr)
-          }
-        })
+      if (settings['Setup Command']) {
+        let setupCommand = settings['Setup Command'].replace(/(?:\r\n|\r|\n)/g, ' && ')
+        if (setupCommand !== '') {
+          require('child_process').exec(setupCommand, (e, stdout, stderr) => {
+            console.log('Setup Command:', stdout)
+            if (stderr) {
+              console.log('Setup Command Error:', stderr)
+            }
+          })
+        }
       }
       // if (process.env.DEBUG !== 'true') {
       //   require('open')('http://localhost:8088', 'chrome')

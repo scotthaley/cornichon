@@ -157,11 +157,7 @@ module.exports = (() => {
 
   const getSettings = () => {
     return retrieveData('settings', {
-      custom: {
-        'Setup Command': '',
-        'Code Style': 'material',
-        'Profiles': {}
-      }
+      Profiles: {}
     })
   }
 
