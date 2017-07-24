@@ -53,7 +53,7 @@ module.exports = (() => {
 
     cLine = headerLine + 2
     lineText = readLine(scenario.uri_full, cLine++)
-    while (lineText !== null && lineText.match(/\|.*\|/)) {
+    while (typeof lineText !== 'undefined' && lineText !== null && lineText.match(/\|.*\|/)) {
       let rowData = lineText.split('|').reduce((result, item) => {
         let dataItem = item.trim()
         if (dataItem !== '') {
